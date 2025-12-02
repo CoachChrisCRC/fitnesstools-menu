@@ -140,7 +140,7 @@
         <div class="text-center mb-10 mt-4">
             <div class="inline-block p-1 border-2 border-white rounded-full mb-4">
                 <div class="w-24 h-24 bg-gray-900 rounded-full flex items-center justify-center overflow-hidden">
-                    <i data-lucide="dumbbell" class="w-10 h-10 text-white"></i>
+                    <img src="https://via.placeholder.com/96x96/1f2937/ffffff?text=LOGO" alt="Coach Chris Profile Picture" class="w-full h-full object-cover rounded-full">
                 </div>
             </div>
             <h2 class="text-2xl font-bold mb-2">Free Fitness Tools</h2>
@@ -455,7 +455,6 @@
             if (modal) {
                 // Ensure initial state is clean before opening
                 if (id === 'wod') resetWOD();
-                // Removed one-rm and macro reset
                 if (id === 'bodyfat') resetBodyFat();
 
                 modal.classList.remove('modal-closed');
@@ -479,7 +478,7 @@
             }
         }
 
-        // --- 1. WOD GENERATOR LOGIC ---
+        // --- WOD GENERATOR LOGIC ---
         const KB_MOVEMENTS = [
             { name: "Kettlebell Swings (Russian)", reps: [15, 20], fastReps: [10, 15] },
             { name: "Goblet Squats", reps: [10, 15], fastReps: [8, 12] },
@@ -625,4 +624,511 @@
                             return `
                                 <div class="p-2 bg-gray-900 rounded-md">
                                     <p class="font-mono text-lg font-bold">INTERVAL ${i + 1}: ${m.name}</p>
-                                    <p class="text-sm
+                                    <p class="text-sm">8 Rounds of 20 seconds work / 10 seconds rest.</p>
+                                </div>
+                            `;
+                        }).join('');
+                        instructionsHtml = `
+                            <p class="font-bold text-xl mb-3">Total Work Time: ${numIntervals * 4} Minutes (excluding transition time).</p>
+                            <div class="space-y-2">${instructionsHtml}</div>
+                            <p class="mt-4 text-sm text-gray-400">Goal is maximum repetitions during the 20s work period. Use the built-in Interval Timer.</p>
+                        `;
+                        break;
+
+                    default:
+                        throw new Error("Invalid format.");
+                }
+            } catch(e) {
+                console.error("WOD Generation Error:", e);
+                document.getElementById('wod-error').textContent = "Could not generate WOD. Try selecting a specific format.";
+                document.getElementById('wod-error').classList.remove('hidden');
+                return;
+            }
+            
+            // --- Update UI ---
+            formatDisplay.textContent = format;
+            goalDisplay.textContent = goalText;
+            instructionsDiv.innerHTML = instructionsHtml;
+
+            formDiv.classList.add('hidden');
+            document.getElementById('wod-error').classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+        }
+        
+        function resetWOD() {
+            // Simply hide results and show form for WOD, as inputs are selects and don't need clearing.
+            document.getElementById('wod-result').classList.add('hidden'); 
+            document.getElementById('wod-input-form').classList.remove('hidden');
+            document.getElementById('wod-error').classList.add('hidden');
+        }
+
+        // --- Estimated Bodyfat Calculator Logic ---
+        function toggleHipInput() {
+            const gender = document.getElementById('bodyfat-gender').value;
+            const hipField = document.getElementById('bodyfat-hip-field');
+            const unitSystem = document.getElementById('bodyfat-unit-system').value;
+            const isImperial = unitSystem === 'imperial';
+            const unitLabel = isImperial ? 'in' : 'cm';
+
+            if (gender === 'female') {
+                document.getElementById('bodyfat-hip-label').textContent = `Hip Circumference (${unitLabel}) - Women Only`;
+                hipField.classList.remove('hidden');
+            } else {
+                hipField.classList.add('hidden');
+            }
+            // Ensure inputs reset whenever the gender/unit changes to prevent confusion
+            document.getElementById('bodyfat-result').classList.add('hidden');
+            document.getElementById('bodyfat-input-form').classList.remove('hidden');
+        }
+
+        function toggleBodyfatUnits() {
+            const unitSystem = document.getElementById('bodyfat-unit-system').value;
+            const isImperial = unitSystem === 'imperial';
+            const unitLabel = isImperial ? 'in' : 'cm';
+
+            // Toggle height fields
+            const cmGroup = document.getElementById('bodyfat-height-cm-group');
+            const ftInGroup = document.getElementById('bodyfat-height-ftin-group');
+            if (isImperial) {
+                cmGroup.classList.add('hidden');
+                ftInGroup.classList.remove('hidden');
+            } else {
+                cmGroup.classList.remove('hidden');
+                ftInGroup.classList.add('hidden');
+            }
+
+            // Update circumference labels
+            document.getElementById('bodyfat-neck-label').textContent = `Neck Circumference (${unitLabel})`;
+            document.getElementById('bodyfat-waist-label').textContent = `Waist Circumference (${unitLabel}) - measured at navel`;
+
+            // Reset view state and hip field visibility based on gender
+            toggleHipInput();
+        }
+
+        function calculateBodyFat() {
+            const unitSystem = document.getElementById('bodyfat-unit-system').value;
+            const isImperial = unitSystem === 'imperial';
+            const gender = document.getElementById('bodyfat-gender').value;
+
+            const neckInput = parseFloat(document.getElementById('bodyfat-neck').value);
+            const waistInput = parseFloat(document.getElementById('bodyfat-waist').value);
+            const hipInput = parseFloat(document.getElementById('bodyfat-hip').value) || 0; 
+            
+            const resultDiv = document.getElementById('bodyfat-result');
+            const formDiv = document.getElementById('bodyfat-input-form');
+            const errorDiv = document.getElementById('bodyfat-error');
+
+            resultDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            
+            // --- 1. Get Height Input & Convert to Inches ---
+            let heightIn;
+            if (isImperial) {
+                const ft = parseFloat(document.getElementById('bodyfat-height-ft').value) || 0;
+                const inches = parseFloat(document.getElementById('bodyfat-height-in').value) || 0;
+                heightIn = (ft * 12) + inches;
+            } else {
+                const heightCm = parseFloat(document.getElementById('bodyfat-height-cm').value);
+                heightIn = heightCm * CM_TO_IN;
+            }
+
+            // --- 2. Get Circumference Inputs & Convert to Inches ---
+            let neckIn = neckInput;
+            let waistIn = waistInput;
+            let hipIn = hipInput; 
+
+            if (!isImperial) {
+                neckIn *= CM_TO_IN;
+                waistIn *= CM_TO_IN;
+                hipIn *= CM_TO_IN;
+            }
+            
+            // --- 3. Input Validation (Ensure all required final values are valid) ---
+            if (isNaN(heightIn) || isNaN(neckIn) || isNaN(waistIn) || 
+                heightIn < 50 || neckIn <= 0 || waistIn <= 0 || (gender === 'female' && isNaN(hipIn)) || (gender === 'female' && hipIn <= 0)
+            ) {
+                errorDiv.textContent = "Please ensure all required measurements are entered with valid numbers.";
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+
+            let bodyFatPercent;
+            
+            // U.S. Navy Body Fat Formula (Simplified Log version, using Imperial inputs)
+            if (gender === 'male') {
+                if (waistIn <= neckIn) {
+                    errorDiv.textContent = "Waist circumference must be larger than Neck circumference for calculation.";
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+                // BF% = 86.010 * log10(waist - neck) - 70.041 * log10(height) + 36.76
+                bodyFatPercent = 86.010 * Math.log10(waistIn - neckIn) - 70.041 * Math.log10(heightIn) + 36.76;
+            } else { // female
+                 if (waistIn + hipIn <= neckIn) {
+                    errorDiv.textContent = "Sum of Waist and Hip must be larger than Neck circumference for calculation.";
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+                // BF% = 163.205 * log10(waist + hip - neck) - 97.684 * log10(height) - 78.387
+                bodyFatPercent = 163.205 * Math.log10(waistIn + hipIn - neckIn) - 97.684 * Math.log10(heightIn) - 78.387;
+            }
+            
+            // Clamp result to reasonable range (e.g., 5% to 50%)
+            bodyFatPercent = Math.max(5, Math.min(50, bodyFatPercent));
+
+            // Update UI
+            document.getElementById('bf-result-percent').textContent = bodyFatPercent.toFixed(1) + '%';
+            
+            // Determine category
+            const category = getBodyFatCategory(gender, bodyFatPercent);
+            document.getElementById('bf-result-category').textContent = category;
+
+            formDiv.classList.add('hidden');
+            resultDiv.classList.remove('hidden');
+        }
+
+        function resetBodyFat() {
+            // Clear inputs
+            document.getElementById('bodyfat-height-cm').value = '';
+            document.getElementById('bodyfat-height-ft').value = '';
+            document.getElementById('bodyfat-height-in').value = '';
+            document.getElementById('bodyfat-neck').value = '';
+            document.getElementById('bodyfat-waist').value = '';
+            document.getElementById('bodyfat-hip').value = '';
+
+            // Reset UI state
+            document.getElementById('bodyfat-result').classList.add('hidden');
+            document.getElementById('bodyfat-input-form').classList.remove('hidden');
+            document.getElementById('bodyfat-error').classList.add('hidden');
+            
+            // Reset gender and unit selections
+            document.getElementById('bodyfat-gender').selectedIndex = 0;
+            document.getElementById('bodyfat-unit-system').selectedIndex = 0;
+            toggleBodyfatUnits(); 
+        }
+
+        function getBodyFatCategory(gender, bf) {
+            if (gender === 'male') {
+                if (bf <= 5) return "Essential Fat";
+                if (bf <= 13) return "Athlete";
+                if (bf <= 17) return "Fitness";
+                if (bf <= 24) return "Acceptable";
+                return "Obese";
+            } else { // female
+                if (bf <= 13) return "Essential Fat";
+                if (bf <= 20) return "Athlete";
+                if (bf <= 24) return "Fitness";
+                if (bf <= 31) return "Acceptable";
+                return "Obese";
+            }
+        }
+
+        // --- Interval Timer Logic ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+        let timerInterval = null;
+
+        // Configuration and State
+        let settings = {
+            workTime: 45,
+            restTime: 15,
+            setRestTime: 60,
+            cyclesPerSet: 8,
+            totalSets: 3
+        };
+
+        let state = {
+            timeLeft: settings.workTime,
+            currentSet: 1,
+            currentCycle: 1,
+            isWork: true,      // true: Work, false: Rest
+            isSetRest: false,  // true: Resting between sets
+            isRunning: false,
+            isReady: false
+        };
+
+        const container = document.getElementById('timer-container');
+        const timeDisplay = document.getElementById('time-display');
+        const cycleDisplay = document.getElementById('cycle-display');
+        const setDisplay = document.getElementById('set-display');
+        const statusLabel = document.getElementById('timer-label');
+        const startBtn = document.getElementById('start-btn');
+        const cycleTotalDisplay = document.getElementById('cycle-total-display');
+        const setTotalDisplay = document.getElementById('set-total-display');
+        const settingsPanel = document.getElementById('timer-settings-panel');
+        const displayPanel = document.getElementById('timer-display-panel');
+        const startText = document.getElementById('start-text');
+
+        function showSettings() {
+            resetTimer();
+            settingsPanel.classList.remove('hidden');
+            displayPanel.classList.add('hidden');
+            state.isReady = false;
+        }
+
+        function loadTimerSettings() {
+            // Read and validate inputs
+            const work = parseInt(document.getElementById('timer-work-time').value, 10);
+            const rest = parseInt(document.getElementById('timer-rest-time').value, 10);
+            const setRest = parseInt(document.getElementById('timer-set-rest-time').value, 10);
+            const cycles = parseInt(document.getElementById('timer-cycles-per-set').value, 10);
+            const sets = parseInt(document.getElementById('timer-total-sets').value, 10);
+
+            if (work < 5 || rest < 0 || cycles < 1 || sets < 1 || setRest < 0 || isNaN(work) || isNaN(rest) || isNaN(cycles) || isNaN(sets) || isNaN(setRest)) {
+                // In a real app, use a proper message box instead of logging
+                console.error("Invalid timer settings. Please check all fields.");
+                return; 
+            }
+            
+            // Apply settings
+            settings.workTime = work;
+            settings.restTime = rest;
+            settings.setRestTime = setRest;
+            settings.cyclesPerSet = cycles;
+            settings.totalSets = sets;
+
+            // Initialize state for start
+            state.timeLeft = settings.workTime;
+            state.currentSet = 1;
+            state.currentCycle = 1;
+            state.isWork = true;
+            state.isSetRest = false;
+            state.isReady = true;
+
+            // Update display totals and initial state
+            cycleTotalDisplay.textContent = settings.cyclesPerSet;
+            setTotalDisplay.textContent = settings.totalSets;
+            
+            updateDisplay();
+            setTheme('rest'); // Start in a neutral/ready state
+
+            // Switch to display view
+            settingsPanel.classList.add('hidden');
+            displayPanel.classList.remove('hidden');
+        }
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            // Attempt to resume audio context if suspended (common issue on mobile)
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function beep(freq = 600, duration = 100, type = 'sine') {
+            if (!audioCtx) return;
+            try {
+                const osc = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                osc.start(audioCtx.currentTime);
+                
+                // Set initial volume and ramp down
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration / 1000);
+
+                osc.stop(audioCtx.currentTime + duration / 1000);
+            } catch (e) {
+                console.warn("Audio Context error:", e);
+            }
+        }
+
+        function toggleTimer() {
+            if (!state.isReady) {
+                // Timer hasn't been set up yet, force setup
+                loadTimerSettings();
+                if (!state.isReady) return; // Should not happen if loadTimerSettings is successful
+            }
+            
+            if (state.isRunning) {
+                stopTimer();
+            } else {
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            if (statusLabel.innerText === 'DONE') {
+                // If it was finished, hitting start restarts it
+                loadTimerSettings();
+            }
+            
+            state.isRunning = true;
+            initAudio();
+            startBtn.innerHTML = `<i data-lucide="pause" class="w-6 h-6 fill-current"></i> <span id="start-text">PAUSE</span>`;
+            lucide.createIcons();
+            
+            // Ensure theme is correct on start/resume
+            if (state.isWork) {
+                 setTheme('work');
+            } else if (state.isSetRest) {
+                 setTheme('set-rest');
+            } else {
+                 setTheme('rest');
+            }
+
+            timerInterval = setInterval(() => {
+                state.timeLeft--;
+                updateDisplay();
+
+                if (state.timeLeft >= 1 && state.timeLeft <= 3) {
+                    beep(600, 100, 'square'); 
+                }
+
+                if (state.timeLeft < 0) {
+                    switchPhase();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            state.isRunning = false;
+            clearInterval(timerInterval);
+            // Check if timer is done before setting resume text
+            if (statusLabel.innerText !== 'DONE') {
+                startBtn.innerHTML = `<i data-lucide="play" class="w-6 h-6 fill-current"></i> <span id="start-text">RESUME</span>`;
+                lucide.createIcons();
+            }
+        }
+
+        function resetTimer() {
+            stopTimer();
+            clearInterval(timerInterval);
+            
+            // Reset state to initial configured values
+            state.timeLeft = settings.workTime;
+            state.currentSet = 1;
+            state.currentCycle = 1;
+            state.isWork = true;
+            state.isSetRest = false;
+            state.isRunning = false;
+            state.isReady = false; // Must be reset to force settings load
+
+            startBtn.innerHTML = `<i data-lucide="play" class="w-6 h-6 fill-current"></i> <span id="start-text">START</span>`;
+            lucide.createIcons();
+            
+            container.classList.remove('state-work', 'state-rest', 'state-set-rest');
+            statusLabel.innerText = "READY";
+            
+            updateDisplay();
+        }
+
+        function switchPhase() {
+            beep(900, 300, 'square'); 
+            
+            // This is the core logic transition
+            if (state.isWork) {
+                // Work -> Rest or Set Rest
+                state.isWork = false;
+                
+                if (state.currentCycle < settings.cyclesPerSet) {
+                    // Normal cycle rest
+                    state.timeLeft = settings.restTime;
+                    statusLabel.innerText = "REST";
+                    setTheme('rest');
+                } else if (state.currentSet < settings.totalSets && settings.setRestTime > 0) {
+                    // End of cycle in a set, transition to SET REST
+                    state.isSetRest = true;
+                    state.timeLeft = settings.setRestTime;
+                    statusLabel.innerText = "SET REST";
+                    setTheme('set-rest');
+                } else {
+                    // Last cycle of last set, or last set with no rest programmed, finish
+                    finishWorkout();
+                    return;
+                }
+            } else if (state.isSetRest) {
+                // Set Rest -> Next Set Work
+                state.isSetRest = false;
+                state.currentSet++;
+                state.currentCycle = 1;
+                state.isWork = true;
+                state.timeLeft = settings.workTime;
+                statusLabel.innerText = "WORK";
+                setTheme('work');
+            } else { 
+                // Cycle Rest -> Next Cycle Work or Next Set Work (if no set rest)
+                state.currentCycle++;
+                state.isWork = true;
+                
+                if (state.currentCycle > settings.cyclesPerSet) {
+                     // This means the user had 0s set rest, so we bypass it here.
+                    if (state.currentSet < settings.totalSets) {
+                        state.currentSet++;
+                        state.currentCycle = 1;
+                        state.timeLeft = settings.workTime;
+                        statusLabel.innerText = "WORK";
+                        setTheme('work');
+                    } else {
+                        finishWorkout();
+                        return;
+                    }
+                } else {
+                    // Standard transition to next cycle
+                    state.timeLeft = settings.workTime;
+                    statusLabel.innerText = "WORK";
+                    setTheme('work');
+                }
+            }
+            
+            updateDisplay();
+        }
+
+        function finishWorkout() {
+            stopTimer();
+            statusLabel.innerText = "DONE";
+            timeDisplay.innerText = "0";
+            state.isRunning = false;
+            
+            // Final celebratory beeps
+            setTimeout(() => beep(600, 100), 0);
+            setTimeout(() => beep(800, 100), 150);
+            setTimeout(() => beep(1200, 300), 300);
+            
+            startBtn.innerHTML = `<i data-lucide="rotate-ccw" class="w-6 h-6 fill-current"></i> <span id="start-text">RESTART</span>`;
+            lucide.createIcons();
+            // Ensure button remains visible for restart
+        }
+
+        function updateDisplay() {
+            // Ensure time is non-negative for display
+            const timeToDisplay = Math.max(0, state.timeLeft);
+            timeDisplay.innerText = timeToDisplay.toString().padStart(2, '0');
+            
+            // Display should reflect actual current progress, but total capacity.
+            cycleDisplay.innerText = state.currentCycle;
+            setDisplay.innerText = state.currentSet;
+        }
+
+        function setTheme(mode) {
+            container.classList.remove('state-work', 'state-rest', 'state-set-rest');
+            if (mode === 'work') {
+                container.classList.add('state-work');
+            } else if (mode === 'rest') {
+                container.classList.add('state-rest');
+            } else if (mode === 'set-rest') {
+                container.classList.add('state-set-rest');
+            }
+        }
+        
+        // Initial setup
+        window.onload = () => {
+             // Initial load of default settings to ensure the UI is populated correctly
+             loadTimerSettings();
+             resetTimer(); // Ensure it starts in a clean READY state
+             showSettings(); // Force settings panel open
+             
+             // Initialize unit displays for calculators
+             toggleBodyfatUnits();
+        }
+    </script>
+</body>
+</html>
