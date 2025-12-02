@@ -48,7 +48,7 @@
             box-shadow: none;
         }
 
-        /* Generic Modal Styles */
+        /* Generic Modal Styles (For WOD, Bodyfat, Timer - the remaining ones) */
         .tool-modal {
             transition: opacity 0.3s ease;
             z-index: 50;
@@ -123,7 +123,6 @@
 </head>
 <body class="min-h-screen flex flex-col items-center relative">
 
-    <!-- Header / Branding Area -->
     <header class="w-full max-w-md px-6 py-8 flex justify-between items-start">
         <div class="flex flex-col select-none">
             <h1 class="font-brand font-extrabold text-4xl leading-none tracking-wide text-white mb-1">COACH CHRIS</h1>
@@ -136,10 +135,8 @@
         </button>
     </header>
 
-    <!-- Main Content -->
     <main class="w-full max-w-md px-6 flex-grow pb-12">
         
-        <!-- Profile/Intro Section -->
         <div class="text-center mb-10 mt-4">
             <div class="inline-block p-1 border-2 border-white rounded-full mb-4">
                 <div class="w-24 h-24 bg-gray-900 rounded-full flex items-center justify-center overflow-hidden">
@@ -153,10 +150,8 @@
             </p>
         </div>
 
-        <!-- Links Container -->
         <div class="space-y-4 flex flex-col w-full">
 
-            <!-- Link 1: WOD Generator (Local Modal) -->
             <button onclick="openModal('wod')" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
@@ -167,29 +162,26 @@
                 </div>
             </button>
 
-            <!-- Link 2: 1RM Calculator (External Link as requested) -->
             <a href="https://coachchriscrc.github.io/1RMCalculator/" target="_blank" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="barbell" class="w-5 h-5"></i>
                         <span class="font-bold text-lg uppercase tracking-wide">1RM Calculator</span>
                     </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
             </a>
 
-            <!-- Link 3: Calorie and Macro Calculator (Local Modal) -->
-            <button onclick="openModal('macro')" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
+            <a href="https://coachchriscrc.github.io/Macrocalculator/" target="_blank" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                         <span class="font-bold text-lg uppercase tracking-wide">Calorie & Macro Calculator</span>
                     </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
-            </button>
+            </a>
             
-            <!-- Link 4: Bodyfat Calculator (Local Modal) -->
             <button onclick="openModal('bodyfat')" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
@@ -200,7 +192,6 @@
                 </div>
             </button>
 
-            <!-- Link 5: Interval Timer (Local Modal) -->
             <button onclick="openModal('timer')" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
@@ -211,7 +202,6 @@
                 </div>
             </button>
 
-            <!-- Featured/Different Link -->
             <a href="#" class="link-card block w-full bg-white text-black border border-white p-4 rounded-lg hover:bg-gray-200 hover:text-black mt-6">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-4">
@@ -224,7 +214,6 @@
 
         </div>
 
-        <!-- Social Icons -->
         <div class="flex justify-center space-x-6 mt-12">
             <a href="#" class="text-gray-400 hover:text-white transition-colors">
                 <i data-lucide="instagram" class="w-6 h-6"></i>
@@ -243,7 +232,6 @@
         <p>&copy; 2024 Circular Roots Coaching. All Rights Reserved.</p>
     </footer>
 
-    <!-- 1. WOD GENERATOR MODAL -->
     <div id="wod-modal" class="tool-modal fixed inset-0 bg-black flex flex-col items-center justify-start modal-closed">
         <button onclick="closeModal('wod')" class="absolute top-6 right-6 p-2 text-white hover:opacity-70 transition-opacity">
             <i data-lucide="x" class="w-8 h-8"></i>
@@ -252,7 +240,6 @@
             <h2 class="font-brand text-4xl uppercase tracking-widest font-bold mb-8 text-center">WOD Generator</h2>
             <p class="text-center text-sm text-gray-400 mb-6">Generate a quick 15-30 minute workout.</p>
 
-            <!-- Input Form -->
             <div id="wod-input-form" class="space-y-4">
                 <label class="block">
                     <span class="text-sm font-bold block mb-1">Equipment</span>
@@ -279,7 +266,6 @@
                 </button>
             </div>
 
-            <!-- Result Display -->
             <div id="wod-result" class="mt-8 pt-6 border-t border-gray-700 space-y-6 hidden">
                 <h3 class="text-xl font-bold uppercase tracking-wider mb-2">Your Workout of the Day:</h3>
                 
@@ -291,8 +277,7 @@
                 </div>
 
                 <div class="space-y-4" id="wod-instructions">
-                    <!-- Instructions will be inserted here -->
-                </div>
+                    </div>
                 
                 <button onclick="resetWOD()" class="w-full py-3 text-sm font-bold uppercase tracking-wider opacity-60 hover:opacity-100 transition-opacity">
                     GENERATE NEW WOD
@@ -304,136 +289,6 @@
         </div>
     </div>
 
-
-    <!-- 3. CALORIE/MACRO CALCULATOR MODAL -->
-    <div id="macro-modal" class="tool-modal fixed inset-0 bg-black flex flex-col items-center justify-start modal-closed">
-        <button onclick="closeModal('macro')" class="absolute top-6 right-6 p-2 text-white hover:opacity-70 transition-opacity">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
-        <div class="w-full max-w-md p-6 sm:p-8 pt-16 overflow-y-auto h-full">
-            <h2 class="font-brand text-4xl uppercase tracking-widest font-bold mb-8 text-center">Calorie & Macro Calculator</h2>
-            
-            <!-- Input Form -->
-            <div id="macro-input-form" class="space-y-4">
-                
-                <!-- Unit System Toggle -->
-                <label class="block">
-                    <span class="text-sm font-bold block mb-1">Units</span>
-                    <select id="macro-unit-system" class="w-full" onchange="toggleMacroUnits()">
-                        <option value="metric">Metric (kg, cm)</option>
-                        <option value="imperial">Imperial (lb, ft/in)</option>
-                    </select>
-                </label>
-
-                <label class="block">
-                    <span class="text-sm font-bold block mb-1">Gender</span>
-                    <select id="macro-gender" class="w-full">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </label>
-                <div class="grid grid-cols-3 gap-3">
-                    <label class="block">
-                        <span class="text-sm font-bold block mb-1">Age</span>
-                        <input id="macro-age" type="number" min="15" max="100" placeholder="Years" class="w-full">
-                    </label>
-
-                    <!-- Height Inputs (Dynamic based on unit) -->
-                    <div id="macro-height-cm-group" class="block col-span-2">
-                        <span class="text-sm font-bold block mb-1">Height (cm)</span>
-                        <input id="macro-height-cm" type="number" min="100" max="250" placeholder="e.g., 175" class="w-full">
-                    </div>
-                    <div id="macro-height-ftin-group" class="grid grid-cols-2 gap-2 col-span-2 hidden">
-                        <div>
-                            <span class="text-sm font-bold block mb-1">Height (ft)</span>
-                            <input id="macro-height-ft" type="number" min="3" max="8" placeholder="e.g., 5" class="w-full">
-                        </div>
-                        <div>
-                            <span class="text-sm font-bold block mb-1">Height (in)</span>
-                            <input id="macro-height-in" type="number" min="0" max="11" placeholder="e.g., 9" class="w-full">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Weight Input (Dynamic label) -->
-                <label class="block">
-                    <span id="macro-weight-label" class="text-sm font-bold block mb-1">Weight (kg)</span>
-                    <input id="macro-weight" type="number" min="30" max="300" placeholder="e.g., 75" class="w-full">
-                </label>
-
-                <label class="block">
-                    <span class="text-sm font-bold block mb-1">Activity Level</span>
-                    <select id="macro-activity" class="w-full">
-                        <option value="1.2">Sedentary (Little or no exercise)</option>
-                        <option value="1.375">Light (1-3 days/week)</option>
-                        <option value="1.55">Moderate (3-5 days/week)</option>
-                        <option value="1.725">High (6-7 days/week)</option>
-                        <option value="1.9">Extreme (Athlete, 2x per day)</option>
-                    </select>
-                </label>
-                
-                <button onclick="calculateMacros()" class="w-full mt-6 py-4 bg-white text-black text-xl font-bold uppercase rounded-sm hover:opacity-80 transition-opacity">
-                    Calculate Macros
-                </button>
-            </div>
-
-            <!-- Result Display -->
-            <div id="macro-result" class="mt-8 pt-6 border-t border-gray-700 space-y-6 hidden">
-                <h3 class="text-xl font-bold uppercase tracking-wider mb-4">Results Summary</h3>
-
-                <!-- TDEE Section -->
-                <div class="p-4 border border-white rounded-lg text-center">
-                    <p class="text-sm uppercase text-gray-400">Your Total Daily Energy Expenditure (TDEE)</p>
-                    <p class="text-5xl font-brand font-bold mt-1" id="tdee-display">2500</p>
-                    <p class="text-lg uppercase text-gray-400">Maintenance / Recomp Calories</p>
-                </div>
-
-                <!-- Goals Section -->
-                <div class="space-y-4">
-                    <h4 class="text-lg font-bold uppercase">Calorie Goals (300 kcal Adjustment)</h4>
-                    <div class="grid grid-cols-2 gap-4 text-center">
-                        <div class="bg-gray-900 p-3 rounded-lg">
-                            <p class="text-xs uppercase text-red-500 font-bold">Weight-loss / Fat-loss</p>
-                            <p class="text-2xl font-brand font-bold mt-1" id="cutting-cal">2200 kcal</p>
-                        </div>
-                        <div class="bg-gray-900 p-3 rounded-lg">
-                            <p class="text-xs uppercase text-blue-500 font-bold">Muscle Gain</p>
-                            <p class="text-2xl font-brand font-bold mt-1" id="bulking-cal">2800 kcal</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Macros Section -->
-                <div class="space-y-4">
-                    <h4 class="text-lg font-bold uppercase">Macro Split (40P/30C/30F)</h4>
-                    <p class="text-sm text-gray-500 text-center">Based on Maintenance Calories</p>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="bg-gray-900 p-3 rounded-lg text-center">
-                            <p class="text-xs uppercase text-red-500 font-bold">Protein</p>
-                            <p class="text-2xl font-brand font-bold mt-1" id="macro-protein">183g</p>
-                        </div>
-                        <div class="bg-gray-900 p-3 rounded-lg text-center">
-                            <p class="text-xs uppercase text-blue-500 font-bold">Carbs</p>
-                            <p class="text-2xl font-brand font-bold mt-1" id="macro-carbs">187g</p>
-                        </div>
-                        <div class="bg-gray-900 p-3 rounded-lg text-center">
-                            <p class="text-xs uppercase text-green-500 font-bold">Fat</p>
-                            <p class="text-2xl font-brand font-bold mt-1" id="macro-fat">83g</p>
-                        </div>
-                    </div>
-                </div>
-                <button onclick="resetMacro()" class="w-full py-3 text-sm font-bold uppercase tracking-wider opacity-60 hover:opacity-100 transition-opacity">
-                    RECALCULATE
-                </button>
-            </div>
-            <p id="macro-error" class="text-red-500 text-sm mt-4 hidden text-center">
-                Please ensure all fields are filled out with valid numbers.
-            </p>
-        </div>
-    </div>
-
-
-    <!-- 4. ESTIMATED BODYFAT CALCULATOR MODAL -->
     <div id="bodyfat-modal" class="tool-modal fixed inset-0 bg-black flex flex-col items-center justify-start modal-closed">
         <button onclick="closeModal('bodyfat')" class="absolute top-6 right-6 p-2 text-white hover:opacity-70 transition-opacity">
             <i data-lucide="x" class="w-8 h-8"></i>
@@ -442,10 +297,8 @@
             <h2 class="font-brand text-4xl uppercase tracking-widest font-bold mb-8 text-center">Bodyfat Calculator</h2>
             <p class="text-center text-sm text-gray-400 mb-6">Uses the US Navy Body Fat Formula.</p>
 
-            <!-- Input Form -->
             <div id="bodyfat-input-form" class="space-y-4">
 
-                <!-- Unit System Toggle -->
                 <label class="block">
                     <span class="text-sm font-bold block mb-1">Units</span>
                     <select id="bodyfat-unit-system" class="w-full" onchange="toggleBodyfatUnits()">
@@ -462,7 +315,6 @@
                     </select>
                 </label>
 
-                <!-- Height Inputs (Dynamic based on unit) -->
                 <div id="bodyfat-height-cm-group" class="block">
                     <span class="text-sm font-bold block mb-1">Height (cm)</span>
                     <input id="bodyfat-height-cm" type="number" min="100" max="250" placeholder="e.g., 175" class="w-full">
@@ -478,7 +330,6 @@
                     </div>
                 </div>
 
-                <!-- Circumference Inputs (Dynamic label) -->
                 <label class="block">
                     <span id="bodyfat-neck-label" class="text-sm font-bold block mb-1">Neck Circumference (cm)</span>
                     <input id="bodyfat-neck" type="number" min="20" max="80" placeholder="e.g., 38" class="w-full">
@@ -497,7 +348,6 @@
                 </button>
             </div>
 
-            <!-- Result Display -->
             <div id="bodyfat-result" class="mt-8 pt-6 border-t border-gray-700 space-y-4 hidden">
                 <h3 class="text-xl font-bold uppercase tracking-wider mb-2">Estimated Body Composition</h3>
                 <div class="p-4 border border-white rounded-lg text-center">
@@ -516,7 +366,6 @@
     </div>
 
 
-    <!-- 5. INTERVAL TIMER MODAL OVERLAY -->
     <div id="timer-modal" class="tool-modal fixed inset-0 flex flex-col items-center justify-center modal-closed">
         
         <button onclick="closeModal('timer')" class="absolute top-6 right-6 p-2 text-current hover:opacity-70 transition-opacity">
@@ -525,7 +374,6 @@
 
         <div id="timer-container" class="w-full max-w-md h-full flex flex-col justify-start p-8 text-center transition-colors duration-300">
             
-            <!-- Timer Settings Panel -->
             <div id="timer-settings-panel" class="w-full pt-16 space-y-4">
                 <h2 class="font-brand text-4xl uppercase tracking-widest font-bold mb-8 text-center">Interval Timer</h2>
                 <div class="grid grid-cols-2 gap-4">
@@ -557,9 +405,7 @@
                 </button>
             </div>
 
-            <!-- Timer Display Panel -->
             <div id="timer-display-panel" class="hidden h-full flex flex-col justify-between py-12">
-                <!-- Top Status -->
                 <div class="pt-12">
                     <h2 id="timer-label" class="font-brand text-4xl uppercase tracking-widest font-bold mb-2">READY</h2>
                     <div class="flex justify-center items-center space-x-4 font-mono text-sm opacity-80">
@@ -569,14 +415,12 @@
                     </div>
                 </div>
 
-                <!-- Big Timer Display -->
                 <div class="flex-grow flex items-center justify-center">
                     <div id="time-display" class="font-brand text-[10rem] leading-none font-bold tabular-nums">
                         45
                     </div>
                 </div>
 
-                <!-- Controls -->
                 <div class="pb-12 space-y-4 w-full">
                     <button id="start-btn" onclick="toggleTimer()" class="w-full py-5 text-xl font-bold uppercase tracking-wider border-2 border-current rounded-none hover:opacity-80 transition-opacity flex items-center justify-center gap-3">
                         <i data-lucide="play" class="w-6 h-6 fill-current"></i>
@@ -601,6 +445,7 @@
 
         // --- GLOBAL CONSTANTS ---
         const LB_TO_KG = 0.453592;
+        const KG_TO_LB = 2.20462;
         const CM_TO_IN = 0.393701;
         const IN_TO_CM = 2.54;
 
@@ -610,7 +455,7 @@
             if (modal) {
                 // Ensure initial state is clean before opening
                 if (id === 'wod') resetWOD();
-                if (id === 'macro') resetMacro();
+                // Removed one-rm and macro reset
                 if (id === 'bodyfat') resetBodyFat();
 
                 modal.classList.remove('modal-closed');
@@ -780,641 +625,4 @@
                             return `
                                 <div class="p-2 bg-gray-900 rounded-md">
                                     <p class="font-mono text-lg font-bold">INTERVAL ${i + 1}: ${m.name}</p>
-                                    <p class="text-sm">8 Rounds of 20 seconds work / 10 seconds rest.</p>
-                                </div>
-                            `;
-                        }).join('');
-                        instructionsHtml = `
-                            <p class="font-bold text-xl mb-3">Total Work Time: ${numIntervals * 4} Minutes (excluding transition time).</p>
-                            <div class="space-y-2">${instructionsHtml}</div>
-                            <p class="mt-4 text-sm text-gray-400">Goal is maximum repetitions during the 20s work period. Use the built-in Interval Timer.</p>
-                        `;
-                        break;
-
-                    default:
-                        throw new Error("Invalid format.");
-                }
-            } catch(e) {
-                console.error("WOD Generation Error:", e);
-                document.getElementById('wod-error').textContent = "Could not generate WOD. Try selecting a specific format.";
-                document.getElementById('wod-error').classList.remove('hidden');
-                return;
-            }
-            
-            // --- Update UI ---
-            formatDisplay.textContent = format;
-            goalDisplay.textContent = goalText;
-            instructionsDiv.innerHTML = instructionsHtml;
-
-            formDiv.classList.add('hidden');
-            document.getElementById('wod-error').classList.add('hidden');
-            resultDiv.classList.remove('hidden');
-        }
-        
-        function resetWOD() {
-            // Simply hide results and show form for WOD, as inputs are selects and don't need clearing.
-            document.getElementById('wod-result').classList.add('hidden'); 
-            document.getElementById('wod-input-form').classList.remove('hidden');
-            document.getElementById('wod-error').classList.add('hidden');
-        }
-
-
-        // --- 3. Calorie and Macro Calculator Logic ---
-        const PROTEIN_CAL_PER_G = 4;
-        const CARB_CAL_PER_G = 4;
-        const FAT_CAL_PER_G = 9;
-        // Moderate Macro Split (40P/30C/30F) for general fitness/recomposition
-        const MACRO_SPLIT = { protein: 0.40, carbs: 0.30, fat: 0.30 }; 
-
-        function toggleMacroUnits() {
-            const unitSystem = document.getElementById('macro-unit-system').value;
-            const isImperial = unitSystem === 'imperial';
-
-            document.getElementById('macro-weight-label').textContent = isImperial ? 'Weight (lb)' : 'Weight (kg)';
-            
-            const cmGroup = document.getElementById('macro-height-cm-group');
-            const ftInGroup = document.getElementById('macro-height-ftin-group');
-
-            if (isImperial) {
-                cmGroup.classList.add('hidden');
-                ftInGroup.classList.remove('hidden');
-                document.getElementById('macro-weight').min = 60; // Min weight 60 lb
-                document.getElementById('macro-weight').max = 660; // Max weight 660 lb
-                document.getElementById('macro-weight').placeholder = 'e.g., 165';
-            } else {
-                cmGroup.classList.remove('hidden');
-                ftInGroup.classList.add('hidden');
-                document.getElementById('macro-weight').min = 30; // Min weight 30 kg
-                document.getElementById('macro-weight').max = 300; // Max weight 300 kg
-                document.getElementById('macro-weight').placeholder = 'e.g., 75';
-            }
-        }
-
-        function calculateMacros() {
-            const unitSystem = document.getElementById('macro-unit-system').value;
-            const isImperial = unitSystem === 'imperial';
-            
-            const gender = document.getElementById('macro-gender').value;
-            const age = parseInt(document.getElementById('macro-age').value, 10);
-            const weightInput = parseFloat(document.getElementById('macro-weight').value);
-            const activityMultiplier = parseFloat(document.getElementById('macro-activity').value);
-
-            let heightCm;
-            if (isImperial) {
-                const ft = parseFloat(document.getElementById('macro-height-ft').value) || 0;
-                const inches = parseFloat(document.getElementById('macro-height-in').value) || 0;
-                // Convert feet and inches to total inches, then to cm
-                const totalInches = (ft * 12) + inches;
-                heightCm = totalInches * IN_TO_CM;
-            } else {
-                heightCm = parseFloat(document.getElementById('macro-height-cm').value);
-            }
-
-            const resultDiv = document.getElementById('macro-result');
-            const formDiv = document.getElementById('macro-input-form');
-            const errorDiv = document.getElementById('macro-error');
-
-            resultDiv.classList.add('hidden');
-            errorDiv.classList.add('hidden');
-            
-            // Convert weight to KG for calculation (Mifflin-St Jeor formula expects KG and CM)
-            let weightKg = weightInput;
-            if (isImperial) {
-                weightKg = weightInput * LB_TO_KG;
-            }
-
-            if (isNaN(age) || isNaN(heightCm) || isNaN(weightKg) || age <= 0 || heightCm <= 100 || weightKg <= 0 || isNaN(activityMultiplier)) {
-                errorDiv.textContent = "Please ensure all fields are filled out with valid numbers.";
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            // Mifflin-St Jeor BMR Equation
-            let bmr;
-            if (gender === 'male') {
-                // BMR = (10 * kg) + (6.25 * cm) - (5 * age) + 5
-                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5;
-            } else {
-                // BMR = (10 * kg) + (6.25 * cm) - (5 * age) - 161
-                bmr = (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
-            }
-
-            const tdee = Math.round(bmr * activityMultiplier);
-
-            // Calorie Goals 
-            const maintenance = tdee;
-            const cutting = tdee - 300; 
-            const bulking = tdee + 300; 
-
-            // Macro Breakdown (based on Maintenance Calories)
-            const proteinCal = maintenance * MACRO_SPLIT.protein;
-            const carbsCal = maintenance * MACRO_SPLIT.carbs;
-            const fatCal = maintenance * MACRO_SPLIT.fat;
-
-            const proteinGrams = Math.round(proteinCal / PROTEIN_CAL_PER_G);
-            const carbsGrams = Math.round(carbsCal / CARB_CAL_PER_G);
-            const fatGrams = Math.round(fatCal / FAT_CAL_PER_G);
-
-            // Update UI
-            document.getElementById('tdee-display').textContent = maintenance.toLocaleString();
-            document.getElementById('cutting-cal').textContent = `${cutting.toLocaleString()} kcal`;
-            document.getElementById('bulking-cal').textContent = `${bulking.toLocaleString()} kcal`;
-
-            document.getElementById('macro-protein').textContent = `${proteinGrams}g`;
-            document.getElementById('macro-carbs').textContent = `${carbsGrams}g`;
-            document.getElementById('macro-fat').textContent = `${fatGrams}g`;
-
-            formDiv.classList.add('hidden');
-            resultDiv.classList.remove('hidden');
-        }
-        
-        function resetMacro() {
-            document.getElementById('macro-age').value = '';
-            document.getElementById('macro-height-cm').value = '';
-            document.getElementById('macro-height-ft').value = '';
-            document.getElementById('macro-height-in').value = '';
-            document.getElementById('macro-weight').value = '';
-            document.getElementById('macro-result').classList.add('hidden');
-            document.getElementById('macro-input-form').classList.remove('hidden');
-            document.getElementById('macro-error').classList.add('hidden');
-            // Reset selects to first option
-            document.getElementById('macro-gender').selectedIndex = 0;
-            document.getElementById('macro-activity').selectedIndex = 0;
-            document.getElementById('macro-unit-system').selectedIndex = 0;
-            toggleMacroUnits();
-        }
-
-        
-        // --- 4. Estimated Bodyfat Calculator Logic ---
-        function toggleHipInput() {
-            const gender = document.getElementById('bodyfat-gender').value;
-            const hipField = document.getElementById('bodyfat-hip-field');
-            const unitSystem = document.getElementById('bodyfat-unit-system').value;
-            const isImperial = unitSystem === 'imperial';
-            const unitLabel = isImperial ? 'in' : 'cm';
-
-            if (gender === 'female') {
-                document.getElementById('bodyfat-hip-label').textContent = `Hip Circumference (${unitLabel}) - Women Only`;
-                hipField.classList.remove('hidden');
-            } else {
-                hipField.classList.add('hidden');
-            }
-            // Ensure inputs reset whenever the gender/unit changes to prevent confusion
-            document.getElementById('bodyfat-result').classList.add('hidden');
-            document.getElementById('bodyfat-input-form').classList.remove('hidden');
-        }
-
-        function toggleBodyfatUnits() {
-            const unitSystem = document.getElementById('bodyfat-unit-system').value;
-            const isImperial = unitSystem === 'imperial';
-            const unitLabel = isImperial ? 'in' : 'cm';
-
-            // Toggle height fields
-            const cmGroup = document.getElementById('bodyfat-height-cm-group');
-            const ftInGroup = document.getElementById('bodyfat-height-ftin-group');
-            if (isImperial) {
-                cmGroup.classList.add('hidden');
-                ftInGroup.classList.remove('hidden');
-            } else {
-                cmGroup.classList.remove('hidden');
-                ftInGroup.classList.add('hidden');
-            }
-
-            // Update circumference labels
-            document.getElementById('bodyfat-neck-label').textContent = `Neck Circumference (${unitLabel})`;
-            document.getElementById('bodyfat-waist-label').textContent = `Waist Circumference (${unitLabel}) - measured at navel`;
-
-            // Reset view state and hip field visibility based on gender
-            toggleHipInput();
-        }
-
-        function calculateBodyFat() {
-            const unitSystem = document.getElementById('bodyfat-unit-system').value;
-            const isImperial = unitSystem === 'imperial';
-            const gender = document.getElementById('bodyfat-gender').value;
-
-            const neckInput = parseFloat(document.getElementById('bodyfat-neck').value);
-            const waistInput = parseFloat(document.getElementById('bodyfat-waist').value);
-            const hipInput = parseFloat(document.getElementById('bodyfat-hip').value) || 0; 
-            
-            const resultDiv = document.getElementById('bodyfat-result');
-            const formDiv = document.getElementById('bodyfat-input-form');
-            const errorDiv = document.getElementById('bodyfat-error');
-
-            resultDiv.classList.add('hidden');
-            errorDiv.classList.add('hidden');
-            
-            // --- 1. Get Height Input & Convert to Inches ---
-            let heightIn;
-            if (isImperial) {
-                const ft = parseFloat(document.getElementById('bodyfat-height-ft').value) || 0;
-                const inches = parseFloat(document.getElementById('bodyfat-height-in').value) || 0;
-                heightIn = (ft * 12) + inches;
-            } else {
-                const heightCm = parseFloat(document.getElementById('bodyfat-height-cm').value);
-                heightIn = heightCm * CM_TO_IN;
-            }
-
-            // --- 2. Get Circumference Inputs & Convert to Inches ---
-            let neckIn = neckInput;
-            let waistIn = waistInput;
-            let hipIn = hipInput; 
-
-            if (!isImperial) {
-                neckIn *= CM_TO_IN;
-                waistIn *= CM_TO_IN;
-                hipIn *= CM_TO_IN;
-            }
-            
-            // --- 3. Input Validation (Ensure all required final values are valid) ---
-            if (isNaN(heightIn) || isNaN(neckIn) || isNaN(waistIn) || 
-                heightIn < 50 || neckIn <= 0 || waistIn <= 0 || (gender === 'female' && isNaN(hipIn)) || (gender === 'female' && hipIn <= 0)
-            ) {
-                errorDiv.textContent = "Please ensure all required measurements are entered with valid numbers.";
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-
-            let bodyFatPercent;
-            
-            // U.S. Navy Body Fat Formula (Simplified Log version, using Imperial inputs)
-            if (gender === 'male') {
-                if (waistIn <= neckIn) {
-                    errorDiv.textContent = "Waist circumference must be larger than Neck circumference for calculation.";
-                    errorDiv.classList.remove('hidden');
-                    return;
-                }
-                // BF% = 86.010 * log10(waist - neck) - 70.041 * log10(height) + 36.76
-                bodyFatPercent = 86.010 * Math.log10(waistIn - neckIn) - 70.041 * Math.log10(heightIn) + 36.76;
-            } else { // female
-                 if (waistIn + hipIn <= neckIn) {
-                    errorDiv.textContent = "Sum of Waist and Hip must be larger than Neck circumference for calculation.";
-                    errorDiv.classList.remove('hidden');
-                    return;
-                }
-                // BF% = 163.205 * log10(waist + hip - neck) - 97.684 * log10(height) - 78.387
-                bodyFatPercent = 163.205 * Math.log10(waistIn + hipIn - neckIn) - 97.684 * Math.log10(heightIn) - 78.387;
-            }
-            
-            // Clamp result to reasonable range (e.g., 5% to 50%)
-            bodyFatPercent = Math.max(5, Math.min(50, bodyFatPercent));
-
-            // Update UI
-            document.getElementById('bf-result-percent').textContent = bodyFatPercent.toFixed(1) + '%';
-            
-            // Determine category
-            const category = getBodyFatCategory(gender, bodyFatPercent);
-            document.getElementById('bf-result-category').textContent = category;
-
-            formDiv.classList.add('hidden');
-            resultDiv.classList.remove('hidden');
-        }
-
-        function resetBodyFat() {
-            // Clear inputs
-            document.getElementById('bodyfat-height-cm').value = '';
-            document.getElementById('bodyfat-height-ft').value = '';
-            document.getElementById('bodyfat-height-in').value = '';
-            document.getElementById('bodyfat-neck').value = '';
-            document.getElementById('bodyfat-waist').value = '';
-            document.getElementById('bodyfat-hip').value = '';
-
-            // Reset UI state
-            document.getElementById('bodyfat-result').classList.add('hidden');
-            document.getElementById('bodyfat-input-form').classList.remove('hidden');
-            document.getElementById('bodyfat-error').classList.add('hidden');
-            
-            // Reset gender and unit selections
-            document.getElementById('bodyfat-gender').selectedIndex = 0;
-            document.getElementById('bodyfat-unit-system').selectedIndex = 0;
-            toggleBodyfatUnits(); 
-        }
-
-        function getBodyFatCategory(gender, bf) {
-            if (gender === 'male') {
-                if (bf <= 5) return "Essential Fat";
-                if (bf <= 13) return "Athlete";
-                if (bf <= 17) return "Fitness";
-                if (bf <= 24) return "Acceptable";
-                return "Obese";
-            } else { // female
-                if (bf <= 13) return "Essential Fat";
-                if (bf <= 20) return "Athlete";
-                if (bf <= 24) return "Fitness";
-                if (bf <= 31) return "Acceptable";
-                return "Obese";
-            }
-        }
-
-        // --- 5. Interval Timer Logic (Refactored) ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        let timerInterval = null;
-
-        // Configuration and State
-        let settings = {
-            workTime: 45,
-            restTime: 15,
-            setRestTime: 60,
-            cyclesPerSet: 8,
-            totalSets: 3
-        };
-
-        let state = {
-            timeLeft: settings.workTime,
-            currentSet: 1,
-            currentCycle: 1,
-            isWork: true,      // true: Work, false: Rest
-            isSetRest: false,  // true: Resting between sets
-            isRunning: false,
-            isReady: false
-        };
-
-        const container = document.getElementById('timer-container');
-        const timeDisplay = document.getElementById('time-display');
-        const cycleDisplay = document.getElementById('cycle-display');
-        const setDisplay = document.getElementById('set-display');
-        const statusLabel = document.getElementById('timer-label');
-        const startBtn = document.getElementById('start-btn');
-        const cycleTotalDisplay = document.getElementById('cycle-total-display');
-        const setTotalDisplay = document.getElementById('set-total-display');
-        const settingsPanel = document.getElementById('timer-settings-panel');
-        const displayPanel = document.getElementById('timer-display-panel');
-        const startText = document.getElementById('start-text');
-
-        function showSettings() {
-            resetTimer();
-            settingsPanel.classList.remove('hidden');
-            displayPanel.classList.add('hidden');
-            state.isReady = false;
-        }
-
-        function loadTimerSettings() {
-            // Read and validate inputs
-            const work = parseInt(document.getElementById('timer-work-time').value, 10);
-            const rest = parseInt(document.getElementById('timer-rest-time').value, 10);
-            const setRest = parseInt(document.getElementById('timer-set-rest-time').value, 10);
-            const cycles = parseInt(document.getElementById('timer-cycles-per-set').value, 10);
-            const sets = parseInt(document.getElementById('timer-total-sets').value, 10);
-
-            if (work < 5 || rest < 0 || cycles < 1 || sets < 1 || setRest < 0 || isNaN(work) || isNaN(rest) || isNaN(cycles) || isNaN(sets) || isNaN(setRest)) {
-                // In a real app, use a proper message box instead of logging
-                console.error("Invalid timer settings. Please check all fields.");
-                return; 
-            }
-            
-            // Apply settings
-            settings.workTime = work;
-            settings.restTime = rest;
-            settings.setRestTime = setRest;
-            settings.cyclesPerSet = cycles;
-            settings.totalSets = sets;
-
-            // Initialize state for start
-            state.timeLeft = settings.workTime;
-            state.currentSet = 1;
-            state.currentCycle = 1;
-            state.isWork = true;
-            state.isSetRest = false;
-            state.isReady = true;
-
-            // Update display totals and initial state
-            cycleTotalDisplay.textContent = settings.cyclesPerSet;
-            setTotalDisplay.textContent = settings.totalSets;
-            
-            updateDisplay();
-            setTheme('rest'); // Start in a neutral/ready state
-
-            // Switch to display view
-            settingsPanel.classList.add('hidden');
-            displayPanel.classList.remove('hidden');
-        }
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
-            // Attempt to resume audio context if suspended (common issue on mobile)
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        function beep(freq = 600, duration = 100, type = 'sine') {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                osc.start(audioCtx.currentTime);
-                
-                // Set initial volume and ramp down
-                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration / 1000);
-
-                osc.stop(audioCtx.currentTime + duration / 1000);
-            } catch (e) {
-                console.warn("Audio Context error:", e);
-            }
-        }
-
-        function toggleTimer() {
-            if (!state.isReady) {
-                // Timer hasn't been set up yet, force setup
-                loadTimerSettings();
-                if (!state.isReady) return; // Should not happen if loadTimerSettings is successful
-            }
-            
-            if (state.isRunning) {
-                stopTimer();
-            } else {
-                startTimer();
-            }
-        }
-
-        function startTimer() {
-            if (statusLabel.innerText === 'DONE') {
-                // If it was finished, hitting start restarts it
-                loadTimerSettings();
-            }
-            
-            state.isRunning = true;
-            initAudio();
-            startBtn.innerHTML = `<i data-lucide="pause" class="w-6 h-6 fill-current"></i> <span id="start-text">PAUSE</span>`;
-            lucide.createIcons();
-            
-            // Ensure theme is correct on start/resume
-            if (state.isWork) {
-                 setTheme('work');
-            } else if (state.isSetRest) {
-                 setTheme('set-rest');
-            } else {
-                 setTheme('rest');
-            }
-
-            timerInterval = setInterval(() => {
-                state.timeLeft--;
-                updateDisplay();
-
-                if (state.timeLeft >= 1 && state.timeLeft <= 3) {
-                    beep(600, 100, 'square'); 
-                }
-
-                if (state.timeLeft < 0) {
-                    switchPhase();
-                }
-            }, 1000);
-        }
-
-        function stopTimer() {
-            state.isRunning = false;
-            clearInterval(timerInterval);
-            // Check if timer is done before setting resume text
-            if (statusLabel.innerText !== 'DONE') {
-                startBtn.innerHTML = `<i data-lucide="play" class="w-6 h-6 fill-current"></i> <span id="start-text">RESUME</span>`;
-                lucide.createIcons();
-            }
-        }
-
-        function resetTimer() {
-            stopTimer();
-            clearInterval(timerInterval);
-            
-            // Reset state to initial configured values
-            state.timeLeft = settings.workTime;
-            state.currentSet = 1;
-            state.currentCycle = 1;
-            state.isWork = true;
-            state.isSetRest = false;
-            state.isRunning = false;
-            state.isReady = false; // Must be reset to force settings load
-
-            startBtn.innerHTML = `<i data-lucide="play" class="w-6 h-6 fill-current"></i> <span id="start-text">START</span>`;
-            lucide.createIcons();
-            
-            container.classList.remove('state-work', 'state-rest', 'state-set-rest');
-            statusLabel.innerText = "READY";
-            
-            updateDisplay();
-        }
-
-        function switchPhase() {
-            beep(900, 300, 'square'); 
-            
-            // This is the core logic transition
-            if (state.isWork) {
-                // Work -> Rest or Set Rest
-                state.isWork = false;
-                
-                if (state.currentCycle < settings.cyclesPerSet) {
-                    // Normal cycle rest
-                    state.timeLeft = settings.restTime;
-                    statusLabel.innerText = "REST";
-                    setTheme('rest');
-                } else if (state.currentSet < settings.totalSets && settings.setRestTime > 0) {
-                    // End of cycle in a set, transition to SET REST
-                    state.isSetRest = true;
-                    state.timeLeft = settings.setRestTime;
-                    statusLabel.innerText = "SET REST";
-                    setTheme('set-rest');
-                } else {
-                    // Last cycle of last set, or last set with no rest programmed, finish
-                    finishWorkout();
-                    return;
-                }
-            } else if (state.isSetRest) {
-                // Set Rest -> Next Set Work
-                state.isSetRest = false;
-                state.currentSet++;
-                state.currentCycle = 1;
-                state.isWork = true;
-                state.timeLeft = settings.workTime;
-                statusLabel.innerText = "WORK";
-                setTheme('work');
-            } else { 
-                // Cycle Rest -> Next Cycle Work or Next Set Work (if no set rest)
-                state.currentCycle++;
-                state.isWork = true;
-                
-                if (state.currentCycle > settings.cyclesPerSet) {
-                     // This means the user had 0s set rest, so we bypass it here.
-                    if (state.currentSet < settings.totalSets) {
-                        state.currentSet++;
-                        state.currentCycle = 1;
-                        state.timeLeft = settings.workTime;
-                        statusLabel.innerText = "WORK";
-                        setTheme('work');
-                    } else {
-                        finishWorkout();
-                        return;
-                    }
-                } else {
-                    // Standard transition to next cycle
-                    state.timeLeft = settings.workTime;
-                    statusLabel.innerText = "WORK";
-                    setTheme('work');
-                }
-            }
-            
-            updateDisplay();
-        }
-
-        function finishWorkout() {
-            stopTimer();
-            statusLabel.innerText = "DONE";
-            timeDisplay.innerText = "0";
-            state.isRunning = false;
-            
-            // Final celebratory beeps
-            setTimeout(() => beep(600, 100), 0);
-            setTimeout(() => beep(800, 100), 150);
-            setTimeout(() => beep(1200, 300), 300);
-            
-            startBtn.innerHTML = `<i data-lucide="rotate-ccw" class="w-6 h-6 fill-current"></i> <span id="start-text">RESTART</span>`;
-            lucide.createIcons();
-            // Ensure button remains visible for restart
-        }
-
-        function updateDisplay() {
-            // Ensure time is non-negative for display
-            const timeToDisplay = Math.max(0, state.timeLeft);
-            timeDisplay.innerText = timeToDisplay.toString().padStart(2, '0');
-            
-            // Display should reflect actual current progress, but total capacity.
-            cycleDisplay.innerText = state.currentCycle;
-            setDisplay.innerText = state.currentSet;
-        }
-
-        function setTheme(mode) {
-            container.classList.remove('state-work', 'state-rest', 'state-set-rest');
-            if (mode === 'work') {
-                container.classList.add('state-work');
-            } else if (mode === 'rest') {
-                container.classList.add('state-rest');
-            } else if (mode === 'set-rest') {
-                container.classList.add('state-set-rest');
-            }
-        }
-        
-        // Initial setup
-        window.onload = () => {
-             // Initial load of default settings to ensure the UI is populated correctly
-             // We do this before resetTimer so resetTimer knows the configured values
-             loadTimerSettings();
-             resetTimer(); // Ensure it starts in a clean READY state
-             showSettings(); // Force settings panel open
-             
-             // Initialize unit displays for calculators
-             toggleBodyfatUnits();
-             toggleMacroUnits();
-        }
-    </script>
-</body>
-</html>
-
+                                    <p class="text-sm
