@@ -7,36 +7,77 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Base Imports for Aesthetics */
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Oswald:wght@400;500;700&display=swap');
+        /* Import custom fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Oswald:wght@400;500;700&display=swap');
         
+        :root {
+            --bg-page: #f3f4f6;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+            --text-main: #1f2937;
+            --text-heading: #000000;
+            --text-muted: #9ca3af;
+            --text-accent: #6b7280;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --bg-toggle: #f3f4f6;
+            --toggle-pill-bg: #e5e7eb;
+            --bg-btn-primary: #000000;
+            --btn-text-primary: #ffffff;
+            --link-hover-bg: #000000;
+            --link-hover-text: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-page: #0a0a0a;
+            --bg-card: #121212;
+            --border-color: #262626;
+            --text-main: #ffffff;
+            --text-heading: #ffffff;
+            --text-muted: #525252;
+            --text-accent: #a3a3a3;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            --bg-toggle: #1a1a1a;
+            --toggle-pill-bg: #1a1a1a;
+            --bg-btn-primary: #ffffff;
+            --btn-text-primary: #000000;
+            --link-hover-bg: #ffffff;
+            --link-hover-text: #000000;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            transition: background-color 0.3s, color 0.3s;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .font-brand {
             font-family: 'Oswald', sans-serif;
         }
 
-        .tracking-ultra-wide {
-            letter-spacing: 0.15em;
+        /* Main Card Container */
+        .app-card {
+            background-color: var(--bg-card);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
-        /* Link/Button Styling */
+        /* Nav Card Hover Effects */
         .link-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            box-shadow: 0 4px 6px -1px rgba(255, 255, 255, 0.1), 0 2px 4px -2px rgba(255, 255, 255, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
         }
         
         .link-card:hover {
-            transform: translateY(-3px);
-            background-color: #ffffff;
-            color: #000000;
-            box-shadow: 0 10px 15px -3px rgba(255, 255, 255, 0.3), 0 4px 6px -4px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            background-color: var(--link-hover-bg);
+            color: var(--link-hover-text);
+            border-color: var(--link-hover-bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .link-card:hover .arrow-icon {
@@ -45,851 +86,218 @@
 
         .link-card:active {
             transform: translateY(0);
-            box-shadow: none;
+        }
+        
+        /* Newsletter specific card */
+        .newsletter-cta {
+            background-color: var(--bg-btn-primary);
+            color: var(--btn-text-primary);
+            transition: all 0.25s ease;
+        }
+        
+        .newsletter-cta:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
 
-        /* Generic Modal Styles (For WOD and Timer) */
-        .tool-modal {
-            transition: opacity 0.3s ease;
-            z-index: 50;
-            overflow-y: auto;
+        /* Theme Toggle Styling */
+        .theme-switch-container {
+            position: relative;
+            width: 44px;
+            height: 22px;
+            background-color: var(--toggle-pill-bg);
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            border: 1px solid var(--border-color);
         }
-        
-        .modal-open {
-            opacity: 1;
-            pointer-events: auto;
+
+        .theme-switch-circle {
+            position: absolute;
+            left: 2px;
+            width: 16px;
+            height: 16px;
+            background-color: var(--bg-btn-primary);
+            border-radius: 50%;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
         }
-        
-        .modal-closed {
-            opacity: 0;
+
+        [data-theme="dark"] .theme-switch-circle { transform: translateX(22px); }
+
+        .theme-switch-icons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 3px;
+            z-index: 5;
             pointer-events: none;
         }
 
-        /* Specific Styles for Timer (Monochromatic Inversion for focus) */
-        #timer-modal {
-             /* Ensure the modal background is dark and takes up the full screen */
-            background-color: #000000;
-        }
-        
-        #timer-container {
-             /* Base text color for neutral state */
-            color: #ffffff;
-            transition: all 0.5s ease-in-out;
+        .theme-switch-icons i {
+            width: 9px;
+            height: 9px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
         }
 
-        .state-work {
-            background-color: #ffffff !important;
-            color: #000000 !important;
-        }
-
-        .state-rest {
-            background-color: #111111 !important;
-            color: #ffffff !important;
-        }
-        
-        .state-set-rest {
-            background-color: #333333 !important;
-            color: #fefefe !important;
-        }
-        
-        /* Ensure the close button is visible in the inverted state */
-        .state-work .absolute {
-            color: #000000;
-        }
-
-        /* Input styling for the dark theme */
-        input, select {
-            background-color: #111111;
-            border: 1px solid #333333;
-            color: #ffffff;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            transition: border-color 0.2s;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #ffffff;
-            box-shadow: 0 0 0 1px #ffffff;
-        }
-
-        /* Big timer text size for responsiveness */
-        @media (max-width: 640px) {
-            #time-display {
-                font-size: 7rem; /* Smaller on mobile */
-            }
-        }
+        [data-theme="light"] .icon-sun { color: var(--btn-text-primary); }
+        [data-theme="dark"] .icon-moon { color: var(--btn-text-primary); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center relative">
+<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
 
-    <header class="w-full max-w-md px-6 py-8 flex justify-between items-start">
-        <div class="flex flex-col select-none">
-            <h1 class="font-brand font-extrabold text-4xl leading-none tracking-wide text-white mb-1">COACH CHRIS</h1>
-            <h2 class="font-brand font-bold text-lg leading-none text-gray-400 mb-[2px]">CIRCULAR ROOTS COACHING</h2>
-            <h3 class="font-brand font-bold text-lg leading-none text-gray-600">TRAIN UNCNVNTNL</h3>
-        </div>
+    <!-- Main Content Card -->
+    <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
         
-        <button class="text-white hover:text-gray-300 transition-colors pt-1" aria-label="Menu">
-            <i data-lucide="menu" class="w-8 h-8"></i>
-        </button>
-    </header>
-
-    <main class="w-full max-w-md px-6 flex-grow pb-12">
-        
-        <div class="text-center mb-10 mt-4">
-            <div class="inline-block p-1 border-2 border-white rounded-full mb-4">
-                <div class="w-24 h-24 bg-gray-900 rounded-full flex items-center justify-center overflow-hidden">
-                    <i data-lucide="dumbbell" class="w-10 h-10 text-white"></i>
+        <!-- Header / Branding Area -->
+        <header class="w-full px-8 py-10 flex justify-between items-start">
+            <div class="flex flex-col select-none">
+                <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
+            </div>
+            
+            <div class="flex flex-col items-center gap-1.5">
+                <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
+                <div id="theme-toggle" class="theme-switch-container" aria-label="Toggle Theme">
+                    <div class="theme-switch-circle"></div>
+                    <div class="theme-switch-icons">
+                        <i data-lucide="sun" class="icon-sun"></i>
+                        <i data-lucide="moon" class="icon-moon"></i>
+                    </div>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold mb-2">Free Fitness Tools</h2>
-            <p class="text-gray-400 text-sm max-w-xs mx-auto">
-                No-nonsense tools to optimize your training. 
-                <br>Calculate, track, and execute.
-            </p>
-        </div>
+        </header>
 
-        <div class="space-y-4 flex flex-col w-full">
-
-            <button onclick="openModal('wod')" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <i data-lucide="zap" class="w-5 h-5"></i>
-                        <span class="font-bold text-lg uppercase tracking-wide">WOD Generator</span>
-                    </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
-                </div>
-            </button>
-
-            <a href="https://coachchriscrc.github.io/1RMCalculator/" target="_blank" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <i data-lucide="weight" class="w-5 h-5 text-white"></i>
-                        <span class="font-bold text-lg uppercase tracking-wide">1RM Calculator</span>
-                    </div>
-                    <i data-lucide="external-link" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
-                </div>
-            </a>
-            <a href="https://coachchriscrc.github.io/Macrocalculator/" target="_blank" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <i data-lucide="utensils" class="w-5 h-5"></i>
-                        <span class="font-bold text-lg uppercase tracking-wide">Calorie & Macro Calculator</span>
-                    </div>
-                    <i data-lucide="external-link" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
-                </div>
-            </a>
+        <!-- Main Content -->
+        <main class="w-full px-8 flex-grow pb-12">
             
-            <a href="https://coachchriscrc.github.io/bfcalculator/" target="_blank" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <i data-lucide="scan" class="w-5 h-5"></i>
-                        <span class="font-bold text-lg uppercase tracking-wide">Estimated Bodyfat Calculator</span>
+            <!-- Profile/Intro Section -->
+            <div class="text-center mb-10 mt-2">
+                <div class="inline-block p-1 rounded-full mb-4 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
+                    <div class="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
+                        <i data-lucide="dumbbell" class="w-10 h-10" style="color: var(--btn-text-primary)"></i>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
-            </a>
+                <h2 class="text-2xl font-black mb-2" style="color: var(--text-heading)">Free Fitness Tools</h2>
+                <p class="text-sm max-w-[250px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                    No-nonsense tools to optimize your training. 
+                    Calculate, track, and execute.
+                </p>
+            </div>
 
-            <button onclick="openModal('timer')" class="link-card block w-full border border-white p-4 rounded-lg group text-left">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <i data-lucide="timer" class="w-5 h-5"></i>
-                        <span class="font-bold text-lg uppercase tracking-wide">Interval Timer</span>
+            <!-- Links Container -->
+            <div class="space-y-3 flex flex-col w-full">
+
+                <!-- Link 1: WOD Generator -->
+                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <i data-lucide="zap" class="w-5 h-5"></i>
+                            <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
+                        </div>
+                        <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
-                </div>
-            </button>
+                </a>
 
-            <a href="#" class="link-card block w-full bg-white text-black border border-white p-4 rounded-lg hover:bg-gray-200 hover:text-black mt-6">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
-                        <i data-lucide="mail" class="w-5 h-5"></i>
-                        <span class="font-bold text-lg uppercase tracking-wide">Join the Newsletter</span>
+                <!-- Link 2: 1RM Calculator -->
+                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                    <div class="flex items-center justify-between"> 
+                        <div class="flex items-center space-x-4">
+                            <i data-lucide="dumbbell" class="w-5 h-5"></i>
+                            <span class="font-bold text-base uppercase tracking-wider">1RM Calculator</span>
+                        </div>
+                        <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                    <span class="text-xs font-bold border border-black px-2 py-0.5 rounded">FREE</span>
-                </div>
-            </a>
+                </a>
 
-        </div>
+                <!-- Link 3: Calorie and Macro Calculator -->
+                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <i data-lucide="utensils" class="w-5 h-5"></i>
+                            <span class="font-bold text-base uppercase tracking-wider">Calorie & Macro Calculator</span>
+                        </div>
+                        <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
+                    </div>
+                </a>
+                
+                <!-- Link 4: Bodyfat Calculator -->
+                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <i data-lucide="scan" class="w-5 h-5"></i>
+                            <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
+                        </div>
+                        <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
+                    </div>
+                </a>
 
-        <div class="flex justify-center space-x-6 mt-12">
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <i data-lucide="instagram" class="w-6 h-6"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <i data-lucide="twitter" class="w-6 h-6"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                <i data-lucide="youtube" class="w-6 h-6"></i>
-            </a>
-        </div>
+                <!-- Link 5: Interval Timer -->
+                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <i data-lucide="timer" class="w-5 h-5"></i>
+                            <span class="font-bold text-base uppercase tracking-wider">Interval Timer</span>
+                        </div>
+                        <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
+                    </div>
+                </a>
 
-    </main>
+                <!-- Featured/Newsletter Link -->
+                <a href="#" class="newsletter-cta block w-full p-4 rounded-xl mt-6 shadow-md">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <i data-lucide="mail" class="w-5 h-5"></i>
+                            <span class="font-bold text-base uppercase tracking-wider">Join the Newsletter</span>
+                        </div>
+                        <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
+                    </div>
+                </a>
 
-    <footer class="w-full text-center py-6 text-gray-600 text-xs">
+            </div>
+
+            <!-- Social Icons -->
+            <div class="flex justify-center space-x-8 mt-12">
+                <a href="#" class="hover:opacity-100 transition-opacity opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="instagram" class="w-6 h-6"></i>
+                </a>
+                <a href="#" class="hover:opacity-100 transition-opacity opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="twitter" class="w-6 h-6"></i>
+                </a>
+                <a href="#" class="hover:opacity-100 transition-opacity opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="youtube" class="w-6 h-6"></i>
+                </a>
+            </div>
+
+        </main>
+    </div>
+
+    <footer class="w-full text-center py-8 text-[10px] uppercase tracking-[0.2em] font-bold" style="color: var(--text-muted)">
         <p>&copy; 2024 Circular Roots Coaching. All Rights Reserved.</p>
     </footer>
-
-    <div id="wod-modal" class="tool-modal fixed inset-0 bg-black flex flex-col items-center justify-start modal-closed">
-        <button onclick="closeModal('wod')" class="absolute top-6 right-6 p-2 text-white hover:opacity-70 transition-opacity">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
-        <div class="w-full max-w-md p-6 sm:p-8 pt-16 overflow-y-auto h-full">
-            <h2 class="font-brand text-4xl uppercase tracking-widest font-bold mb-8 text-center">WOD Generator</h2>
-            <p class="text-center text-sm text-gray-400 mb-6">Generate a quick 15-30 minute workout.</p>
-
-            <div id="wod-input-form" class="space-y-4">
-                <label class="block">
-                    <span class="text-sm font-bold block mb-1">Equipment</span>
-                    <select id="wod-equipment" class="w-full">
-                        <option value="combined">Kettlebell & Bodyweight (Combined)</option>
-                        <option value="kettlebell">Kettlebell Only</option>
-                        <option value="bodyweight">Bodyweight Only</option>
-                    </select>
-                </label>
-                <label class="block">
-                    <span class="text-sm font-bold block mb-1">Workout Format</span>
-                    <select id="wod-format" class="w-full">
-                        <option value="random">Random Format</option>
-                        <option value="AMRAP">AMRAP (As Many Rounds As Possible)</option>
-                        <option value="EMOM">EMOM (Every Minute On the Minute)</option>
-                        <option value="FOR TIME">FOR TIME (Fixed Rounds)</option>
-                        <option value="CHIPPER">Chipper (High Rep)</option>
-                        <option value="TABATA">Timed Intervals (Tabata)</option>
-                    </select>
-                </label>
-                
-                <button onclick="generateWOD()" class="w-full mt-6 py-4 bg-white text-black text-xl font-bold uppercase rounded-sm hover:opacity-80 transition-opacity">
-                    Generate WOD
-                </button>
-            </div>
-
-            <div id="wod-result" class="mt-8 pt-6 border-t border-gray-700 space-y-6 hidden">
-                <h3 class="text-xl font-bold uppercase tracking-wider mb-2">Your Workout of the Day:</h3>
-                
-                <div class="p-4 border border-white rounded-lg">
-                    <p class="text-sm uppercase text-gray-400 mb-1">Format</p>
-                    <p class="text-3xl font-brand font-bold" id="wod-format-display">AMRAP</p>
-                    <p class="text-sm uppercase text-gray-400 mt-3 mb-1">Time Goal / Structure</p>
-                    <p class="text-lg font-bold" id="wod-goal-display">20 Minute Time Cap</p>
-                </div>
-
-                <div class="space-y-4" id="wod-instructions">
-                    </div>
-                
-                <button onclick="resetWOD()" class="w-full py-3 text-sm font-bold uppercase tracking-wider opacity-60 hover:opacity-100 transition-opacity">
-                    GENERATE NEW WOD
-                </button>
-            </div>
-            <p id="wod-error" class="text-red-500 text-sm mt-4 hidden text-center">
-                An error occurred during generation.
-            </p>
-        </div>
-    </div>
-
-
-    <div id="timer-modal" class="tool-modal fixed inset-0 flex flex-col items-center justify-center modal-closed">
-        
-        <button onclick="closeModal('timer')" class="absolute top-6 right-6 p-2 text-current hover:opacity-70 transition-opacity">
-            <i data-lucide="x" class="w-8 h-8"></i>
-        </button>
-
-        <div id="timer-container" class="w-full max-w-md h-full flex flex-col justify-start p-8 text-center transition-colors duration-300">
-            
-            <div id="timer-settings-panel" class="w-full pt-16 space-y-4">
-                <h2 class="font-brand text-4xl uppercase tracking-widest font-bold mb-8 text-center">Interval Timer</h2>
-                <div class="grid grid-cols-2 gap-4">
-                    <label class="block">
-                        <span class="text-sm font-bold block mb-1">Work Time (s)</span>
-                        <input id="timer-work-time" type="number" value="45" min="5" max="300" class="w-full text-center">
-                    </label>
-                    <label class="block">
-                        <span class="text-sm font-bold block mb-1">Rest Time (s)</span>
-                        <input id="timer-rest-time" type="number" value="15" min="0" max="300" class="w-full text-center">
-                    </label>
-                    <label class="block">
-                        <span class="text-sm font-bold block mb-1">Cycles per Set</span>
-                        <input id="timer-cycles-per-set" type="number" value="8" min="1" max="50" class="w-full text-center">
-                    </label>
-                    <label class="block">
-                        <span class="text-sm font-bold block mb-1">Total Sets</span>
-                        <input id="timer-total-sets" type="number" value="3" min="1" max="20" class="w-full text-center">
-                    </label>
-                </div>
-                
-                <label class="block pt-4">
-                    <span class="text-sm font-bold block mb-1">Rest Between Sets (s) - Optional</span>
-                    <input id="timer-set-rest-time" type="number" value="60" min="0" max="600" class="w-full text-center">
-                </label>
-
-                <button onclick="loadTimerSettings()" class="w-full py-4 mt-6 bg-white text-black text-xl font-bold uppercase rounded-sm hover:opacity-80 transition-opacity">
-                    Set Timer
-                </button>
-            </div>
-
-            <div id="timer-display-panel" class="hidden h-full flex flex-col justify-between py-12">
-                <div class="pt-12">
-                    <h2 id="timer-label" class="font-brand text-4xl uppercase tracking-widest font-bold mb-2">READY</h2>
-                    <div class="flex justify-center items-center space-x-4 font-mono text-sm opacity-80">
-                        <span class="flex items-center space-x-2">CYCLE <span id="cycle-display" class="text-xl font-bold">1</span> / <span id="cycle-total-display">8</span></span>
-                        <span class="text-2xl font-bold text-gray-500">|</span>
-                        <span class="flex items-center space-x-2">SET <span id="set-display" class="text-xl font-bold">1</span> / <span id="set-total-display">3</span></span>
-                    </div>
-                </div>
-
-                <div class="flex-grow flex items-center justify-center">
-                    <div id="time-display" class="font-brand text-[10rem] leading-none font-bold tabular-nums">
-                        45
-                    </div>
-                </div>
-
-                <div class="pb-12 space-y-4 w-full">
-                    <button id="start-btn" onclick="toggleTimer()" class="w-full py-5 text-xl font-bold uppercase tracking-wider border-2 border-current rounded-none hover:opacity-80 transition-opacity flex items-center justify-center gap-3">
-                        <i data-lucide="play" class="w-6 h-6 fill-current"></i>
-                        <span id="start-text">START</span>
-                    </button>
-
-                    <button onclick="showSettings()" class="w-full py-3 text-sm font-bold uppercase tracking-wider opacity-60 hover:opacity-100 transition-opacity">
-                        CHANGE SETTINGS
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         // Initialize Lucide Icons
         lucide.createIcons();
-        
-        // Helper function for random selection
-        const randItem = (arr) => arr[Math.floor(Math.random() * arr.length)];
-        const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
-        // --- GLOBAL CONSTANTS ---
-        const LB_TO_KG = 0.453592;
-        const KG_TO_LB = 2.20462;
-        const CM_TO_IN = 0.393701;
-        const IN_TO_CM = 2.54;
+        // Theme Toggle Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const body = document.body;
 
-        // --- Universal Modal Control ---
-        function openModal(id) {
-            const modal = document.getElementById(id + '-modal');
-            if (modal) {
-                // Ensure initial state is clean before opening
-                if (id === 'wod') resetWOD();
-                // Removed: if (id === 'bodyfat') resetBodyFat();
-
-                modal.classList.remove('modal-closed');
-                modal.classList.add('modal-open');
-                
-                if (id === 'timer') {
-                    initAudio();
-                    showSettings(); // Always start on the settings screen
-                }
-            }
-        }
-
-        function closeModal(id) {
-            const modal = document.getElementById(id + '-modal');
-            if (modal) {
-                modal.classList.remove('modal-open');
-                modal.classList.add('modal-closed');
-                if (id === 'timer') {
-                    resetTimer();
-                }
-            }
-        }
-
-        // --- WOD GENERATOR LOGIC ---
-        const KB_MOVEMENTS = [
-            { name: "Kettlebell Swings (Russian)", reps: [15, 20], fastReps: [10, 15] },
-            { name: "Goblet Squats", reps: [10, 15], fastReps: [8, 12] },
-            { name: "Single-Arm Clean & Press (per side)", reps: [5, 10], fastReps: [4, 8] },
-            { name: "Kettlebell Deadlifts", reps: [15, 25], fastReps: [12, 20] },
-            { name: "Kettlebell Halos (per direction)", reps: [8, 12], fastReps: [8, 10] },
-        ];
-
-        const BW_MOVEMENTS = [
-            { name: "Air Squats", reps: [20, 30], fastReps: [15, 20] },
-            { name: "Push-ups (Standard)", reps: [10, 15], fastReps: [8, 12] },
-            { name: "Burpees", reps: [5, 10], fastReps: [4, 8] },
-            { name: "Jumping Jacks", reps: [30, 50], fastReps: [20, 40] },
-            { name: "Mountain Climbers (per leg)", reps: [20, 30], fastReps: [15, 25] },
-            { name: "Plank Hold (seconds)", reps: [30, 60], fastReps: [20, 45] },
-        ];
-        
-        const WOD_FORMATS = ["AMRAP", "EMOM", "FOR TIME", "CHIPPER", "TABATA"];
-
-        function getMovements(equipment, count) {
-            let availableMoves = [];
-            if (equipment === 'kettlebell') {
-                availableMoves = KB_MOVEMENTS;
-            } else if (equipment === 'bodyweight') {
-                availableMoves = BW_MOVEMENTS;
-            } else { // combined
-                // Use a mix of both types
-                const kbCount = Math.floor(count / 2);
-                const bwCount = count - kbCount;
-                
-                const kbCopy = [...KB_MOVEMENTS];
-                const bwCopy = [...BW_MOVEMENTS];
-                
-                // Select unique KB moves
-                for (let i = 0; i < kbCount && kbCopy.length > 0; i++) {
-                    const index = randInt(0, kbCopy.length - 1);
-                    availableMoves.push(kbCopy.splice(index, 1)[0]);
-                }
-                // Select unique BW moves
-                for (let i = 0; i < bwCount && bwCopy.length > 0; i++) {
-                    const index = randInt(0, bwCopy.length - 1);
-                    availableMoves.push(bwCopy.splice(index, 1)[0]);
-                }
-            }
-            // Shuffle final list
-            for (let i = availableMoves.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [availableMoves[i], availableMoves[j]] = [availableMoves[j], availableMoves[i]];
-            }
-            return availableMoves.slice(0, count);
-        }
-
-        function generateWOD() {
-            const equipment = document.getElementById('wod-equipment').value;
-            let format = document.getElementById('wod-format').value;
-            const resultDiv = document.getElementById('wod-result');
-            const formDiv = document.getElementById('wod-input-form');
-            const formatDisplay = document.getElementById('wod-format-display');
-            const goalDisplay = document.getElementById('wod-goal-display');
-            const instructionsDiv = document.getElementById('wod-instructions');
-
-            // --- Select Format ---
-            if (format === 'random') {
-                format = randItem(WOD_FORMATS);
-            }
-
-            // --- Generate WOD based on format ---
-            let goalText = '';
-            let instructionsHtml = '';
-            let movements;
-
-            try {
-                switch (format) {
-                    case "AMRAP":
-                        const amrapTime = randItem([15, 18, 20]);
-                        movements = getMovements(equipment, randInt(3, 4));
-                        goalText = `${amrapTime} Minute AMRAP (As Many Rounds As Possible)`;
-                        
-                        instructionsHtml = movements.map(m => {
-                            const reps = randInt(m.reps[0], m.reps[1]);
-                            return `<div class="p-2 bg-gray-900 rounded-md font-mono text-lg">${reps} x ${m.name}</div>`;
-                        }).join('');
-                        instructionsHtml += `<p class="mt-4 text-sm text-gray-400">Perform the sequence above. Rest only as needed to maintain high intensity.</p>`;
-                        break;
-
-                    case "EMOM":
-                        const emomTime = randItem([16, 20, 24]);
-                        movements = getMovements(equipment, randInt(2, 3));
-                        goalText = `${emomTime} Minute EMOM (Every Minute On the Minute)`;
-
-                        instructionsHtml = movements.map((m, i) => {
-                            // Use fastReps for EMOM to ensure time for rest
-                            const reps = randInt(m.fastReps[0], m.fastReps[1]);
-                            const minute = (i % movements.length) + 1;
-                            const minuteType = (movements.length > 1) ? `Minute ${minute}` : 'Every Minute';
-                            return `<div class="p-2 bg-gray-900 rounded-md font-mono text-lg">${minuteType}: ${reps} x ${m.name}</div>`;
-                        }).join('');
-                        instructionsHtml += `<p class="mt-4 text-sm text-gray-400">Perform the designated movement in the minute. Rest for the remainder of the minute before the next task begins. Repeat pattern for ${emomTime} minutes.</p>`;
-                        break;
-
-                    case "FOR TIME":
-                        const numRounds = randItem([4, 5, 6]);
-                        movements = getMovements(equipment, randInt(3, 5));
-                        goalText = `FOR TIME: ${numRounds} Rounds`;
-
-                        instructionsHtml = movements.map(m => {
-                            const reps = randInt(m.reps[0], m.reps[1]);
-                            return `<div class="p-2 bg-gray-900 rounded-md font-mono text-lg">${reps} x ${m.name}</div>`;
-                        }).join('');
-                        instructionsHtml = `
-                            <p class="font-bold text-xl mb-3">Complete ${numRounds} Rounds of:</p>
-                            <div class="space-y-2">${instructionsHtml}</div>
-                            <p class="mt-4 text-sm text-gray-400">Record your total time to completion. Break reps as needed.</p>
-                        `;
-                        break;
-                        
-                    case "CHIPPER":
-                        const repStart = randItem([100, 80, 60]);
-                        movements = getMovements(equipment, randInt(4, 5));
-                        goalText = `CHIPPER: For Time (Complete all reps once)`;
-
-                        instructionsHtml = movements.map((m, i) => {
-                            // Decrement reps slightly for variety
-                            const repFactor = (i / movements.length) * 0.4; // max 40% reduction
-                            const reps = repStart - Math.round(repStart * repFactor);
-                            // Round to nearest 5 or 10 for clean numbers
-                            const finalReps = Math.round(reps / 5) * 5;
-                            return `<div class="p-2 bg-gray-900 rounded-md font-mono text-lg">${finalReps} x ${m.name}</div>`;
-                        }).join('');
-                        instructionsHtml = `
-                            <p class="font-bold text-xl mb-3">Complete all movements in the order listed. Reps must be completed before moving to the next exercise:</p>
-                            <div class="space-y-2">${instructionsHtml}</div>
-                            <p class="mt-4 text-sm text-gray-400">This is a high-volume workout. Pace yourself early.</p>
-                        `;
-                        break;
-                        
-                    case "TABATA":
-                        const numIntervals = randItem([3, 4]);
-                        movements = getMovements(equipment, numIntervals);
-                        goalText = `Timed Interval Workout (Tabata Protocol)`;
-
-                        instructionsHtml = movements.map((m, i) => {
-                            return `
-                                <div class="p-2 bg-gray-900 rounded-md">
-                                    <p class="font-mono text-lg font-bold">INTERVAL ${i + 1}: ${m.name}</p>
-                                    <p class="text-sm">8 Rounds of 20 seconds work / 10 seconds rest.</p>
-                                </div>
-                            `;
-                        }).join('');
-                        instructionsHtml = `
-                            <p class="font-bold text-xl mb-3">Total Work Time: ${numIntervals * 4} Minutes (excluding transition time).</p>
-                            <div class="space-y-2">${instructionsHtml}</div>
-                            <p class="mt-4 text-sm text-gray-400">Goal is maximum repetitions during the 20s work period. Use the built-in Interval Timer.</p>
-                        `;
-                        break;
-
-                    default:
-                        throw new Error("Invalid format.");
-                }
-            } catch(e) {
-                console.error("WOD Generation Error:", e);
-                document.getElementById('wod-error').textContent = "Could not generate WOD. Try selecting a specific format.";
-                document.getElementById('wod-error').classList.remove('hidden');
-                return;
-            }
-            
-            // --- Update UI ---
-            formatDisplay.textContent = format;
-            goalDisplay.textContent = goalText;
-            instructionsDiv.innerHTML = instructionsHtml;
-
-            formDiv.classList.add('hidden');
-            document.getElementById('wod-error').classList.add('hidden');
-            resultDiv.classList.remove('hidden');
-        }
-        
-        function resetWOD() {
-            // Simply hide results and show form for WOD, as inputs are selects and don't need clearing.
-            document.getElementById('wod-result').classList.add('hidden'); 
-            document.getElementById('wod-input-form').classList.remove('hidden');
-            document.getElementById('wod-error').classList.add('hidden');
-        }
-
-        // --- Interval Timer Logic ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-        let timerInterval = null;
-
-        // Configuration and State
-        let settings = {
-            workTime: 45,
-            restTime: 15,
-            setRestTime: 60,
-            cyclesPerSet: 8,
-            totalSets: 3
-        };
-
-        let state = {
-            timeLeft: settings.workTime,
-            currentSet: 1,
-            currentCycle: 1,
-            isWork: true,      // true: Work, false: Rest
-            isSetRest: false,  // true: Resting between sets
-            isRunning: false,
-            isReady: false
-        };
-
-        const container = document.getElementById('timer-container');
-        const timeDisplay = document.getElementById('time-display');
-        const cycleDisplay = document.getElementById('cycle-display');
-        const setDisplay = document.getElementById('set-display');
-        const statusLabel = document.getElementById('timer-label');
-        const startBtn = document.getElementById('start-btn');
-        const cycleTotalDisplay = document.getElementById('cycle-total-display');
-        const setTotalDisplay = document.getElementById('set-total-display');
-        const settingsPanel = document.getElementById('timer-settings-panel');
-        const displayPanel = document.getElementById('timer-display-panel');
-        const startText = document.getElementById('start-text');
-
-        function showSettings() {
-            resetTimer();
-            settingsPanel.classList.remove('hidden');
-            displayPanel.classList.add('hidden');
-            state.isReady = false;
-        }
-
-        function loadTimerSettings() {
-            // Read and validate inputs
-            const work = parseInt(document.getElementById('timer-work-time').value, 10);
-            const rest = parseInt(document.getElementById('timer-rest-time').value, 10);
-            const setRest = parseInt(document.getElementById('timer-set-rest-time').value, 10);
-            const cycles = parseInt(document.getElementById('timer-cycles-per-set').value, 10);
-            const sets = parseInt(document.getElementById('timer-total-sets').value, 10);
-
-            if (work < 5 || rest < 0 || cycles < 1 || sets < 1 || setRest < 0 || isNaN(work) || isNaN(rest) || isNaN(cycles) || isNaN(sets) || isNaN(setRest)) {
-                // In a real app, use a proper message box instead of logging
-                console.error("Invalid timer settings. Please check all fields.");
-                return; 
-            }
-            
-            // Apply settings
-            settings.workTime = work;
-            settings.restTime = rest;
-            settings.setRestTime = setRest;
-            settings.cyclesPerSet = cycles;
-            settings.totalSets = sets;
-
-            // Initialize state for start
-            state.timeLeft = settings.workTime;
-            state.currentSet = 1;
-            state.currentCycle = 1;
-            state.isWork = true;
-            state.isSetRest = false;
-            state.isReady = true;
-
-            // Update display totals and initial state
-            cycleTotalDisplay.textContent = settings.cyclesPerSet;
-            setTotalDisplay.textContent = settings.totalSets;
-            
-            updateDisplay();
-            setTheme('rest'); // Start in a neutral/ready state
-
-            // Switch to display view
-            settingsPanel.classList.add('hidden');
-            displayPanel.classList.remove('hidden');
-        }
-
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
-            // Attempt to resume audio context if suspended (common issue on mobile)
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        function beep(freq = 600, duration = 100, type = 'sine') {
-            if (!audioCtx) return;
-            try {
-                const osc = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-
-                osc.start(audioCtx.currentTime);
-                
-                // Set initial volume and ramp down
-                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration / 1000);
-
-                osc.stop(audioCtx.currentTime + duration / 1000);
-            } catch (e) {
-                console.warn("Audio Context error:", e);
-            }
-        }
-
-        function toggleTimer() {
-            if (!state.isReady) {
-                // Timer hasn't been set up yet, force setup
-                loadTimerSettings();
-                if (!state.isReady) return; // Should not happen if loadTimerSettings is successful
-            }
-            
-            if (state.isRunning) {
-                stopTimer();
-            } else {
-                startTimer();
-            }
-        }
-
-        function startTimer() {
-            if (statusLabel.innerText === 'DONE') {
-                // If it was finished, hitting start restarts it
-                loadTimerSettings();
-            }
-            
-            state.isRunning = true;
-            initAudio();
-            startBtn.innerHTML = `<i data-lucide="pause" class="w-6 h-6 fill-current"></i> <span id="start-text">PAUSE</span>`;
-            lucide.createIcons();
-            
-            // Ensure theme is correct on start/resume
-            if (state.isWork) {
-                 setTheme('work');
-            } else if (state.isSetRest) {
-                 setTheme('set-rest');
-            } else {
-                 setTheme('rest');
-            }
-
-            timerInterval = setInterval(() => {
-                state.timeLeft--;
-                updateDisplay();
-
-                if (state.timeLeft >= 1 && state.timeLeft <= 3) {
-                    beep(600, 100, 'square'); 
-                }
-
-                if (state.timeLeft < 0) {
-                    switchPhase();
-                }
-            }, 1000);
-        }
-
-        function stopTimer() {
-            state.isRunning = false;
-            clearInterval(timerInterval);
-            // Check if timer is done before setting resume text
-            if (statusLabel.innerText !== 'DONE') {
-                startBtn.innerHTML = `<i data-lucide="play" class="w-6 h-6 fill-current"></i> <span id="start-text">RESUME</span>`;
-                lucide.createIcons();
-            }
-        }
-
-        function resetTimer() {
-            stopTimer();
-            clearInterval(timerInterval);
-            
-            // Reset state to initial configured values
-            state.timeLeft = settings.workTime;
-            state.currentSet = 1;
-            state.currentCycle = 1;
-            state.isWork = true;
-            state.isSetRest = false;
-            state.isRunning = false;
-            state.isReady = false; // Must be reset to force settings load
-
-            startBtn.innerHTML = `<i data-lucide="play" class="w-6 h-6 fill-current"></i> <span id="start-text">START</span>`;
-            lucide.createIcons();
-            
-            container.classList.remove('state-work', 'state-rest', 'state-set-rest');
-            statusLabel.innerText = "READY";
-            
-            updateDisplay();
-        }
-
-        function switchPhase() {
-            beep(900, 300, 'square'); 
-            
-            // This is the core logic transition
-            if (state.isWork) {
-                // Work -> Rest or Set Rest
-                state.isWork = false;
-                
-                if (state.currentCycle < settings.cyclesPerSet) {
-                    // Normal cycle rest
-                    state.timeLeft = settings.restTime;
-                    statusLabel.innerText = "REST";
-                    setTheme('rest');
-                } else if (state.currentSet < settings.totalSets && settings.setRestTime > 0) {
-                    // End of cycle in a set, transition to SET REST
-                    state.isSetRest = true;
-                    state.timeLeft = settings.setRestTime;
-                    statusLabel.innerText = "SET REST";
-                    setTheme('set-rest');
-                } else {
-                    // Last cycle of last set, or last set with no rest programmed, finish
-                    finishWorkout();
-                    return;
-                }
-            } else if (state.isSetRest) {
-                // Set Rest -> Next Set Work
-                state.isSetRest = false;
-                state.currentSet++;
-                state.currentCycle = 1;
-                state.isWork = true;
-                state.timeLeft = settings.workTime;
-                statusLabel.innerText = "WORK";
-                setTheme('work');
-            } else { 
-                // Cycle Rest -> Next Cycle Work or Next Set Work (if no set rest)
-                state.currentCycle++;
-                state.isWork = true;
-                
-                if (state.currentCycle > settings.cyclesPerSet) {
-                     // This means the user had 0s set rest, so we bypass it here.
-                    if (state.currentSet < settings.totalSets) {
-                        state.currentSet++;
-                        state.currentCycle = 1;
-                        state.timeLeft = settings.workTime;
-                        statusLabel.innerText = "WORK";
-                        setTheme('work');
-                    } else {
-                        finishWorkout();
-                        return;
-                    }
-                } else {
-                    // Standard transition to next cycle
-                    state.timeLeft = settings.workTime;
-                    statusLabel.innerText = "WORK";
-                    setTheme('work');
-                }
-            }
-            
-            updateDisplay();
-        }
-
-        function finishWorkout() {
-            stopTimer();
-            statusLabel.innerText = "DONE";
-            timeDisplay.innerText = "0";
-            state.isRunning = false;
-            
-            // Final celebratory beeps
-            setTimeout(() => beep(600, 100), 0);
-            setTimeout(() => beep(800, 100), 150);
-            setTimeout(() => beep(1200, 300), 300);
-            
-            startBtn.innerHTML = `<i data-lucide="rotate-ccw" class="w-6 h-6 fill-current"></i> <span id="start-text">RESTART</span>`;
-            lucide.createIcons();
-            // Ensure button remains visible for restart
-        }
-
-        function updateDisplay() {
-            // Ensure time is non-negative for display
-            const timeToDisplay = Math.max(0, state.timeLeft);
-            timeDisplay.innerText = timeToDisplay.toString().padStart(2, '0');
-            
-            // Display should reflect actual current progress, but total capacity.
-            cycleDisplay.innerText = state.currentCycle;
-            setDisplay.innerText = state.currentSet;
-        }
-
-        function setTheme(mode) {
-            container.classList.remove('state-work', 'state-rest', 'state-set-rest');
-            if (mode === 'work') {
-                container.classList.add('state-work');
-            } else if (mode === 'rest') {
-                container.classList.add('state-rest');
-            } else if (mode === 'set-rest') {
-                container.classList.add('state-set-rest');
-            }
-        }
-        
-        // Initial setup
-        window.onload = () => {
-             // Initial load of default settings to ensure the UI is populated correctly
-             loadTimerSettings();
-             resetTimer(); // Ensure it starts in a clean READY state
-             showSettings(); // Force settings panel open
-             
-             // Re-initialize Lucide Icons just in case the onload fires late or elements loaded dynamically
-             lucide.createIcons();
-        }
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = body.getAttribute('data-theme');
+                const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+                body.setAttribute('data-theme', nextTheme);
+            });
+        });
     </script>
 </body>
 </html>
+
