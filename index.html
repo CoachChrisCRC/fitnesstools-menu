@@ -70,6 +70,9 @@
             color: var(--text-main);
             cursor: pointer;
             user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
         
         .link-card:hover {
@@ -169,7 +172,7 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
 
-    <!-- Combined Help/Information Modal -->
+    <!-- Information Modal -->
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
             <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
@@ -189,15 +192,11 @@
                         </li>
                         <li class="flex gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--text-heading)"></i>
-                            <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch above for your preference.</span>
+                            <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch above.</span>
                         </li>
                         <li class="flex gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--text-heading)"></i>
-                            <span>All data is processed locally—your fitness stats stay private to your device and are never shared.</span>
-                        </li>
-                        <li class="flex gap-2">
-                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--text-heading)"></i>
-                            <span>These tools are optimized for mobile, tablet, and desktop viewports.</span>
+                            <span>Calculators provide localized estimates based on standard fitness protocols.</span>
                         </li>
                     </ul>
                 </div>
@@ -206,7 +205,7 @@
         </div>
     </div>
 
-    <!-- Dynamic Developer Modal -->
+    <!-- Dev Modal -->
     <div id="dev-modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
             <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
@@ -227,7 +226,7 @@
         </div>
     </div>
 
-    <!-- Main Application Card -->
+    <!-- Main Card -->
     <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
         
         <header class="w-full px-8 py-10 flex justify-between items-start">
@@ -264,12 +263,12 @@
                 <h2 class="text-2xl font-black mb-2" style="color: var(--text-heading)">Free Fitness Tools</h2>
                 <p class="text-sm max-w-[250px] mx-auto leading-relaxed" style="color: var(--text-accent)">
                     No-nonsense tools to optimize your training. 
-                    Calculate, track, and execute.
                 </p>
             </div>
 
             <div class="space-y-3 flex flex-col w-full">
-                <div data-tool="wod" class="link-card tool-btn p-4 rounded-xl flex items-center justify-between">
+                <!-- Internal Tools -->
+                <div data-tool="wod" class="link-card tool-btn p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="zap" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
@@ -277,7 +276,7 @@
                     <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
-                <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl flex items-center justify-between"> 
+                <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl"> 
                     <div class="flex items-center space-x-4">
                         <i data-lucide="dumbbell" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">1RM Calculator</span>
@@ -285,7 +284,7 @@
                     <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
-                <div data-tool="calorie" class="link-card tool-btn p-4 rounded-xl flex items-center justify-between">
+                <div data-tool="calorie" class="link-card tool-btn p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
@@ -293,15 +292,16 @@
                     <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
                 
-                <div data-tool="bodyfat" class="link-card tool-btn p-4 rounded-xl flex items-center justify-between">
+                <!-- External Bodyfat Link -->
+                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="ruler" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
                     </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
-                </div>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                </a>
 
-                <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl flex items-center justify-between">
+                <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="timer" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Interval Timer</span>
@@ -318,7 +318,7 @@
                 </div>
             </div>
 
-            <!-- Social Media Section with Subheadings -->
+            <!-- Social Media Section -->
             <div class="flex justify-center space-x-12 mt-12 pb-4">
                 <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
                     <i data-lucide="message-circle" class="w-6 h-6"></i>
@@ -336,21 +336,17 @@
         </main>
     </div>
 
-    <!-- Reverted Comprehensive Footer -->
+    <!-- Footer -->
     <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <!-- Medical Disclaimer -->
         <div class="mb-6 space-y-2">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
             <p class="text-[8px] leading-normal normal-case opacity-70 italic">
-                The content provided by these tools is for informational and educational purposes only and is not intended as medical advice or a substitute for professional consultation with a qualified healthcare provider. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition or physical activity.
+                The content provided by these tools is for informational purposes only and is not intended as medical advice.
             </p>
         </div>
-
-        <!-- Copyright Info -->
         <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed">
-            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL</p>
+            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
             <p>All Rights Reserved.</p>
-            <p class="mt-2 text-[8px] opacity-60 italic">- Fitter Stronger Better -</p>
         </div>
     </footer>
 
@@ -368,12 +364,11 @@
             const devIconWrapper = document.getElementById('dev-icon-wrapper');
             
             const toolData = {
-                'wod': { title: "Generating Heat", text: "We're curating the ultimate library of unconventional workouts. Our WOD engine is currently being tuned for maximum intensity.", icon: "zap" },
-                '1rm': { title: "Heavy Loading", text: "Calculating the perfect 1RM requires precision. We're finalizing the formulas to ensure your safety and accuracy in the rack.", icon: "dumbbell" },
-                'calorie': { title: "Fueling Up", text: "Nutrition is the foundation of performance. We're refining our metabolic algorithms to give you precise fueling targets.", icon: "utensils" },
-                'bodyfat': { title: "Precision Stats", text: "Our composition analyzer is undergoing final testing. Soon you'll be able to track your physical transformation with ease.", icon: "ruler" },
-                'timer': { title: "Synchronizing", text: "Timing is everything in interval training. Our performance clock is being calibrated for lag-free training sessions.", icon: "timer" },
-                'newsletter': { title: "Drafting Intel", text: "The first dispatch is almost ready. We're assembling the best unconventional training wisdom to send straight to your inbox.", icon: "mail" }
+                'wod': { title: "Generating Heat", text: "We're curating the ultimate library of unconventional workouts. Coming soon.", icon: "zap" },
+                '1rm': { title: "Heavy Loading", text: "Finalizing precision formulas for power and strength lifts. Coming soon.", icon: "dumbbell" },
+                'calorie': { title: "Fueling Up", text: "Refining our metabolic algorithms for precision fueling. Coming soon.", icon: "utensils" },
+                'timer': { title: "Synchronizing", text: "Our performance clock is being calibrated for interval training. Coming soon.", icon: "timer" },
+                'newsletter': { title: "Drafting Intel", text: "Assembling unconventional training wisdom for your inbox. Coming soon.", icon: "mail" }
             };
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
@@ -392,7 +387,8 @@
             
             document.querySelectorAll('.tool-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    const data = toolData[btn.getAttribute('data-tool')];
+                    const toolKey = btn.getAttribute('data-tool');
+                    const data = toolData[toolKey];
                     if (data) {
                         devTitle.textContent = data.title;
                         devText.textContent = data.text;
