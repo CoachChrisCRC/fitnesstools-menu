@@ -70,6 +70,7 @@
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             color: var(--text-main);
+            cursor: pointer;
         }
         
         .link-card:hover {
@@ -137,7 +138,7 @@
         [data-theme="dark"] .icon-moon { color: var(--btn-text-primary); }
 
         /* Modal Styles */
-        #modal-overlay {
+        #modal-overlay, #dev-modal-overlay {
             background-color: var(--modal-overlay);
             backdrop-filter: blur(4px);
             transition: all 0.3s ease;
@@ -150,7 +151,7 @@
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
-        #modal-overlay.active .modal-content {
+        #modal-overlay.active .modal-content, #dev-modal-overlay.active .modal-content {
             transform: scale(1);
         }
     </style>
@@ -190,6 +191,25 @@
         </div>
     </div>
 
+    <!-- Under Development Modal -->
+    <div id="dev-modal-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden opacity-0">
+        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
+            <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex flex-col items-center text-center">
+                <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
+                    <i data-lucide="construction" class="w-8 h-8" style="color: var(--text-heading)"></i>
+                </div>
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">In the Lab</h3>
+                <p class="text-sm leading-relaxed mb-6" style="color: var(--text-accent)">
+                    We're currently fine-tuning this tool to ensure it meets the highest standards for your training. This feature will be live soon.
+                </p>
+                <button id="dev-modal-confirm" class="w-full py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Card -->
     <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
         
@@ -200,7 +220,6 @@
                 <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <!-- Theme & Info Controls Stack -->
             <div class="flex flex-col items-center gap-3">
                 <div class="flex flex-col items-center gap-1.5">
                     <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
@@ -235,7 +254,7 @@
             </div>
 
             <div class="space-y-3 flex flex-col w-full">
-                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                <div class="link-card tool-btn block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <i data-lucide="zap" class="w-5 h-5"></i>
@@ -243,9 +262,9 @@
                         </div>
                         <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                </a>
+                </div>
 
-                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                <div class="link-card tool-btn block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between"> 
                         <div class="flex items-center space-x-4">
                             <i data-lucide="dumbbell" class="w-5 h-5"></i>
@@ -253,29 +272,29 @@
                         </div>
                         <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                </a>
+                </div>
 
-                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                <div class="link-card tool-btn block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <i data-lucide="utensils" class="w-5 h-5"></i>
-                            <span class="font-bold text-base uppercase tracking-wider">Calorie & Macro Calculator</span>
+                            <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
                         </div>
                         <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                </a>
+                </div>
                 
-                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                <div class="link-card tool-btn block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
-                            <i data-lucide="scan" class="w-5 h-5"></i>
+                            <i data-lucide="ruler" class="w-5 h-5"></i>
                             <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
                         </div>
                         <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                </a>
+                </div>
 
-                <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
+                <div class="link-card tool-btn block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <i data-lucide="timer" class="w-5 h-5"></i>
@@ -283,9 +302,9 @@
                         </div>
                         <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                     </div>
-                </a>
+                </div>
 
-                <a href="#" class="newsletter-cta block w-full p-4 rounded-xl mt-6 shadow-md">
+                <div class="newsletter-cta tool-btn block w-full p-4 rounded-xl mt-6 shadow-md cursor-pointer">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <i data-lucide="mail" class="w-5 h-5"></i>
@@ -293,7 +312,7 @@
                         </div>
                         <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                     </div>
-                </a>
+                </div>
             </div>
 
             <div class="flex justify-center space-x-8 mt-12">
@@ -311,9 +330,7 @@
         </main>
     </div>
 
-    <!-- Updated Footer with Disclaimer and Single-Line Copyright -->
     <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <!-- Medical Disclaimer -->
         <div class="mb-6 space-y-2">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
             <p class="text-[8px] leading-normal normal-case opacity-70 italic">
@@ -321,7 +338,6 @@
             </p>
         </div>
 
-        <!-- Copyright Info -->
         <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed">
             <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL</p>
             <p>All Rights Reserved.</p>
@@ -333,48 +349,58 @@
         lucide.createIcons();
 
         document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
-            const modalOverlay = document.getElementById('modal-overlay');
-            const openInfoBtn = document.getElementById('open-info');
-            const closeModalBtn = document.getElementById('close-modal');
-            const confirmModalBtn = document.getElementById('modal-confirm');
+            const themeToggle = document.getElementById('theme-toggle');
             const yearSpan = document.getElementById('current-year');
-
-            // Dynamic Year
-            if (yearSpan) {
-                yearSpan.textContent = new Date().getFullYear();
-            }
+            
+            // Modals
+            const infoModal = document.getElementById('modal-overlay');
+            const devModal = document.getElementById('dev-modal-overlay');
+            
+            // Buttons
+            const toolBtns = document.querySelectorAll('.tool-btn');
+            const openInfoBtn = document.getElementById('open-info');
+            
+            if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
             // Theme Toggle
             themeToggle.addEventListener('click', () => {
                 const currentTheme = body.getAttribute('data-theme');
-                const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
-                body.setAttribute('data-theme', nextTheme);
+                body.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
             });
 
-            // Modal Controls
-            const openModal = () => {
-                modalOverlay.classList.remove('hidden');
+            // Modal Utility Functions
+            const showModal = (modal) => {
+                modal.classList.remove('hidden');
                 setTimeout(() => {
-                    modalOverlay.classList.add('active');
-                    modalOverlay.style.opacity = '1';
+                    modal.classList.add('active');
+                    modal.style.opacity = '1';
                 }, 10);
             };
 
-            const closeModal = () => {
-                modalOverlay.classList.remove('active');
-                modalOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    modalOverlay.classList.add('hidden');
-                }, 300);
+            const hideModal = (modal) => {
+                modal.classList.remove('active');
+                modal.style.opacity = '0';
+                setTimeout(() => modal.classList.add('hidden'), 300);
             };
 
-            openInfoBtn.addEventListener('click', openModal);
-            closeModalBtn.addEventListener('click', closeModal);
-            confirmModalBtn.addEventListener('click', closeModal);
-            modalOverlay.addEventListener('click', (e) => {
-                if (e.target === modalOverlay) closeModal();
+            // Event Listeners
+            openInfoBtn.addEventListener('click', () => showModal(infoModal));
+            document.getElementById('close-modal').addEventListener('click', () => hideModal(infoModal));
+            document.getElementById('modal-confirm').addEventListener('click', () => hideModal(infoModal));
+            
+            toolBtns.forEach(btn => {
+                btn.addEventListener('click', () => showModal(devModal));
+            });
+
+            document.getElementById('close-dev-modal').addEventListener('click', () => hideModal(devModal));
+            document.getElementById('dev-modal-confirm').addEventListener('click', () => hideModal(devModal));
+
+            // Close on overlay click
+            [infoModal, devModal].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) hideModal(modal);
+                });
             });
         });
     </script>
