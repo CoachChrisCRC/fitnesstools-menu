@@ -177,7 +177,7 @@
                         </li>
                         <li class="flex gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-black dark:text-white"></i>
-                            <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch in the header.</span>
+                            <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch above.</span>
                         </li>
                         <li class="flex gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-black dark:text-white"></i>
@@ -200,10 +200,8 @@
                 <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <div class="flex items-center gap-4">
-                <button id="open-info" class="p-2 rounded-xl transition-colors" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i>
-                </button>
+            <!-- Theme & Info Controls Stack -->
+            <div class="flex flex-col items-center gap-3">
                 <div class="flex flex-col items-center gap-1.5">
                     <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
                     <div id="theme-toggle" class="theme-switch-container" aria-label="Toggle Theme">
@@ -214,6 +212,10 @@
                         </div>
                     </div>
                 </div>
+                
+                <button id="open-info" class="p-2.5 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </button>
             </div>
         </header>
 
