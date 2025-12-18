@@ -311,8 +311,22 @@
         </main>
     </div>
 
-    <footer class="w-full text-center py-8 text-[10px] uppercase tracking-[0.2em] font-bold" style="color: var(--text-muted)">
-        <p>&copy; 2024 Circular Roots Coaching. All Rights Reserved.</p>
+    <!-- Updated Footer with Disclaimer and Single-Line Copyright -->
+    <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
+        <!-- Medical Disclaimer -->
+        <div class="mb-6 space-y-2">
+            <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
+            <p class="text-[8px] leading-normal normal-case opacity-70 italic">
+                The content provided by these tools is for informational and educational purposes only and is not intended as medical advice or a substitute for professional consultation with a qualified healthcare provider. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition or physical activity.
+            </p>
+        </div>
+
+        <!-- Copyright Info -->
+        <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed">
+            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL</p>
+            <p>All Rights Reserved.</p>
+            <p class="mt-2 text-[8px] opacity-60 italic">- Fitter Stronger Better -</p>
+        </div>
     </footer>
 
     <script>
@@ -325,6 +339,12 @@
             const openInfoBtn = document.getElementById('open-info');
             const closeModalBtn = document.getElementById('close-modal');
             const confirmModalBtn = document.getElementById('modal-confirm');
+            const yearSpan = document.getElementById('current-year');
+
+            // Dynamic Year
+            if (yearSpan) {
+                yearSpan.textContent = new Date().getFullYear();
+            }
 
             // Theme Toggle
             themeToggle.addEventListener('click', () => {
