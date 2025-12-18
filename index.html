@@ -25,6 +25,7 @@
             --btn-text-primary: #ffffff;
             --link-hover-bg: #000000;
             --link-hover-text: #ffffff;
+            --modal-overlay: rgba(0, 0, 0, 0.4);
         }
 
         [data-theme="dark"] {
@@ -42,6 +43,7 @@
             --btn-text-primary: #000000;
             --link-hover-bg: #ffffff;
             --link-hover-text: #000000;
+            --modal-overlay: rgba(0, 0, 0, 0.8);
         }
 
         body {
@@ -55,7 +57,6 @@
             font-family: 'Oswald', sans-serif;
         }
 
-        /* Main Card Container */
         .app-card {
             background-color: var(--bg-card);
             box-shadow: var(--shadow);
@@ -63,7 +64,6 @@
             transition: all 0.3s ease;
         }
 
-        /* Nav Card Hover Effects */
         .link-card {
             transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
@@ -77,27 +77,16 @@
             background-color: var(--link-hover-bg);
             color: var(--link-hover-text);
             border-color: var(--link-hover-bg);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .link-card:hover .arrow-icon {
             transform: translateX(4px);
         }
 
-        .link-card:active {
-            transform: translateY(0);
-        }
-        
-        /* Newsletter specific card */
         .newsletter-cta {
             background-color: var(--bg-btn-primary);
             color: var(--btn-text-primary);
             transition: all 0.25s ease;
-        }
-        
-        .newsletter-cta:hover {
-            opacity: 0.9;
-            transform: translateY(-2px);
         }
 
         /* Theme Toggle Styling */
@@ -142,19 +131,68 @@
             width: 9px;
             height: 9px;
             color: var(--text-muted);
-            transition: color 0.3s ease;
         }
 
         [data-theme="light"] .icon-sun { color: var(--btn-text-primary); }
         [data-theme="dark"] .icon-moon { color: var(--btn-text-primary); }
+
+        /* Modal Styles */
+        #modal-overlay {
+            background-color: var(--modal-overlay);
+            backdrop-filter: blur(4px);
+            transition: all 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transform: scale(0.95);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        #modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
 
+    <!-- Info Modal -->
+    <div id="modal-overlay" class="fixed inset-0 z-50 flex items-center justify-center p-6 hidden opacity-0">
+        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
+            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex flex-col items-center text-center">
+                <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
+                    <i data-lucide="info" class="w-8 h-8" style="color: var(--text-heading)"></i>
+                </div>
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">How to Use</h3>
+                <div class="space-y-4 text-sm leading-relaxed text-left" style="color: var(--text-accent)">
+                    <p>Welcome to the <strong>Circular Roots</strong> toolkit. Here’s how to get the most out of these resources:</p>
+                    <ul class="space-y-2 list-none">
+                        <li class="flex gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-black dark:text-white"></i>
+                            <span>Select a tool from the menu to start your calculation or training.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-black dark:text-white"></i>
+                            <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch in the header.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-black dark:text-white"></i>
+                            <span>All data is processed locally—your fitness stats stay private to your device.</span>
+                        </li>
+                    </ul>
+                </div>
+                <button id="modal-confirm" class="w-full mt-8 py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Start Training</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Content Card -->
     <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
         
-        <!-- Header / Branding Area -->
         <header class="w-full px-8 py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
                 <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
@@ -162,22 +200,25 @@
                 <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <div class="flex flex-col items-center gap-1.5">
-                <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
-                <div id="theme-toggle" class="theme-switch-container" aria-label="Toggle Theme">
-                    <div class="theme-switch-circle"></div>
-                    <div class="theme-switch-icons">
-                        <i data-lucide="sun" class="icon-sun"></i>
-                        <i data-lucide="moon" class="icon-moon"></i>
+            <div class="flex items-center gap-4">
+                <button id="open-info" class="p-2 rounded-xl transition-colors" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </button>
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
+                    <div id="theme-toggle" class="theme-switch-container" aria-label="Toggle Theme">
+                        <div class="theme-switch-circle"></div>
+                        <div class="theme-switch-icons">
+                            <i data-lucide="sun" class="icon-sun"></i>
+                            <i data-lucide="moon" class="icon-moon"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </header>
 
-        <!-- Main Content -->
         <main class="w-full px-8 flex-grow pb-12">
             
-            <!-- Profile/Intro Section -->
             <div class="text-center mb-10 mt-2">
                 <div class="inline-block p-1 rounded-full mb-4 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
                     <div class="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
@@ -191,10 +232,7 @@
                 </p>
             </div>
 
-            <!-- Links Container -->
             <div class="space-y-3 flex flex-col w-full">
-
-                <!-- Link 1: WOD Generator -->
                 <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -205,7 +243,6 @@
                     </div>
                 </a>
 
-                <!-- Link 2: 1RM Calculator -->
                 <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between"> 
                         <div class="flex items-center space-x-4">
@@ -216,7 +253,6 @@
                     </div>
                 </a>
 
-                <!-- Link 3: Calorie and Macro Calculator -->
                 <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -227,7 +263,6 @@
                     </div>
                 </a>
                 
-                <!-- Link 4: Bodyfat Calculator -->
                 <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -238,7 +273,6 @@
                     </div>
                 </a>
 
-                <!-- Link 5: Interval Timer -->
                 <a href="#" class="link-card block w-full p-4 rounded-xl group text-left">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -249,7 +283,6 @@
                     </div>
                 </a>
 
-                <!-- Featured/Newsletter Link -->
                 <a href="#" class="newsletter-cta block w-full p-4 rounded-xl mt-6 shadow-md">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
@@ -259,10 +292,8 @@
                         <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                     </div>
                 </a>
-
             </div>
 
-            <!-- Social Icons -->
             <div class="flex justify-center space-x-8 mt-12">
                 <a href="#" class="hover:opacity-100 transition-opacity opacity-50" style="color: var(--text-main)">
                     <i data-lucide="instagram" class="w-6 h-6"></i>
@@ -283,18 +314,45 @@
     </footer>
 
     <script>
-        // Initialize Lucide Icons
         lucide.createIcons();
 
-        // Theme Toggle Logic
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggle = document.getElementById('theme-toggle');
             const body = document.body;
+            const modalOverlay = document.getElementById('modal-overlay');
+            const openInfoBtn = document.getElementById('open-info');
+            const closeModalBtn = document.getElementById('close-modal');
+            const confirmModalBtn = document.getElementById('modal-confirm');
 
+            // Theme Toggle
             themeToggle.addEventListener('click', () => {
                 const currentTheme = body.getAttribute('data-theme');
                 const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
                 body.setAttribute('data-theme', nextTheme);
+            });
+
+            // Modal Controls
+            const openModal = () => {
+                modalOverlay.classList.remove('hidden');
+                setTimeout(() => {
+                    modalOverlay.classList.add('active');
+                    modalOverlay.style.opacity = '1';
+                }, 10);
+            };
+
+            const closeModal = () => {
+                modalOverlay.classList.remove('active');
+                modalOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    modalOverlay.classList.add('hidden');
+                }, 300);
+            };
+
+            openInfoBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            confirmModalBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', (e) => {
+                if (e.target === modalOverlay) closeModal();
             });
         });
     </script>
