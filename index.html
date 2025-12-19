@@ -415,6 +415,13 @@
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
+            // FIX: Ensure overlay is hidden when navigating back via browser history
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    launchOverlay.classList.remove('active');
+                }
+            });
+
             themeToggle.addEventListener('click', () => {
                 const isDark = body.getAttribute('data-theme') === 'dark';
                 body.setAttribute('data-theme', isDark ? 'light' : 'dark');
@@ -430,7 +437,6 @@
             // External link logic: Show animation, THEN redirect
             document.querySelectorAll('a.link-card').forEach(link => {
                 link.addEventListener('click', function(e) {
-                    // Prevent immediate redirection
                     e.preventDefault();
                     
                     const targetUrl = this.href;
@@ -442,11 +448,8 @@
                         lucide.createIcons();
                     }
 
-                    // Show the overlay
                     launchOverlay.classList.add('active');
                     
-                    // Wait for the animation to play before moving to the next page
-                    // 1200ms matches the pulse animation duration defined in CSS
                     setTimeout(() => {
                         window.location.href = targetUrl;
                     }, 1200);
