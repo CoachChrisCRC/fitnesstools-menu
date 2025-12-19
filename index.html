@@ -26,7 +26,7 @@
             --link-hover-bg: #000000;
             --link-hover-text: #ffffff;
             --modal-overlay: rgba(0, 0, 0, 0.4);
-            --launch-overlay: rgba(255, 255, 255, 0.95);
+            --launch-overlay: rgba(255, 255, 255, 0.9);
         }
 
         [data-theme="dark"] {
@@ -45,7 +45,7 @@
             --link-hover-bg: #ffffff;
             --link-hover-text: #000000;
             --modal-overlay: rgba(0, 0, 0, 0.8);
-            --launch-overlay: rgba(10, 10, 10, 0.98);
+            --launch-overlay: rgba(10, 10, 10, 0.95);
         }
 
         body {
@@ -91,13 +91,13 @@
 
         .link-card:hover .arrow-icon { transform: translateX(4px); }
 
-        /* Launching Overlay Styles */
+        /* Minimal Loading Overlay */
         #launch-overlay {
             position: fixed;
             inset: 0;
             z-index: 100;
             background-color: var(--launch-overlay);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
             display: none;
             flex-direction: column;
             align-items: center;
@@ -111,27 +111,19 @@
             opacity: 1;
         }
 
-        .loader-bar {
-            width: 140px;
-            height: 2px;
-            background: var(--border-color);
-            position: relative;
-            overflow: hidden;
-            border-radius: 4px;
+        /* Pulsing Icon Animation */
+        #launch-icon-container {
+            color: var(--text-heading);
+            animation: pulse-scale 1.2s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .loader-progress {
-            position: absolute;
-            height: 100%;
-            width: 40%;
-            background: var(--bg-btn-primary);
-            animation: loading 1.2s infinite ease-in-out;
-            border-radius: 4px;
-        }
-
-        @keyframes loading {
-            0% { left: -40%; }
-            100% { left: 100%; }
+        @keyframes pulse-scale {
+            0% { transform: scale(0.85); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.85); opacity: 0.3; }
         }
 
         /* Theme Toggle Styling */
@@ -214,13 +206,10 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
 
-    <!-- Launching Overlay -->
+    <!-- Minimal Loading Overlay -->
     <div id="launch-overlay">
-        <div class="flex flex-col items-center">
-            <div class="loader-bar mb-4">
-                <div class="loader-progress"></div>
-            </div>
-            <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-80" style="color: var(--text-heading)">Launching Application</span>
+        <div id="launch-icon-container">
+            <!-- Icon injected here -->
         </div>
     </div>
 
@@ -412,6 +401,7 @@
             const infoModal = document.getElementById('modal-overlay');
             const devModal = document.getElementById('dev-modal-overlay');
             const launchOverlay = document.getElementById('launch-overlay');
+            const launchIconContainer = document.getElementById('launch-icon-container');
             const devTitle = document.getElementById('dev-title');
             const devText = document.getElementById('dev-text');
             const devIconWrapper = document.getElementById('dev-icon-wrapper');
@@ -437,14 +427,29 @@
             document.getElementById('close-modal').addEventListener('click', () => closeModal(infoModal));
             document.getElementById('modal-confirm').addEventListener('click', () => closeModal(infoModal));
             
-            // Launch overlay trigger for external links
+            // External link logic: Show animation, THEN redirect
             document.querySelectorAll('a.link-card').forEach(link => {
-                link.addEventListener('click', (e) => {
+                link.addEventListener('click', function(e) {
+                    // Prevent immediate redirection
+                    e.preventDefault();
+                    
+                    const targetUrl = this.href;
+                    const iconElement = this.querySelector('[data-lucide]');
+                    
+                    if (iconElement) {
+                        const iconName = iconElement.getAttribute('data-lucide');
+                        launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16"></i>`;
+                        lucide.createIcons();
+                    }
+
+                    // Show the overlay
                     launchOverlay.classList.add('active');
-                    // Reset overlay after 2 seconds (assuming tab has opened)
+                    
+                    // Wait for the animation to play before moving to the next page
+                    // 1200ms matches the pulse animation duration defined in CSS
                     setTimeout(() => {
-                        launchOverlay.classList.remove('active');
-                    }, 2000);
+                        window.location.href = targetUrl;
+                    }, 1200);
                 });
             });
 
