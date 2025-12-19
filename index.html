@@ -26,6 +26,7 @@
             --link-hover-bg: #000000;
             --link-hover-text: #ffffff;
             --modal-overlay: rgba(0, 0, 0, 0.4);
+            --launch-overlay: rgba(255, 255, 255, 0.95);
         }
 
         [data-theme="dark"] {
@@ -44,6 +45,7 @@
             --link-hover-bg: #ffffff;
             --link-hover-text: #000000;
             --modal-overlay: rgba(0, 0, 0, 0.8);
+            --launch-overlay: rgba(10, 10, 10, 0.98);
         }
 
         body {
@@ -82,7 +84,6 @@
             border-color: var(--link-hover-bg);
         }
 
-        /* Subtle press animation */
         .link-card:active {
             transform: scale(0.98) translateY(0);
             opacity: 0.9;
@@ -90,12 +91,47 @@
 
         .link-card:hover .arrow-icon { transform: translateX(4px); }
 
-        .newsletter-cta {
-            background-color: var(--bg-btn-primary);
-            color: var(--btn-text-primary);
-            transition: all 0.2s ease;
-            cursor: pointer;
-            user-select: none;
+        /* Launching Overlay Styles */
+        #launch-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background-color: var(--launch-overlay);
+            backdrop-filter: blur(8px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #launch-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .loader-bar {
+            width: 140px;
+            height: 2px;
+            background: var(--border-color);
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        .loader-progress {
+            position: absolute;
+            height: 100%;
+            width: 40%;
+            background: var(--bg-btn-primary);
+            animation: loading 1.2s infinite ease-in-out;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { left: -40%; }
+            100% { left: 100%; }
         }
 
         /* Theme Toggle Styling */
@@ -177,6 +213,16 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
+
+    <!-- Launching Overlay -->
+    <div id="launch-overlay">
+        <div class="flex flex-col items-center">
+            <div class="loader-bar mb-4">
+                <div class="loader-progress"></div>
+            </div>
+            <span class="text-[10px] font-black uppercase tracking-[0.3em] opacity-80" style="color: var(--text-heading)">Launching Application</span>
+        </div>
+    </div>
 
     <!-- Information Modal -->
     <div id="modal-overlay" class="modal-overlay">
@@ -266,9 +312,9 @@
                         <i data-lucide="dumbbell" class="w-10 h-10" style="color: var(--btn-text-primary)"></i>
                     </div>
                 </div>
-                <h2 class="text-2xl font-black mb-2" style="color: var(--text-heading)">Free Fitness Tools</h2>
-                <p class="text-sm max-w-[250px] mx-auto leading-relaxed" style="color: var(--text-accent)">
-                    No-nonsense tools to optimize your training. 
+                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
+                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                    No nonsense tools to support & optimise your training journey
                 </p>
             </div>
 
@@ -291,7 +337,7 @@
                 </div>
 
                 <!-- External Tools -->
-                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card p-4 rounded-xl">
+                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
@@ -299,7 +345,7 @@
                     <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
                 
-                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card p-4 rounded-xl">
+                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="ruler" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
@@ -365,6 +411,7 @@
             const yearSpan = document.getElementById('current-year');
             const infoModal = document.getElementById('modal-overlay');
             const devModal = document.getElementById('dev-modal-overlay');
+            const launchOverlay = document.getElementById('launch-overlay');
             const devTitle = document.getElementById('dev-title');
             const devText = document.getElementById('dev-text');
             const devIconWrapper = document.getElementById('dev-icon-wrapper');
@@ -390,6 +437,17 @@
             document.getElementById('close-modal').addEventListener('click', () => closeModal(infoModal));
             document.getElementById('modal-confirm').addEventListener('click', () => closeModal(infoModal));
             
+            // Launch overlay trigger for external links
+            document.querySelectorAll('a.link-card').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    launchOverlay.classList.add('active');
+                    // Reset overlay after 2 seconds (assuming tab has opened)
+                    setTimeout(() => {
+                        launchOverlay.classList.remove('active');
+                    }, 2000);
+                });
+            });
+
             document.querySelectorAll('.tool-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const toolKey = btn.getAttribute('data-tool');
