@@ -63,7 +63,7 @@
         }
 
         .link-card {
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
@@ -82,12 +82,18 @@
             border-color: var(--link-hover-bg);
         }
 
+        /* Subtle press animation */
+        .link-card:active {
+            transform: scale(0.98) translateY(0);
+            opacity: 0.9;
+        }
+
         .link-card:hover .arrow-icon { transform: translateX(4px); }
 
         .newsletter-cta {
             background-color: var(--bg-btn-primary);
             color: var(--btn-text-primary);
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             cursor: pointer;
             user-select: none;
         }
@@ -284,6 +290,7 @@
                     <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
+                <!-- External Tools -->
                 <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
@@ -292,7 +299,6 @@
                     <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
                 
-                <!-- External Bodyfat Link -->
                 <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="ruler" class="w-5 h-5"></i>
