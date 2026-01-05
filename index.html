@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Fitness Tools - Coach Chris</title>
+    <!-- PWA Primary Meta Tags -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Coach Chris">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -358,6 +364,15 @@
                     </div>
                     <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                 </div>
+
+                <!-- New Get Coaching Button -->
+                <a href="https://coachchriscrc.carrd.co/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--text-heading)">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="trending-up" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Get Coaching</span>
+                    </div>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                </a>
             </div>
 
             <!-- Social Media Section -->
@@ -380,20 +395,76 @@
 
     <!-- Footer -->
     <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <div class="mb-6 space-y-2">
+        <div class="mb-6 space-y-2 text-center">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
             <p class="text-[8px] leading-normal normal-case opacity-70 italic">
                 The content provided by these tools is for informational purposes only and is not intended as medical advice.
             </p>
         </div>
-        <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed">
+        <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
             <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
+            <p>TRAIN UNCNVNTNL</p>
             <p>All Rights Reserved.</p>
+            <p>Fitter | Stronger | Better</p>
         </div>
     </footer>
 
     <script>
         lucide.createIcons();
+
+        // --- PWA Support & Custom Icon Configuration ---
+        const PWA_CONFIG = {
+            name: "Coach Chris Tools",
+            shortName: "Coach Chris",
+            iconUrl: "FitnessTools-AppIcon.png" 
+        };
+
+        // 1. Generate Manifest dynamically
+        const manifest = {
+            "name": PWA_CONFIG.name,
+            "short_name": PWA_CONFIG.shortName,
+            "start_url": ".",
+            "display": "standalone",
+            "background_color": "#000000",
+            "theme_color": "#000000",
+            "description": "Unconventional fitness tools by Circular Roots Coaching",
+            "icons": [
+                {
+                    "src": PWA_CONFIG.iconUrl,
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                }
+            ]
+        };
+        
+        // Inject manifest and touch icons for iOS
+        const stringManifest = JSON.stringify(manifest);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        
+        const manifestTag = document.createElement('link');
+        manifestTag.rel = 'manifest';
+        manifestTag.href = manifestURL;
+        document.head.appendChild(manifestTag);
+
+        const appleIconTag = document.createElement('link');
+        appleIconTag.rel = 'apple-touch-icon';
+        appleIconTag.href = PWA_CONFIG.iconUrl;
+        document.head.appendChild(appleIconTag);
+
+        // 2. Register Inline Service Worker
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => self.skipWaiting());
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `;
+            const swBlob = new Blob([swCode], {type: 'text/javascript'});
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log("SW Error", err));
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
@@ -415,7 +486,6 @@
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
-            // FIX: Ensure overlay is hidden when navigating back via browser history
             window.addEventListener('pageshow', (event) => {
                 if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
                     launchOverlay.classList.remove('active');
@@ -434,25 +504,18 @@
             document.getElementById('close-modal').addEventListener('click', () => closeModal(infoModal));
             document.getElementById('modal-confirm').addEventListener('click', () => closeModal(infoModal));
             
-            // External link logic: Show animation, THEN redirect
             document.querySelectorAll('a.link-card').forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
                     const targetUrl = this.href;
                     const iconElement = this.querySelector('[data-lucide]');
-                    
                     if (iconElement) {
                         const iconName = iconElement.getAttribute('data-lucide');
-                        launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16"></i>`;
+                        launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16" style="color: var(--text-heading)"></i>`;
                         lucide.createIcons();
                     }
-
+                    e.preventDefault();
                     launchOverlay.classList.add('active');
-                    
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 1200);
+                    setTimeout(() => { window.location.href = targetUrl; }, 1200);
                 });
             });
 
@@ -480,4 +543,3 @@
     </script>
 </body>
 </html>
-
