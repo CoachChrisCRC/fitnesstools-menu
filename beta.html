@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Tools - Coach Chris</title>
+    <title>Free Fitness Tools - Coach Chris</title>
     <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -19,22 +19,22 @@
             --olive: #808a5c;
             --bg-page: #f3f4f6;
             --bg-card: rgba(255, 255, 255, 0.4); 
-            --border-color: rgba(255, 255, 255, 0.5); 
+            --border-color: rgba(255, 255, 255, 0.5);
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
             --bg-toggle: rgba(243, 244, 246, 0.5);
-            --bg-btn-primary: #808a5c;
+            --bg-btn-primary: var(--olive);
             --btn-text-primary: #ffffff;
-            --link-hover-bg: #808a5c;
+            --link-hover-bg: var(--olive);
             --link-hover-text: #ffffff;
             --modal-overlay: rgba(0, 0, 0, 0.2);
             --launch-overlay: rgba(255, 255, 255, 0.85);
         }
 
-        .dark {
+        [data-theme="dark"] {
             --bg-page: #0a0a0a;
             --bg-card: rgba(18, 18, 18, 0.6); 
             --border-color: rgba(255, 255, 255, 0.15);
@@ -44,9 +44,9 @@
             --text-accent: #a3a3a3;
             --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
             --bg-toggle: rgba(26, 26, 26, 0.5);
-            --bg-btn-primary: #808a5c;
+            --bg-btn-primary: var(--olive);
             --btn-text-primary: #ffffff;
-            --link-hover-bg: #808a5c;
+            --link-hover-bg: var(--olive);
             --link-hover-text: #ffffff;
             --modal-overlay: rgba(0, 0, 0, 0.6);
             --launch-overlay: rgba(10, 10, 10, 0.9);
@@ -86,7 +86,7 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease, background 0.3s ease;
+            transition: transform 0.2s ease;
             color: var(--text-heading);
         }
         .fab-button:active { transform: scale(0.9); }
@@ -121,6 +121,9 @@
             backdrop-filter: none;
         }
 
+        .link-card:active { transform: scale(0.98) translateY(0); opacity: 0.9; }
+        .link-card:hover .arrow-icon { transform: translateX(4px); }
+
         #launch-overlay {
             position: fixed;
             inset: 0;
@@ -134,6 +137,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
+
         #launch-overlay.active { display: flex; opacity: 1; }
 
         #launch-icon-container {
@@ -164,7 +168,9 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
+
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        
         .modal-content {
             background-color: var(--bg-card);
             backdrop-filter: blur(40px);
@@ -177,18 +183,20 @@
             padding: 2rem;
             position: relative;
         }
+        
+        .modal-overlay.active .modal-content { transform: scale(1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 dark">
+<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="dark">
 
     <div class="controls-stack">
         <div class="fab-button" id="theme-toggle" title="Toggle Light/Dark">
-            <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
-            <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+            <i data-lucide="sun" class="w-5 h-5 hidden" id="sun-icon"></i>
+            <i data-lucide="moon" class="w-5 h-5" id="moon-icon"></i>
         </div>
-        <div class="fab-button" id="open-info" title="How to use">
+        <button id="open-info" class="fab-button" title="How to use">
             <i data-lucide="help-circle" class="w-5 h-5"></i>
-        </div>
+        </button>
     </div>
 
     <div id="launch-overlay">
@@ -197,20 +205,28 @@
 
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
-            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70" style="color: var(--text-muted)">
+            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
                     <i data-lucide="help-circle" class="w-8 h-8" style="color: var(--olive)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3">Toolkit Guide</h3>
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Toolkit Guide</h3>
                 <div class="space-y-4 text-sm leading-relaxed text-left" style="color: var(--text-accent)">
                     <p>Welcome to the <strong>Circular Roots</strong> toolkit. Here’s how to get the most out of these resources:</p>
                     <ul class="space-y-3 list-none">
                         <li class="flex gap-2">
                             <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--olive)"></i>
                             <span>Select any tool from the menu to start your calculation or generate training sessions.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--olive)"></i>
+                            <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch above.</span>
+                        </li>
+                        <li class="flex gap-2">
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--olive)"></i>
+                            <span>Calculators provide localized estimates based on standard fitness protocols.</span>
                         </li>
                     </ul>
                 </div>
@@ -221,7 +237,7 @@
 
     <div id="dev-modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
-            <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70" style="color: var(--text-muted)">
+            <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex flex-col items-center text-center">
@@ -230,14 +246,17 @@
                         <i id="dev-icon" data-lucide="construction" class="w-8 h-8" style="color: var(--olive)"></i>
                     </div>
                 </div>
-                <h3 id="dev-title" class="font-brand font-bold text-2xl uppercase mb-3">In the Lab</h3>
-                <p id="dev-text" class="text-sm leading-relaxed mb-6" style="color: var(--text-accent)">Fine-tuning algorithms. Live soon.</p>
+                <h3 id="dev-title" class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">In the Lab</h3>
+                <p id="dev-text" class="text-sm leading-relaxed mb-6" style="color: var(--text-accent)">
+                    Fine-tuning the algorithms to ensure peak performance. Live soon.
+                </p>
                 <button id="dev-modal-confirm" class="w-full py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Back to Menu</button>
             </div>
         </div>
     </div>
 
     <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
+        
         <header class="w-full px-8 py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
                 <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
@@ -253,121 +272,199 @@
                         <i data-lucide="dumbbell" class="w-10 h-10" style="color: #ffffff"></i>
                     </div>
                 </div>
-                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Fitness Tools</h2>
-                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">No nonsense tools to support & optimise your training journey</p>
+                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
+                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                    No nonsense tools to support & optimise your training journey
+                </p>
             </div>
 
             <div class="space-y-3 flex flex-col w-full">
                 <a href="https://coachchriscrc.github.io/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="zap" class="w-5 h-5 text-[#808a5c]"></i>
+                        <i data-lucide="zap" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
                 <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl"> 
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="dumbbell" class="w-5 h-5 text-[#808a5c]"></i>
+                        <i data-lucide="dumbbell" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">1RM Calculator</span>
                     </div>
-                    <i data-lucide="lock" class="w-5 h-5 opacity-40"></i>
+                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
                 <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="utensils" class="w-5 h-5 text-[#808a5c]"></i>
+                        <i data-lucide="utensils" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
                 
                 <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="ruler" class="w-5 h-5 text-[#808a5c]"></i>
+                        <i data-lucide="ruler" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
                 <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="timer" class="w-5 h-5 text-[#808a5c]"></i>
+                        <i data-lucide="timer" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Interval Timer</span>
                     </div>
-                    <i data-lucide="lock" class="w-5 h-5 opacity-40"></i>
+                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
+                </div>
+
+                <div data-tool="newsletter" class="newsletter-cta tool-btn p-4 rounded-xl mt-6 shadow-md flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="mail" class="w-5 h-5" style="color: var(--olive)"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Join the Newsletter</span>
+                    </div>
+                    <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                 </div>
 
                 <a href="https://coachchriscrc.carrd.co/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--olive)">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="trending-up" class="w-5 h-5 text-[#808a5c]"></i>
+                        <i data-lucide="trending-up" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Get Coaching</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                </a>
+            </div>
+
+            <div class="flex justify-center space-x-12 mt-12 pb-4">
+                <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="message-circle" class="w-6 h-6"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">WhatsApp</span>
+                </a>
+                <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="instagram" class="w-6 h-6"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">Instagram</span>
+                </a>
+                <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="facebook" class="w-6 h-6"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">Facebook</span>
                 </a>
             </div>
         </main>
     </div>
 
     <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <div class="mb-8 space-y-2 text-center">
+        <div class="mb-6 space-y-2 text-center">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
-            <p class="text-[8px] leading-normal opacity-70 italic">
+            <p class="text-[8px] leading-normal normal-case opacity-70 italic">
                 The content provided by these tools is for informational purposes only and is not intended as medical advice.
             </p>
         </div>
-        <div class="text-[10px] uppercase tracking-[0.2em] font-bold space-y-1.5 flex flex-col items-center">
-            <p style="color: var(--text-heading)">COACH CHRIS</p>
-            <p style="color: var(--olive)">CIRCULAR ROOTS COACHING</p>
-            <p class="opacity-60">TRAIN UNCNVNTNL</p>
-            <p class="text-[8px] mt-4 opacity-40 font-normal">&copy; <span id="current-year"></span> All Rights Reserved</p>
+        <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
+            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
+            <p style="color: var(--olive)">TRAIN UNCNVNTNL</p>
+            <p>All Rights Reserved.</p>
+            <p>Fitter | Stronger | Better</p>
         </div>
     </footer>
 
     <script>
         lucide.createIcons();
 
+        const PWA_CONFIG = { name: "Coach Chris Tools", shortName: "Coach Chris", iconUrl: "FitnessTools-AppIcon.png" };
+        const manifest = { "name": PWA_CONFIG.name, "short_name": PWA_CONFIG.shortName, "start_url": ".", "display": "standalone", "background_color": "#000000", "theme_color": "#000000", "description": "Unconventional fitness tools by Circular Roots Coaching", "icons": [{ "src": PWA_CONFIG.iconUrl, "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }] };
+        const stringManifest = JSON.stringify(manifest);
+        const blob = new Blob([stringManifest], {type: 'application/json'});
+        const manifestURL = URL.createObjectURL(blob);
+        const manifestTag = document.createElement('link');
+        manifestTag.rel = 'manifest'; manifestTag.href = manifestURL;
+        document.head.appendChild(manifestTag);
+        const appleIconTag = document.createElement('link');
+        appleIconTag.rel = 'apple-touch-icon'; appleIconTag.href = PWA_CONFIG.iconUrl;
+        document.head.appendChild(appleIconTag);
+
+        if ('serviceWorker' in navigator) {
+            const swCode = `self.addEventListener('install', (e) => self.skipWaiting()); self.addEventListener('fetch', (e) => { e.respondWith(fetch(e.request).catch(() => caches.match(e.request))); });`;
+            const swBlob = new Blob([swCode], {type: 'text/javascript'});
+            const swUrl = URL.createObjectURL(swBlob);
+            navigator.serviceWorker.register(swUrl).catch(err => console.log("SW Error", err));
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
             const themeToggle = document.getElementById('theme-toggle');
-            const infoBtn = document.getElementById('open-info');
             const yearSpan = document.getElementById('current-year');
+            const infoModal = document.getElementById('modal-overlay');
+            const devModal = document.getElementById('dev-modal-overlay');
             const launchOverlay = document.getElementById('launch-overlay');
             const launchIconContainer = document.getElementById('launch-icon-container');
+            const devTitle = document.getElementById('dev-title');
+            const devText = document.getElementById('dev-text');
+            const devIconWrapper = document.getElementById('dev-icon-wrapper');
+            
+            const toolData = {
+                '1rm': { title: "Heavy Loading", text: "Finalizing precision formulas for power and strength lifts. Coming soon.", icon: "dumbbell" },
+                'timer': { title: "Synchronizing", text: "Our performance clock is being calibrated for interval training. Coming soon.", icon: "timer" },
+                'newsletter': { title: "Drafting Intel", text: "Assembling unconventional training wisdom for your inbox. Coming soon.", icon: "mail" }
+            };
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
             window.addEventListener('pageshow', (event) => {
                 if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
                     launchOverlay.classList.remove('active');
-                    setTimeout(() => launchOverlay.style.display = 'none', 300);
                 }
             });
 
-            themeToggle.addEventListener('click', () => body.classList.toggle('dark'));
-            infoBtn.addEventListener('click', () => document.getElementById('modal-overlay').classList.add('active'));
+            themeToggle.addEventListener('click', () => {
+                const isDark = body.getAttribute('data-theme') === 'dark';
+                body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+                document.getElementById('sun-icon').classList.toggle('hidden');
+                document.getElementById('moon-icon').classList.toggle('hidden');
+            });
+
+            const openModal = (m) => m.classList.add('active');
+            const closeModal = (m) => m.classList.remove('active');
+
+            document.getElementById('open-info').addEventListener('click', () => openModal(infoModal));
+            document.getElementById('close-modal').addEventListener('click', () => closeModal(infoModal));
+            document.getElementById('modal-confirm').addEventListener('click', () => closeModal(infoModal));
             
-            document.querySelectorAll('a.external-link').forEach(link => {
+            document.querySelectorAll('a.link-card').forEach(link => {
                 link.addEventListener('click', function(e) {
-                    const iconName = this.querySelector('[data-lucide]').getAttribute('data-lucide');
-                    launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16"></i>`;
-                    lucide.createIcons();
+                    const targetUrl = this.href;
+                    const iconElement = this.querySelector('[data-lucide]');
+                    if (iconElement) {
+                        const iconName = iconElement.getAttribute('data-lucide');
+                        launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16" style="color: var(--olive)"></i>`;
+                        lucide.createIcons();
+                    }
                     e.preventDefault();
-                    launchOverlay.style.display = 'flex';
-                    setTimeout(() => launchOverlay.classList.add('active'), 10);
-                    setTimeout(() => { window.location.href = this.href; }, 1200);
+                    launchOverlay.classList.add('active');
+                    setTimeout(() => { window.location.href = targetUrl; }, 1200);
                 });
             });
 
             document.querySelectorAll('.tool-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
-                    document.getElementById('dev-modal-overlay').classList.add('active');
+                    const toolKey = btn.getAttribute('data-tool');
+                    const data = toolData[toolKey];
+                    if (data) {
+                        devTitle.textContent = data.title;
+                        devText.textContent = data.text;
+                        devIconWrapper.innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8" style="color: var(--olive)"></i>`;
+                        lucide.createIcons();
+                        openModal(devModal);
+                    }
                 });
             });
 
-            document.querySelectorAll('.modal-overlay').forEach(m => {
-                m.addEventListener('click', (e) => { if(e.target === m || e.target.closest('button')) m.classList.remove('active'); });
-            });
+            document.getElementById('close-dev-modal').addEventListener('click', () => closeModal(devModal));
+            document.getElementById('dev-modal-confirm').addEventListener('click', () => closeModal(devModal));
+
+            [infoModal, devModal].forEach(m => m.addEventListener('click', (e) => {
+                if (e.target === m) closeModal(m);
+            }));
         });
     </script>
 </body>
