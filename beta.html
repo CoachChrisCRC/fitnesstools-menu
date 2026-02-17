@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Coach Chris CRC | Toolkit</title>
     
-    <meta name="theme-color" content="#fcfcfc">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -18,204 +13,190 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Rock+Salt&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Rock+Salt&display=swap');
         
         :root { 
             --olive: #808a5c; 
-            --bg-gradient-start: #ffffff;
-            --bg-gradient-end: #f4f4f5;
-            --card-bg: rgba(255, 255, 255, 0.8);
-            --card-border: rgba(0, 0, 0, 0.08);
+            --bg-light: #fcfcfc;
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(0, 0, 0, 0.08);
             --text-main: #09090b;
-            --text-muted: #71717a;
+            --text-muted: #52525b;
         }
 
         .dark {
-            --bg-gradient-start: #18181b;
-            --bg-gradient-end: #09090b;
-            --card-bg: rgba(24, 24, 27, 0.8);
-            --card-border: rgba(255, 255, 255, 0.08);
+            --bg-light: #09090b;
+            --glass-bg: rgba(24, 24, 27, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-muted: #a1a1aa;
         }
 
         body { 
             font-family: 'Inter', sans-serif; 
-            background: radial-gradient(circle at 50% 50%, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            background-color: var(--bg-light);
+            background-image: radial-gradient(circle at top right, rgba(128, 138, 92, 0.15), transparent 400px);
             color: var(--text-main); 
             min-height: 100svh;
             display: flex;
-            align-items: center;
             justify-content: center;
-            padding: 24px;
-            transition: background 0.5s ease;
+            padding: 40px 20px;
+            transition: background 0.4s ease;
         }
 
         .rock-salt { font-family: 'Rock Salt', cursive; }
 
-        /* Sophisticated Glass Card */
-        .glass-shell {
-            background: var(--card-bg);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-radius: 42px;
-            padding: 48px 28px 32px;
-            box-shadow: 
-                0 30px 60px -12px rgba(0, 0, 0, 0.15),
-                0 0 0 1px var(--card-border);
+        /* Floating Card Stack */
+        .tool-wrapper {
             width: 100%;
-            max-width: 400px;
-            position: relative;
-            overflow: hidden;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
-        /* Subtle Inner Glow */
-        .glass-shell::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 50%);
-            pointer-events: none;
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
         }
 
-        /* Premium List Items */
-        .tool-button {
-            background: rgba(128, 128, 128, 0.03);
-            border: 1px solid var(--card-border);
-            border-radius: 22px;
-            padding: 18px 22px;
+        /* Tool Item Style */
+        .tool-row {
+            padding: 18px 20px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+            gap: 16px;
+            transition: all 0.2s ease;
+            border-bottom: 1px solid var(--glass-border);
             text-decoration: none;
             color: var(--text-main);
-            margin-bottom: 12px;
         }
-
-        .tool-button:hover {
-            transform: scale(1.02);
-            background: var(--olive);
-            color: white;
-            border-color: var(--olive);
-            box-shadow: 0 10px 20px -5px rgba(128, 138, 92, 0.4);
-        }
-
-        .tool-button:active { transform: scale(0.98); }
-
-        /* Theme FAB */
-        .theme-fab {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            width: 50px;
-            height: 50px;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px);
-            border-radius: 50%;
+        .tool-row:last-child { border-bottom: none; }
+        .tool-row:active { background: rgba(128, 138, 92, 0.1); }
+        
+        .icon-box {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--bg-light);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--card-border);
-            cursor: pointer;
-            z-index: 100;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            border: 1px solid var(--glass-border);
         }
 
-        /* Nav Transition */
+        /* Nav Transition Overlay */
         #nav-transition {
             position: fixed;
             inset: 0;
-            background: var(--bg-gradient-start);
-            z-index: 10000;
+            background: var(--bg-light);
+            z-index: 9999;
             display: none;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        #nav-transition.active { display: flex; }
+        #nav-transition.active { display: flex; opacity: 1; }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--olive);
+        /* Floating Theme Button */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            margin-bottom: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
         }
     </style>
 </head>
 <body class="dark">
 
     <div id="nav-transition">
-        <div class="status-dot animate-ping"></div>
-        <p class="text-[10px] font-black uppercase tracking-[0.3em] opacity-40">Loading Tool</p>
+        <div class="w-12 h-[2px] bg-[#808a5c] relative overflow-hidden">
+            <div class="absolute inset-0 bg-white/20 animate-pulse"></div>
+        </div>
     </div>
 
-    <button class="theme-fab" id="theme-btn" aria-label="Toggle Theme">
-        <i data-lucide="moon" class="w-5 h-5 dark:hidden"></i>
-        <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+    <button class="theme-toggle" id="theme-btn">
+        <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
     </button>
 
-    <div class="glass-shell">
-        <header class="text-center mb-12">
-            <span class="rock-salt text-[#808a5c] text-sm block mb-2 opacity-90">Coach Chris</span>
-            <h1 class="text-4xl font-black uppercase tracking-tighter leading-none mb-3">Toolkit</h1>
-            <div class="h-[1px] w-12 bg-[#808a5c] mx-auto mb-4 opacity-40"></div>
-            <p class="text-[9px] font-bold uppercase tracking-[0.3em] text-muted">Circular Roots Coaching</p>
+    <div class="tool-wrapper">
+        <header class="text-center py-6">
+            <h2 class="rock-salt font-bold text-2xl text-[#808a5c] uppercase tracking-tight mb-3">COACH CHRIS</h2>
+            <h3 class="text-main font-black text-2xl uppercase tracking-tighter mb-1">Chris Hedley</h3>
+            <p class="text-muted text-[10px] font-bold uppercase tracking-[0.25em]">Specialist in Practical Strength & Resilience</p>
         </header>
 
-        <nav class="space-y-3">
-            <a href="https://coachchriscrc.github.io/wodgenerator" class="tool-button nav-link">
-                <div class="flex items-center gap-5">
+        <div class="glass-panel overflow-hidden">
+            <a href="https://coachchriscrc.github.io/wodgenerator" class="tool-row nav-link">
+                <div class="icon-box">
                     <i data-lucide="zap" class="w-5 h-5 text-[#808a5c]"></i>
-                    <span class="text-[12px] font-bold uppercase tracking-widest">WOD Generator</span>
                 </div>
-                <i data-lucide="arrow-right" class="w-4 h-4 opacity-30"></i>
+                <div class="flex-1">
+                    <p class="text-[11px] font-black uppercase tracking-widest">WOD Generator</p>
+                    <p class="text-[9px] text-muted uppercase tracking-wider">Instant Training Sessions</p>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
             </a>
 
-            <a href="https://coachchriscrc.github.io/free-calorie-calculator" class="tool-button nav-link">
-                <div class="flex items-center gap-5">
+            <a href="https://coachchriscrc.github.io/free-calorie-calculator" class="tool-row nav-link">
+                <div class="icon-box">
                     <i data-lucide="utensils" class="w-5 h-5 text-[#808a5c]"></i>
-                    <span class="text-[12px] font-bold uppercase tracking-widest">Calorie Calculator</span>
                 </div>
-                <i data-lucide="arrow-right" class="w-4 h-4 opacity-30"></i>
+                <div class="flex-1">
+                    <p class="text-[11px] font-black uppercase tracking-widest">Calorie Calculator</p>
+                    <p class="text-[9px] text-muted uppercase tracking-wider">Personalized Nutrition Base</p>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
             </a>
 
-            <a href="https://coachchriscrc.github.io/free-bf-calculator" class="tool-button nav-link">
-                <div class="flex items-center gap-5">
+            <a href="https://coachchriscrc.github.io/free-bf-calculator" class="tool-row nav-link">
+                <div class="icon-box">
                     <i data-lucide="ruler" class="w-5 h-5 text-[#808a5c]"></i>
-                    <span class="text-[12px] font-bold uppercase tracking-widest">Bodyfat Calculator</span>
                 </div>
-                <i data-lucide="arrow-right" class="w-4 h-4 opacity-30"></i>
+                <div class="flex-1">
+                    <p class="text-[11px] font-black uppercase tracking-widest">Bodyfat Calculator</p>
+                    <p class="text-[9px] text-muted uppercase tracking-wider">Track Body Composition</p>
+                </div>
+                <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
             </a>
 
-            <div class="tool-button opacity-40 cursor-not-allowed filter grayscale">
-                <div class="flex items-center gap-5">
+            <div class="tool-row opacity-40">
+                <div class="icon-box">
                     <i data-lucide="dumbbell" class="w-5 h-5"></i>
-                    <span class="text-[12px] font-bold uppercase tracking-widest">1RM Calculator</span>
                 </div>
-                <i data-lucide="lock" class="w-4 h-4"></i>
-            </div>
-            
-            <div class="tool-button opacity-40 cursor-not-allowed filter grayscale">
-                <div class="flex items-center gap-5">
-                    <i data-lucide="timer" class="w-5 h-5"></i>
-                    <span class="text-[12px] font-bold uppercase tracking-widest">Interval Timer</span>
+                <div class="flex-1">
+                    <p class="text-[11px] font-black uppercase tracking-widest">1RM Calculator</p>
+                    <p class="text-[9px] text-muted uppercase tracking-wider">Strength Calibration</p>
                 </div>
-                <i data-lucide="lock" class="w-4 h-4"></i>
-            </div>
-        </nav>
-
-        <div class="mt-12 space-y-6">
-            <a href="https://coachchriscrc.carrd.co/#services" class="group w-full flex items-center justify-center gap-3 bg-[#808a5c] text-white py-5 rounded-2xl shadow-lg shadow-[#808a5c]/20 hover:shadow-[#808a5c]/40 active:scale-[0.96] transition-all">
-                <i data-lucide="trending-up" class="w-4 h-4 group-hover:translate-y-[-2px] transition-transform"></i>
-                <span class="text-[11px] font-black uppercase tracking-[0.2em]">Premium Coaching</span>
-            </a>
-            
-            <div class="text-center">
-                <p class="text-[#808a5c] text-[9px] font-black uppercase tracking-[0.5em] opacity-80">#TRAINUNCNVNTNL</p>
+                <i data-lucide="lock" class="w-4 h-4 opacity-30"></i>
             </div>
         </div>
+
+        <div class="glass-panel p-4">
+            <a href="https://coachchriscrc.carrd.co/#services" class="w-full flex items-center justify-center gap-3 bg-[#808a5c] text-white py-5 rounded-2xl shadow-lg shadow-[#808a5c]/20 active:scale-[0.97] transition-all">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                <span class="text-[11px] font-black uppercase tracking-widest">Return to Coaching</span>
+            </a>
+        </div>
+
+        <footer class="text-center mt-4">
+            <p class="text-[#808a5c] text-[9px] font-black uppercase tracking-[0.4em]">#FITTER #STRONGER #BETTER</p>
+        </footer>
     </div>
 
     <script>
@@ -226,13 +207,14 @@
             document.documentElement.classList.toggle('dark');
         });
 
-        // Navigation Animation
+        // Nav logic
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = this.href;
-                document.getElementById('nav-transition').classList.add('active');
-                setTimeout(() => { window.location.href = target; }, 500);
+                const overlay = document.getElementById('nav-transition');
+                overlay.classList.add('active');
+                setTimeout(() => { window.location.href = target; }, 400);
             });
         });
     </script>
