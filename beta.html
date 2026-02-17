@@ -121,6 +121,16 @@
             backdrop-filter: none;
         }
 
+        /* Ensure icons and badges remain visible and contrasty on hover */
+        .link-card:hover i[data-lucide] {
+            color: #ffffff !important;
+        }
+        
+        .link-card:hover .badge-free {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+        }
+
         .link-card:active { transform: scale(0.98) translateY(0); opacity: 0.9; }
         .link-card:hover .arrow-icon { transform: translateX(4px); }
 
@@ -324,7 +334,7 @@
                         <i data-lucide="mail" class="w-5 h-5" style="color: var(--olive)"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Join the Newsletter</span>
                     </div>
-                    <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
+                    <span class="badge-free text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                 </button>
 
                 <a href="https://coachchriscrc.carrd.co/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--olive)">
