@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Fitness Tools - Coach Chris</title>
+    <title>Fitness Tools - Coach Chris</title>
     <meta name="theme-color" content="#0a0a0a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,8 +18,8 @@
         :root {
             --olive: #808a5c;
             --bg-page: #f3f4f6;
-            --bg-card: rgba(255, 255, 255, 0.4); /* Lowered opacity for more glass effect */
-            --border-color: rgba(255, 255, 255, 0.5); /* Brighter border for highlight */
+            --bg-card: rgba(255, 255, 255, 0.4); 
+            --border-color: rgba(255, 255, 255, 0.5); 
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
@@ -34,10 +34,9 @@
             --launch-overlay: rgba(255, 255, 255, 0.85);
         }
 
-        /* Initial Load set to Dark via body class */
         .dark {
             --bg-page: #0a0a0a;
-            --bg-card: rgba(18, 18, 18, 0.6); /* Transparent dark glass */
+            --bg-card: rgba(18, 18, 18, 0.6); 
             --border-color: rgba(255, 255, 255, 0.15);
             --text-main: #ffffff;
             --text-heading: #ffffff;
@@ -56,7 +55,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-page);
-            /* Soft gradient background to make glass pop */
             background-image: radial-gradient(circle at 50% 50%, transparent, rgba(128, 138, 92, 0.05));
             color: var(--text-main);
             transition: background-color 0.4s ease, color 0.4s ease;
@@ -79,7 +77,7 @@
             width: 48px;
             height: 48px;
             background: var(--bg-card);
-            backdrop-filter: blur(40px); /* Increased blur */
+            backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border-radius: 50%;
             display: flex;
@@ -95,7 +93,7 @@
 
         .app-card {
             background-color: var(--bg-card);
-            backdrop-filter: blur(40px); /* Deep frosted glass effect */
+            backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
@@ -123,7 +121,6 @@
             backdrop-filter: none;
         }
 
-        /* Minimal Loading Overlay */
         #launch-overlay {
             position: fixed;
             inset: 0;
@@ -137,7 +134,6 @@
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-
         #launch-overlay.active { display: flex; opacity: 1; }
 
         #launch-icon-container {
@@ -154,7 +150,6 @@
             100% { transform: scale(0.85); opacity: 0.3; }
         }
 
-        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -169,9 +164,7 @@
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
-
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        
         .modal-content {
             background-color: var(--bg-card);
             backdrop-filter: blur(40px);
@@ -204,14 +197,14 @@
 
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
-            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
+            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
                     <i data-lucide="help-circle" class="w-8 h-8" style="color: var(--olive)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Toolkit Guide</h3>
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3">Toolkit Guide</h3>
                 <div class="space-y-4 text-sm leading-relaxed text-left" style="color: var(--text-accent)">
                     <p>Welcome to the <strong>Circular Roots</strong> toolkit. Here’s how to get the most out of these resources:</p>
                     <ul class="space-y-3 list-none">
@@ -228,7 +221,7 @@
 
     <div id="dev-modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
-            <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
+            <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex flex-col items-center text-center">
@@ -237,7 +230,7 @@
                         <i id="dev-icon" data-lucide="construction" class="w-8 h-8" style="color: var(--olive)"></i>
                     </div>
                 </div>
-                <h3 id="dev-title" class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">In the Lab</h3>
+                <h3 id="dev-title" class="font-brand font-bold text-2xl uppercase mb-3">In the Lab</h3>
                 <p id="dev-text" class="text-sm leading-relaxed mb-6" style="color: var(--text-accent)">Fine-tuning algorithms. Live soon.</p>
                 <button id="dev-modal-confirm" class="w-full py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Back to Menu</button>
             </div>
@@ -245,7 +238,6 @@
     </div>
 
     <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
-        
         <header class="w-full px-8 py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
                 <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
@@ -261,10 +253,8 @@
                         <i data-lucide="dumbbell" class="w-10 h-10" style="color: #ffffff"></i>
                     </div>
                 </div>
-                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
-                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
-                    No nonsense tools to support & optimise your training journey
-                </p>
+                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Fitness Tools</h2>
+                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">No nonsense tools to support & optimise your training journey</p>
             </div>
 
             <div class="space-y-3 flex flex-col w-full">
@@ -273,7 +263,7 @@
                         <i data-lucide="zap" class="w-5 h-5 text-[#808a5c]"></i>
                         <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
                 </a>
 
                 <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl"> 
@@ -289,7 +279,7 @@
                         <i data-lucide="utensils" class="w-5 h-5 text-[#808a5c]"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
                 </a>
                 
                 <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
@@ -297,7 +287,7 @@
                         <i data-lucide="ruler" class="w-5 h-5 text-[#808a5c]"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
                 </a>
 
                 <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl">
@@ -313,22 +303,24 @@
                         <i data-lucide="trending-up" class="w-5 h-5 text-[#808a5c]"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Get Coaching</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
+                    <i data-lucide="external-link" class="w-4 h-4 opacity-60"></i>
                 </a>
             </div>
         </main>
     </div>
 
     <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <div class="mb-6 space-y-2 text-center">
+        <div class="mb-8 space-y-2 text-center">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
-            <p class="text-[8px] leading-normal normal-case opacity-70 italic">
+            <p class="text-[8px] leading-normal opacity-70 italic">
                 The content provided by these tools is for informational purposes only and is not intended as medical advice.
             </p>
         </div>
-        <div class="text-[9px] uppercase tracking-[0.2em] font-bold space-y-1 text-center">
-            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
-            <p style="color: var(--olive)">TRAIN UNCNVNTNL</p>
+        <div class="text-[10px] uppercase tracking-[0.2em] font-bold space-y-1.5 flex flex-col items-center">
+            <p style="color: var(--text-heading)">COACH CHRIS</p>
+            <p style="color: var(--olive)">CIRCULAR ROOTS COACHING</p>
+            <p class="opacity-60">TRAIN UNCNVNTNL</p>
+            <p class="text-[8px] mt-4 opacity-40 font-normal">&copy; <span id="current-year"></span> All Rights Reserved</p>
         </div>
     </footer>
 
