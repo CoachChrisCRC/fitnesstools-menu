@@ -121,12 +121,14 @@
             backdrop-filter: none;
         }
 
-        /* Logic for all icons and badges on hover/active */
-        .link-card:hover i, .link-card:active i {
+        /* Fixed: Force icons to white on hover and long-press to override inline styles */
+        .link-card:hover i[data-lucide], 
+        .link-card:active i[data-lucide] {
             color: #ffffff !important;
         }
         
-        .link-card:hover .badge-free, .link-card:active .badge-free {
+        .link-card:hover .badge-free,
+        .link-card:active .badge-free {
             background-color: #ffffff !important;
             color: #000000 !important;
         }
