@@ -17,14 +17,14 @@
         
         :root {
             --olive: #808a5c;
-            --bg-page: #f9f9f9;
+            --bg-page: #f3f4f6;
             --bg-card: rgba(255, 255, 255, 0.8);
             --border-color: rgba(0, 0, 0, 0.08);
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
-            --shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
             --bg-toggle: #f3f4f6;
             --toggle-pill-bg: #e5e7eb;
             --bg-btn-primary: #808a5c;
@@ -32,18 +32,18 @@
             --link-hover-bg: #808a5c;
             --link-hover-text: #ffffff;
             --modal-overlay: rgba(0, 0, 0, 0.4);
-            --launch-overlay: rgba(255, 255, 255, 0.95);
+            --launch-overlay: rgba(255, 255, 255, 0.9);
         }
 
         [data-theme="dark"] {
-            --bg-page: #09090b;
-            --bg-card: rgba(24, 24, 27, 0.8);
+            --bg-page: #0a0a0a;
+            --bg-card: rgba(18, 18, 18, 0.85);
             --border-color: rgba(255, 255, 255, 0.1);
             --text-main: #ffffff;
             --text-heading: #ffffff;
             --text-muted: #525252;
             --text-accent: #a3a3a3;
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
             --bg-toggle: #1a1a1a;
             --toggle-pill-bg: #1a1a1a;
             --bg-btn-primary: #808a5c;
@@ -51,20 +51,18 @@
             --link-hover-bg: #808a5c;
             --link-hover-text: #ffffff;
             --modal-overlay: rgba(0, 0, 0, 0.8);
-            --launch-overlay: rgba(9, 9, 11, 0.98);
+            --launch-overlay: rgba(10, 10, 10, 0.95);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-page);
-            background-image: radial-gradient(circle at top right, rgba(128, 138, 92, 0.1), transparent 400px);
             color: var(--text-main);
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .font-brand { font-family: 'Oswald', sans-serif; }
 
-        /* Glassmorphism Card Style */
         .app-card {
             background-color: var(--bg-card);
             backdrop-filter: blur(20px);
@@ -92,14 +90,13 @@
             background-color: var(--link-hover-bg);
             color: var(--link-hover-text);
             border-color: var(--link-hover-bg);
-            box-shadow: 0 10px 20px -5px rgba(128, 138, 92, 0.3);
         }
 
         .link-card:active {
             transform: scale(0.98) translateY(0);
         }
 
-        .link-card:hover .icon-prime { color: white !important; }
+        .link-card:hover .arrow-icon { transform: translateX(4px); }
 
         /* Minimal Loading Overlay */
         #launch-overlay {
@@ -135,7 +132,7 @@
             100% { transform: scale(0.85); opacity: 0.3; }
         }
 
-        /* Theme Toggle Styling */
+        /* EXACT Theme Toggle Styling from Reference */
         .theme-switch-container {
             position: relative;
             width: 44px;
@@ -155,7 +152,7 @@
             left: 2px;
             width: 16px;
             height: 16px;
-            background-color: var(--olive);
+            background-color: var(--bg-btn-primary);
             border-radius: 50%;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             z-index: 10;
@@ -174,8 +171,8 @@
         }
 
         .theme-switch-icons i { width: 9px; height: 9px; color: var(--text-muted); }
-        [data-theme="light"] .icon-sun { color: white; }
-        [data-theme="dark"] .icon-moon { color: white; }
+        [data-theme="light"] .icon-sun { color: var(--btn-text-primary); }
+        [data-theme="dark"] .icon-moon { color: var(--btn-text-primary); }
 
         /* Modal Styles */
         .modal-overlay {
@@ -187,13 +184,16 @@
             justify-content: center;
             padding: 1.5rem;
             background-color: var(--modal-overlay);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
         
         .modal-content {
             background-color: var(--bg-card);
@@ -203,15 +203,13 @@
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             width: 100%;
             max-width: 24rem;
-            border-radius: 2rem;
-            padding: 2.5rem 2rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
             position: relative;
         }
-        
-        .modal-overlay.active .modal-content { transform: scale(1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="dark">
+<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
 
     <div id="launch-overlay">
         <div id="launch-icon-container"></div>
@@ -219,67 +217,70 @@
 
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
-            <button id="close-modal" class="absolute top-6 right-6 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
+            <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
-                    <i data-lucide="help-circle" class="w-8 h-8 text-[#808a5c]"></i>
+                    <i data-lucide="help-circle" class="w-8 h-8" style="color: var(--olive)"></i>
                 </div>
                 <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Toolkit Guide</h3>
                 <div class="space-y-4 text-sm leading-relaxed text-left" style="color: var(--text-accent)">
                     <p>Welcome to the <strong>Circular Roots</strong> toolkit. Here’s how to get the most out of these resources:</p>
                     <ul class="space-y-3 list-none">
                         <li class="flex gap-2">
-                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-[#808a5c]"></i>
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--olive)"></i>
                             <span>Select any tool from the menu to start your calculation or generate training sessions.</span>
                         </li>
                         <li class="flex gap-2">
-                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0 text-[#808a5c]"></i>
+                            <i data-lucide="check-circle" class="w-4 h-4 mt-0.5 flex-shrink-0" style="color: var(--olive)"></i>
                             <span>Toggle between <strong>Light</strong> and <strong>Dark</strong> modes using the switch above.</span>
                         </li>
                     </ul>
                 </div>
-                <button id="modal-confirm" class="w-full mt-8 py-4 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Start Training</button>
+                <button id="modal-confirm" class="w-full mt-8 py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Start Training</button>
             </div>
         </div>
     </div>
 
     <div id="dev-modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
-            <button id="close-dev-modal" class="absolute top-6 right-6 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
+            <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
             <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
                     <div id="dev-icon-wrapper">
-                        <i id="dev-icon" data-lucide="construction" class="w-8 h-8 text-[#808a5c]"></i>
+                        <i id="dev-icon" data-lucide="construction" class="w-8 h-8" style="color: var(--olive)"></i>
                     </div>
                 </div>
                 <h3 id="dev-title" class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">In the Lab</h3>
                 <p id="dev-text" class="text-sm leading-relaxed mb-6" style="color: var(--text-accent)">
                     Fine-tuning the algorithms to ensure peak performance. Live soon.
                 </p>
-                <button id="dev-modal-confirm" class="w-full py-4 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Back to Menu</button>
+                <button id="dev-modal-confirm" class="w-full py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Back to Menu</button>
             </div>
         </div>
     </div>
 
-    <div class="app-card w-full max-w-md rounded-[3rem] overflow-hidden flex flex-col items-center">
+    <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
         
-        <header class="w-full px-8 pt-12 pb-8 flex justify-between items-start">
+        <header class="w-full px-8 py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
                 <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-lg leading-none mb-[2px] text-[#808a5c]">CIRCULAR ROOTS COACHING</h2>
+                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--olive)">CIRCULAR ROOTS COACHING</h2>
                 <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <div class="flex flex-col items-center gap-4">
-                <div id="theme-toggle" class="theme-switch-container" title="Toggle Light/Dark">
-                    <div class="theme-switch-circle"></div>
-                    <div class="theme-switch-icons">
-                        <i data-lucide="sun" class="icon-sun"></i>
-                        <i data-lucide="moon" class="icon-moon"></i>
+            <div class="flex flex-col items-center gap-3">
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
+                    <div id="theme-toggle" class="theme-switch-container" title="Toggle Light/Dark">
+                        <div class="theme-switch-circle"></div>
+                        <div class="theme-switch-icons">
+                            <i data-lucide="sun" class="icon-sun"></i>
+                            <i data-lucide="moon" class="icon-moon"></i>
+                        </div>
                     </div>
                 </div>
                 <button id="open-info" class="p-2.5 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)">
@@ -289,96 +290,79 @@
         </header>
 
         <main class="w-full px-8 flex-grow pb-12">
-            <div class="text-center mb-10">
-                <div class="inline-block p-1 rounded-full mb-4" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
-                    <div class="w-20 h-20 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--olive)">
-                        <i data-lucide="dumbbell" class="w-8 h-8 text-white"></i>
+            <div class="text-center mb-10 mt-2">
+                <div class="inline-block p-1 rounded-full mb-4 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
+                    <div class="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--olive)">
+                        <i data-lucide="dumbbell" class="w-10 h-10" style="color: #ffffff"></i>
                     </div>
                 </div>
                 <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
-                <p class="text-xs max-w-[280px] mx-auto leading-relaxed uppercase tracking-wider opacity-70" style="color: var(--text-accent)">
-                    Optimize your training journey
+                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                    No nonsense tools to support & optimise your training journey
                 </p>
             </div>
 
             <div class="space-y-3 flex flex-col w-full">
-                <a href="https://coachchriscrc.github.io/wodgenerator" class="link-card external-link p-5 rounded-2xl">
+                <a href="https://coachchriscrc.github.io/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="zap" class="icon-prime w-5 h-5 text-[#808a5c]"></i>
-                        <span class="font-bold text-sm uppercase tracking-widest">WOD Generator</span>
+                        <i data-lucide="zap" class="w-5 h-5 text-[#808a5c]"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-30"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
-                <div data-tool="1rm" class="link-card tool-btn p-5 rounded-2xl"> 
+                <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl"> 
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="dumbbell" class="icon-prime w-5 h-5 text-[#808a5c]"></i>
-                        <span class="font-bold text-sm uppercase tracking-widest">1RM Calculator</span>
+                        <i data-lucide="dumbbell" class="w-5 h-5 text-[#808a5c]"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">1RM Calculator</span>
                     </div>
-                    <i data-lucide="lock" class="w-4 h-4 opacity-30"></i>
+                    <i data-lucide="lock" class="arrow-icon w-5 h-5 opacity-40"></i>
                 </div>
 
-                <a href="https://coachchriscrc.github.io/free-calorie-calculator" class="link-card external-link p-5 rounded-2xl">
+                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="utensils" class="icon-prime w-5 h-5 text-[#808a5c]"></i>
-                        <span class="font-bold text-sm uppercase tracking-widest">Calorie Calculator</span>
+                        <i data-lucide="utensils" class="w-5 h-5 text-[#808a5c]"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-30"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
                 
-                <a href="https://coachchriscrc.github.io/free-bf-calculator" class="link-card external-link p-5 rounded-2xl">
+                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="ruler" class="icon-prime w-5 h-5 text-[#808a5c]"></i>
-                        <span class="font-bold text-sm uppercase tracking-widest">Bodyfat Calculator</span>
+                        <i data-lucide="ruler" class="w-5 h-5 text-[#808a5c]"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="w-4 h-4 opacity-30"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
-                <div data-tool="timer" class="link-card tool-btn p-5 rounded-2xl">
+                <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="timer" class="icon-prime w-5 h-5 text-[#808a5c]"></i>
-                        <span class="font-bold text-sm uppercase tracking-widest">Interval Timer</span>
+                        <i data-lucide="timer" class="w-5 h-5 text-[#808a5c]"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Interval Timer</span>
                     </div>
-                    <i data-lucide="lock" class="w-4 h-4 opacity-30"></i>
+                    <i data-lucide="lock" class="arrow-icon w-5 h-5 opacity-40"></i>
                 </div>
 
-                <a href="https://coachchriscrc.carrd.co/#services" class="link-card p-5 rounded-2xl mt-6 border-2 border-[#808a5c]/30 shadow-xl shadow-[#808a5c]/10">
+                <a href="https://coachchriscrc.carrd.co/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--olive)">
                     <div class="flex items-center space-x-4">
-                        <i data-lucide="trending-up" class="icon-prime w-5 h-5 text-[#808a5c]"></i>
-                        <span class="font-bold text-sm uppercase tracking-widest">Premium Coaching</span>
+                        <i data-lucide="trending-up" class="w-5 h-5 text-[#808a5c]"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Get Coaching</span>
                     </div>
-                    <i data-lucide="chevron-right" class="w-4 h-4 opacity-30"></i>
-                </a>
-            </div>
-
-            <div class="flex justify-center space-x-10 mt-12 pb-4">
-                <a href="#" class="flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-40">
-                    <i data-lucide="message-circle" class="w-5 h-5"></i>
-                    <span class="text-[8px] font-black uppercase tracking-widest">Chat</span>
-                </a>
-                <a href="#" class="flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-40">
-                    <i data-lucide="instagram" class="w-5 h-5"></i>
-                    <span class="text-[8px] font-black uppercase tracking-widest">Social</span>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
             </div>
         </main>
     </div>
 
     <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <div class="text-[9px] uppercase tracking-[0.2em] font-bold space-y-2 text-center">
+        <div class="text-[9px] uppercase tracking-[0.2em] font-bold space-y-1 text-center">
             <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
-            <p class="text-[#808a5c]">#TRAINUNCNVNTNL</p>
+            <p style="color: var(--olive)">TRAIN UNCNVNTNL</p>
         </div>
     </footer>
 
     <script>
         lucide.createIcons();
-
-        // PWA Support
-        const PWA_CONFIG = { name: "Coach Chris Tools", shortName: "Coach Chris", iconUrl: "FitnessTools-AppIcon.png" };
-        const manifest = { "name": PWA_CONFIG.name, "short_name": PWA_CONFIG.shortName, "start_url": ".", "display": "standalone", "background_color": "#000000", "theme_color": "#000000", "icons": [{ "src": PWA_CONFIG.iconUrl, "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }] };
-        const blob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
-        const manifestTag = document.createElement('link'); manifestTag.rel = 'manifest'; manifestTag.href = URL.createObjectURL(blob); document.head.appendChild(manifestTag);
 
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.body;
@@ -386,6 +370,7 @@
             const yearSpan = document.getElementById('current-year');
             const launchOverlay = document.getElementById('launch-overlay');
             const launchIconContainer = document.getElementById('launch-icon-container');
+            
             const toolData = {
                 '1rm': { title: "Heavy Loading", text: "Finalizing precision formulas for power and strength lifts. Coming soon.", icon: "dumbbell" },
                 'timer': { title: "Synchronizing", text: "Our performance clock is being calibrated for interval training. Coming soon.", icon: "timer" }
@@ -393,24 +378,37 @@
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
+            // FIX: Hide loading screen when navigating back
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                    launchOverlay.classList.remove('active');
+                    launchOverlay.style.display = 'none';
+                }
+            });
+
             themeToggle.addEventListener('click', () => {
                 const isDark = body.getAttribute('data-theme') === 'dark';
                 body.setAttribute('data-theme', isDark ? 'light' : 'dark');
             });
 
-            document.getElementById('open-info').addEventListener('click', () => document.getElementById('modal-overlay').classList.add('active'));
-            document.querySelectorAll('.modal-overlay').forEach(m => {
-                m.addEventListener('click', (e) => { if(e.target === m || e.target.closest('button')) m.classList.remove('active'); });
-            });
+            const openModal = (m) => m.classList.add('active');
+            const closeModal = (m) => m.classList.remove('active');
+
+            document.getElementById('open-info').addEventListener('click', () => openModal(document.getElementById('modal-overlay')));
             
             document.querySelectorAll('a.external-link').forEach(link => {
                 link.addEventListener('click', function(e) {
-                    const iconName = this.querySelector('[data-lucide]').getAttribute('data-lucide');
-                    launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16"></i>`;
-                    lucide.createIcons();
+                    const targetUrl = this.href;
+                    const iconElement = this.querySelector('[data-lucide]');
+                    if (iconElement) {
+                        const iconName = iconElement.getAttribute('data-lucide');
+                        launchIconContainer.innerHTML = `<i data-lucide="${iconName}" class="w-16 h-16"></i>`;
+                        lucide.createIcons();
+                    }
                     e.preventDefault();
-                    launchOverlay.classList.add('active');
-                    setTimeout(() => { window.location.href = this.href; }, 1000);
+                    launchOverlay.style.display = 'flex';
+                    setTimeout(() => launchOverlay.classList.add('active'), 10);
+                    setTimeout(() => { window.location.href = targetUrl; }, 1200);
                 });
             });
 
@@ -420,11 +418,15 @@
                     if (data) {
                         document.getElementById('dev-title').textContent = data.title;
                         document.getElementById('dev-text').textContent = data.text;
-                        document.getElementById('dev-icon-wrapper').innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8 text-[#808a5c]"></i>`;
+                        document.getElementById('dev-icon-wrapper').innerHTML = `<i data-lucide="${data.icon}" class="w-8 h-8" style="color: var(--olive)"></i>`;
                         lucide.createIcons();
-                        document.getElementById('dev-modal-overlay').classList.add('active');
+                        openModal(document.getElementById('dev-modal-overlay'));
                     }
                 });
+            });
+
+            document.querySelectorAll('.modal-overlay').forEach(m => {
+                m.addEventListener('click', (e) => { if(e.target === m || e.target.closest('button')) closeModal(m); });
             });
         });
     </script>
