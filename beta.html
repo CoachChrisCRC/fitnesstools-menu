@@ -121,12 +121,12 @@
             backdrop-filter: none;
         }
 
-        /* Ensure icons and badges remain visible and contrasty on hover */
-        .link-card:hover i[data-lucide] {
+        /* Logic for all icons and badges on hover/active */
+        .link-card:hover i, .link-card:active i {
             color: #ffffff !important;
         }
         
-        .link-card:hover .badge-free {
+        .link-card:hover .badge-free, .link-card:active .badge-free {
             background-color: #ffffff !important;
             color: #000000 !important;
         }
