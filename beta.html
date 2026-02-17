@@ -18,44 +18,46 @@
         :root {
             --olive: #808a5c;
             --bg-page: #f3f4f6;
-            --bg-card: rgba(255, 255, 255, 0.8);
-            --border-color: rgba(0, 0, 0, 0.08);
+            --bg-card: rgba(255, 255, 255, 0.4); /* Lowered opacity for more glass effect */
+            --border-color: rgba(255, 255, 255, 0.5); /* Brighter border for highlight */
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            --bg-toggle: #f3f4f6;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --bg-toggle: rgba(243, 244, 246, 0.5);
             --bg-btn-primary: #808a5c;
             --btn-text-primary: #ffffff;
             --link-hover-bg: #808a5c;
             --link-hover-text: #ffffff;
-            --modal-overlay: rgba(0, 0, 0, 0.4);
-            --launch-overlay: rgba(255, 255, 255, 0.9);
+            --modal-overlay: rgba(0, 0, 0, 0.2);
+            --launch-overlay: rgba(255, 255, 255, 0.85);
         }
 
         /* Initial Load set to Dark via body class */
         .dark {
             --bg-page: #0a0a0a;
-            --bg-card: rgba(18, 18, 18, 0.85);
-            --border-color: rgba(255, 255, 255, 0.1);
+            --bg-card: rgba(18, 18, 18, 0.6); /* Transparent dark glass */
+            --border-color: rgba(255, 255, 255, 0.15);
             --text-main: #ffffff;
             --text-heading: #ffffff;
             --text-muted: #525252;
             --text-accent: #a3a3a3;
-            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            --bg-toggle: #1a1a1a;
+            --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+            --bg-toggle: rgba(26, 26, 26, 0.5);
             --bg-btn-primary: #808a5c;
             --btn-text-primary: #ffffff;
             --link-hover-bg: #808a5c;
             --link-hover-text: #ffffff;
-            --modal-overlay: rgba(0, 0, 0, 0.8);
-            --launch-overlay: rgba(10, 10, 10, 0.95);
+            --modal-overlay: rgba(0, 0, 0, 0.6);
+            --launch-overlay: rgba(10, 10, 10, 0.9);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-page);
+            /* Soft gradient background to make glass pop */
+            background-image: radial-gradient(circle at 50% 50%, transparent, rgba(128, 138, 92, 0.05));
             color: var(--text-main);
             transition: background-color 0.4s ease, color 0.4s ease;
         }
@@ -77,8 +79,8 @@
             width: 48px;
             height: 48px;
             background: var(--bg-card);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(40px); /* Increased blur */
+            -webkit-backdrop-filter: blur(40px);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -86,15 +88,15 @@
             border: 1px solid var(--border-color);
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, background 0.3s ease;
             color: var(--text-heading);
         }
         .fab-button:active { transform: scale(0.9); }
 
         .app-card {
             background-color: var(--bg-card);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(40px); /* Deep frosted glass effect */
+            -webkit-backdrop-filter: blur(40px);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
@@ -103,7 +105,7 @@
         .link-card {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
-            background-color: rgba(128, 128, 128, 0.05);
+            background-color: rgba(128, 128, 128, 0.08);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             cursor: pointer;
@@ -118,6 +120,7 @@
             background-color: var(--link-hover-bg);
             color: var(--link-hover-text);
             border-color: var(--link-hover-bg);
+            backdrop-filter: none;
         }
 
         /* Minimal Loading Overlay */
@@ -135,10 +138,7 @@
             transition: opacity 0.3s ease;
         }
 
-        #launch-overlay.active {
-            display: flex;
-            opacity: 1;
-        }
+        #launch-overlay.active { display: flex; opacity: 1; }
 
         #launch-icon-container {
             color: var(--olive);
@@ -164,20 +164,17 @@
             justify-content: center;
             padding: 1.5rem;
             background-color: var(--modal-overlay);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
         }
 
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .modal-content {
             background-color: var(--bg-card);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(40px);
             border: 1px solid var(--border-color);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -348,7 +345,6 @@
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
 
-            // Navigation Fix for Back Button
             window.addEventListener('pageshow', (event) => {
                 if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
                     launchOverlay.classList.remove('active');
