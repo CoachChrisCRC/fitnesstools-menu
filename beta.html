@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Free Fitness Tools - Coach Chris</title>
+    <!-- PWA Primary Meta Tags -->
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,6 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        /* Import custom fonts */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Oswald:wght@400;500;700&display=swap');
         
         :root {
@@ -96,6 +98,7 @@
 
         .link-card:hover .arrow-icon { transform: translateX(4px); }
 
+        /* Minimal Loading Overlay */
         #launch-overlay {
             position: fixed;
             inset: 0;
@@ -115,6 +118,7 @@
             opacity: 1;
         }
 
+        /* Pulsing Icon Animation */
         #launch-icon-container {
             color: var(--text-heading);
             animation: pulse-scale 1.2s infinite ease-in-out;
@@ -129,6 +133,7 @@
             100% { transform: scale(0.85); opacity: 0.3; }
         }
 
+        /* Theme Toggle Styling */
         .theme-switch-container {
             position: relative;
             width: 44px;
@@ -170,6 +175,7 @@
         [data-theme="light"] .icon-sun { color: var(--btn-text-primary); }
         [data-theme="dark"] .icon-moon { color: var(--btn-text-primary); }
 
+        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -207,10 +213,14 @@
 </head>
 <body class="min-h-screen flex flex-col items-center justify-between p-2 sm:p-4 lg:p-6" data-theme="light">
 
+    <!-- Minimal Loading Overlay -->
     <div id="launch-overlay">
-        <div id="launch-icon-container"></div>
+        <div id="launch-icon-container">
+            <!-- Icon injected here -->
+        </div>
     </div>
 
+    <!-- Information Modal -->
     <div id="modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
             <button id="close-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
@@ -243,6 +253,7 @@
         </div>
     </div>
 
+    <!-- Dev Modal -->
     <div id="dev-modal-overlay" class="modal-overlay">
         <div class="modal-content shadow-2xl">
             <button id="close-dev-modal" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
@@ -263,6 +274,7 @@
         </div>
     </div>
 
+    <!-- Main Card -->
     <div class="app-card w-full max-w-7xl rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col items-center my-auto">
         
         <header class="w-full px-6 sm:px-10 lg:px-16 py-6 sm:py-8 lg:py-10 flex justify-between items-start">
@@ -304,7 +316,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5 w-full">
                 <!-- WOD Generator Link -->
-                <a href="https://tools.circularroots.co.uk/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 sm:p-5 lg:p-6 rounded-xl">
+                <a href="https://coachchriscrc.github.io/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 sm:p-5 lg:p-6 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="zap" class="w-5 h-5 lg:w-6 lg:h-6"></i>
                         <span class="font-bold text-base lg:text-lg uppercase tracking-wider">WOD Generator</span>
@@ -364,6 +376,7 @@
                 </a>
             </div>
 
+            <!-- Social Media Section -->
             <div class="flex justify-center space-x-12 mt-10 lg:mt-14 pb-2">
                 <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
                     <i data-lucide="message-circle" class="w-6 h-6 lg:w-7 lg:h-7"></i>
@@ -381,6 +394,7 @@
         </main>
     </div>
 
+    <!-- Footer -->
     <footer class="w-full text-center py-6 px-6 max-w-4xl" style="color: var(--text-muted)">
         <div class="mb-4 space-y-1 text-center">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
@@ -399,12 +413,14 @@
     <script>
         lucide.createIcons();
 
+        // --- PWA Support & Custom Icon Configuration ---
         const PWA_CONFIG = {
             name: "Coach Chris Tools",
             shortName: "Coach Chris",
             iconUrl: "FitnessTools-AppIcon.png" 
         };
 
+        // 1. Generate Manifest dynamically
         const manifest = {
             "name": PWA_CONFIG.name,
             "short_name": PWA_CONFIG.shortName,
@@ -423,6 +439,7 @@
             ]
         };
         
+        // Inject manifest and touch icons for iOS
         const stringManifest = JSON.stringify(manifest);
         const blob = new Blob([stringManifest], {type: 'application/json'});
         const manifestURL = URL.createObjectURL(blob);
@@ -432,11 +449,12 @@
         manifestTag.href = manifestURL;
         document.head.appendChild(manifestTag);
 
-        const appleIconTask = document.createElement('link');
-        appleIconTask.rel = 'apple-touch-icon';
-        appleIconTask.href = PWA_CONFIG.iconUrl;
-        document.head.appendChild(appleIconTask);
+        const appleIconTag = document.createElement('link');
+        appleIconTag.rel = 'apple-touch-icon';
+        appleIconTag.href = PWA_CONFIG.iconUrl;
+        document.head.appendChild(appleIconTag);
 
+        // 2. Register Inline Service Worker
         if ('serviceWorker' in navigator) {
             const swCode = `
                 self.addEventListener('install', (e) => self.skipWaiting());
