@@ -205,7 +205,7 @@
         .modal-overlay.active .modal-content { transform: scale(1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
+<body class="min-h-screen flex flex-col items-center justify-between p-4 sm:p-8" data-theme="light">
 
     <div id="launch-overlay">
         <div id="launch-icon-container"></div>
@@ -263,13 +263,13 @@
         </div>
     </div>
 
-    <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
+    <div class="app-card w-full max-w-2xl lg:max-w-4xl rounded-3xl overflow-hidden flex flex-col items-center my-auto">
         
-        <header class="w-full px-8 py-10 flex justify-between items-start">
+        <header class="w-full px-6 sm:px-12 py-8 sm:py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
-                <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
-                <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
+                <h1 class="font-brand font-bold text-3xl sm:text-4xl lg:text-5xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                <h2 class="font-brand font-bold text-base sm:text-lg lg:text-xl leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                <h3 class="font-brand font-bold text-base sm:text-lg lg:text-xl leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
             <div class="flex flex-col items-center gap-3">
@@ -289,22 +289,22 @@
             </div>
         </header>
 
-        <main class="w-full px-8 flex-grow pb-12">
+        <main class="w-full px-6 sm:px-12 flex-grow pb-12">
             <div class="text-center mb-10 mt-2">
                 <div class="inline-block p-1 rounded-full mb-4 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
-                    <div class="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
-                        <i data-lucide="dumbbell" class="w-10 h-10" style="color: var(--btn-text-primary)"></i>
+                    <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-full flex items-center justify-center overflow-hidden mx-auto" style="background-color: var(--bg-btn-primary)">
+                        <i data-lucide="dumbbell" class="w-10 h-10 sm:w-12 sm:h-12" style="color: var(--btn-text-primary)"></i>
                     </div>
                 </div>
-                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
-                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                <h2 class="text-2xl sm:text-3xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
+                <p class="text-sm sm:text-base max-w-[340px] sm:max-w-md mx-auto leading-relaxed" style="color: var(--text-accent)">
                     No nonsense tools to support & optimise your training journey
                 </p>
             </div>
 
-            <div class="space-y-3 flex flex-col w-full">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 w-full">
                 <!-- WOD Generator Link -->
-                <a href="https://tools.circularroots.co.uk/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
+                <a href="https://tools.circularroots.co.uk/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 sm:p-5 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="zap" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
@@ -313,7 +313,7 @@
                 </a>
 
                 <!-- Internal Tools -->
-                <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl"> 
+                <div data-tool="1rm" class="link-card tool-btn p-4 sm:p-5 rounded-xl"> 
                     <div class="flex items-center space-x-4">
                         <i data-lucide="dumbbell" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">1RM Calculator</span>
@@ -322,7 +322,7 @@
                 </div>
 
                 <!-- External Tools -->
-                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
+                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 sm:p-5 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="utensils" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
@@ -330,7 +330,7 @@
                     <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
                 
-                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
+                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 sm:p-5 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="ruler" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
@@ -338,7 +338,7 @@
                     <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
-                <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl">
+                <div data-tool="timer" class="link-card tool-btn p-4 sm:p-5 rounded-xl">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="timer" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Interval Timer</span>
@@ -346,7 +346,7 @@
                     <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
-                <div data-tool="newsletter" class="newsletter-cta tool-btn p-4 rounded-xl mt-6 shadow-md flex items-center justify-between">
+                <div data-tool="newsletter" class="newsletter-cta tool-btn p-4 sm:p-5 rounded-xl shadow-md flex items-center justify-between">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Join the Newsletter</span>
@@ -354,8 +354,8 @@
                     <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                 </div>
 
-                <!-- Updated Get Coaching Button -->
-                <a href="https://circularroots.co.uk/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--text-heading)">
+                <!-- Full width coaching card -->
+                <a href="https://circularroots.co.uk/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 sm:p-5 rounded-xl shadow-lg border-2 md:col-span-2" style="border-color: var(--text-heading)">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="trending-up" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Get Coaching</span>
@@ -382,8 +382,8 @@
         </main>
     </div>
 
-    <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <div class="mb-6 space-y-2 text-center">
+    <footer class="w-full text-center py-6 px-6 max-w-2xl" style="color: var(--text-muted)">
+        <div class="mb-4 space-y-1 text-center">
             <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
             <p class="text-[8px] leading-normal normal-case opacity-70 italic">
                 The content provided by these tools is for informational purposes only and is not intended as medical advice.
