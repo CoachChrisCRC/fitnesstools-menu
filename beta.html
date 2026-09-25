@@ -18,7 +18,7 @@
         
         :root {
             --bg-page: #f3f4f6;
-            --bg-card: rgba(255, 255, 255, 0.85);
+            --bg-card: rgba(255, 255, 255, 0.75);
             --border-color: rgba(229, 231, 235, 0.6);
             --text-main: #1f2937;
             --text-heading: #000000;
@@ -37,7 +37,7 @@
 
         [data-theme="dark"] {
             --bg-page: #0a0a0a;
-            --bg-card: rgba(18, 18, 18, 0.85);
+            --bg-card: rgba(18, 18, 18, 0.75);
             --border-color: rgba(38, 38, 38, 0.6);
             --text-main: #ffffff;
             --text-heading: #ffffff;
@@ -218,9 +218,8 @@
         .modal-overlay.active .modal-content { transform: scale(1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-0 sm:p-2 md:p-3" data-theme="light">
+<body class="min-h-screen flex flex-col items-center justify-center p-0 sm:p-0" data-theme="light">
 
-    <!-- Minimal Loading Overlay -->
     <div id="launch-overlay">
         <div id="launch-icon-container">
             <!-- Icon injected here -->
@@ -281,19 +280,19 @@
         </div>
     </div>
 
-    <!-- Main Card -->
-    <div class="app-card w-full min-h-screen sm:min-h-0 sm:max-w-xl md:max-w-2xl sm:rounded-3xl overflow-hidden flex flex-col items-center justify-between">
+    <!-- Main Card spanning full screen without extra margins on desktop -->
+    <div class="app-card w-full min-h-screen sm:rounded-none overflow-hidden flex flex-col items-center justify-between">
         
-        <header class="w-full px-5 sm:px-8 py-4 sm:py-5 flex justify-between items-start">
+        <header class="w-full px-6 sm:px-12 py-8 sm:py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
-                <h1 class="font-brand font-bold text-2xl sm:text-3xl md:text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-sm sm:text-base leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
-                <h3 class="font-brand font-bold text-xs sm:text-sm leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
+                <h1 class="font-brand font-bold text-3xl sm:text-4xl md:text-5xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                <h2 class="font-brand font-bold text-base sm:text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                <h3 class="font-brand font-bold text-base sm:text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <div class="flex flex-col items-center gap-2">
-                <div class="flex flex-col items-center gap-1">
-                    <span class="text-[8px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
+            <div class="flex flex-col items-center gap-3">
+                <div class="flex flex-col items-center gap-1.5">
+                    <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
                     <div id="theme-toggle" class="theme-switch-container" title="Toggle Light/Dark">
                         <div class="theme-switch-circle"></div>
                         <div class="theme-switch-icons">
@@ -302,113 +301,113 @@
                         </div>
                     </div>
                 </div>
-                <button id="open-info" class="p-2 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
-                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                <button id="open-info" class="p-2.5 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
                 </button>
             </div>
         </header>
 
-        <main class="w-full px-5 sm:px-8 flex-grow pb-6 max-w-lg mx-auto flex flex-col justify-center">
-            <div class="text-center mb-4 sm:mb-5 mt-1">
-                <div class="inline-block p-1 rounded-full mb-2.5 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
-                    <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
-                        <i data-lucide="dumbbell" class="w-6 h-6 sm:w-7 sm:h-7" style="color: var(--btn-text-primary)"></i>
+        <main class="w-full px-6 sm:px-12 flex-grow pb-12 max-w-xl mx-auto flex flex-col justify-center">
+            <div class="text-center mb-8 sm:mb-10 mt-2">
+                <div class="inline-block p-1 rounded-full mb-4 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
+                        <i data-lucide="dumbbell" class="w-8 h-8 sm:w-10 sm:h-10" style="color: var(--btn-text-primary)"></i>
                     </div>
                 </div>
-                <h2 class="text-lg sm:text-xl font-black mb-1 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
-                <p class="text-xs max-w-[260px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
+                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
                     No nonsense tools to support & optimise your training journey
                 </p>
             </div>
 
-            <div class="space-y-2 flex flex-col w-full">
+            <div class="space-y-3 flex flex-col w-full">
                 <!-- Internal Tools turned External -->
-                <a href="https://coachchriscrc.github.io/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-3 sm:p-3.5 rounded-xl">
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="zap" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">WOD Generator</span>
+                <a href="https://coachchriscrc.github.io/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">WOD Generator</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-3.5 h-3.5 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
                 <!-- Internal Tools -->
-                <div data-tool="1rm" class="link-card tool-btn p-3 sm:p-3.5 rounded-xl"> 
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="dumbbell" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">1RM Calculator</span>
+                <div data-tool="1rm" class="link-card tool-btn p-4 rounded-xl"> 
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="dumbbell" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">1RM Calculator</span>
                     </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300"></i>
+                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
                 <!-- External Tools -->
-                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-3 sm:p-3.5 rounded-xl">
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="utensils" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">Calorie Calculator</span>
+                <a href="https://coachchriscrc.github.io/free-calorie-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="utensils" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Calorie Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-3.5 h-3.5 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
                 
-                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-3 sm:p-3.5 rounded-xl">
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="ruler" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">Bodyfat Calculator</span>
+                <a href="https://coachchriscrc.github.io/free-bf-calculator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="ruler" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Bodyfat Calculator</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-3.5 h-3.5 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
 
-                <div data-tool="timer" class="link-card tool-btn p-3 sm:p-3.5 rounded-xl">
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="timer" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">Interval Timer</span>
+                <div data-tool="timer" class="link-card tool-btn p-4 rounded-xl">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="timer" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Interval Timer</span>
                     </div>
-                    <i data-lucide="arrow-right" class="arrow-icon w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300"></i>
+                    <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
-                <div data-tool="newsletter" class="newsletter-cta tool-btn p-3 sm:p-3.5 rounded-xl mt-2 shadow-md flex items-center justify-between">
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="mail" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">Join the Newsletter</span>
+                <div data-tool="newsletter" class="newsletter-cta tool-btn p-4 rounded-xl mt-6 shadow-md flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Join the Newsletter</span>
                     </div>
-                    <span class="text-[9px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
+                    <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
                 </div>
 
                 <!-- New Get Coaching Button -->
-                <a href="https://circularroots.co.uk/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-3 sm:p-3.5 rounded-xl shadow-md border-2" style="border-color: var(--text-heading)">
-                    <div class="flex items-center space-x-3.5">
-                        <i data-lucide="trending-up" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                        <span class="font-bold text-xs sm:text-sm uppercase tracking-wider">Get Coaching</span>
+                <a href="https://circularroots.co.uk/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--text-heading)">
+                    <div class="flex items-center space-x-4">
+                        <i data-lucide="trending-up" class="w-5 h-5"></i>
+                        <span class="font-bold text-base uppercase tracking-wider">Get Coaching</span>
                     </div>
-                    <i data-lucide="external-link" class="arrow-icon w-3.5 h-3.5 opacity-60"></i>
+                    <i data-lucide="external-link" class="arrow-icon w-4 h-4 opacity-60"></i>
                 </a>
             </div>
 
             <!-- Social Media Section -->
-            <div class="flex justify-center space-x-10 mt-5 pb-2">
-                <a href="#" class="group flex flex-col items-center gap-1 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
-                    <i data-lucide="message-circle" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    <span class="text-[8px] font-black uppercase tracking-widest">WhatsApp</span>
+            <div class="flex justify-center space-x-12 mt-10 pb-4">
+                <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="message-circle" class="w-6 h-6"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">WhatsApp</span>
                 </a>
-                <a href="#" class="group flex flex-col items-center gap-1 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
-                    <i data-lucide="instagram" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    <span class="text-[8px] font-black uppercase tracking-widest">Instagram</span>
+                <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="instagram" class="w-6 h-6"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">Instagram</span>
                 </a>
-                <a href="#" class="group flex flex-col items-center gap-1 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
-                    <i data-lucide="facebook" class="w-4 h-4 sm:w-5 sm:h-5"></i>
-                    <span class="text-[8px] font-black uppercase tracking-widest">Facebook</span>
+                <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
+                    <i data-lucide="facebook" class="w-6 h-6"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest">Facebook</span>
                 </a>
             </div>
         </main>
         
         <!-- Footer integrated into bottom of full-screen card -->
-        <footer class="w-full text-center py-4 px-5 border-t" style="border-color: var(--border-color); color: var(--text-muted)">
-            <div class="mb-2 space-y-0.5 text-center">
-                <h4 class="text-[8px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
-                <p class="text-[7px] leading-normal normal-case opacity-70 italic">
+        <footer class="w-full text-center py-6 px-6 border-t" style="border-color: var(--border-color); color: var(--text-muted)">
+            <div class="mb-4 space-y-1 text-center">
+                <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
+                <p class="text-[8px] leading-normal normal-case opacity-70 italic">
                     The content provided by these tools is for informational purposes only and is not intended as medical advice.
                 </p>
             </div>
-            <div class="text-[7px] sm:text-[8px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-0.5 text-center">
+            <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
                 <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
                 <p>TRAIN UNCNVNTNL</p>
                 <p>All Rights Reserved.</p>
