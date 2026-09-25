@@ -3,31 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Free Calorie Calculator - Coach Chris</title>
-    <!-- Load Tailwind CSS -->
+    <title>Free Calorie & Macro Calculator - Coach Chris</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- html2canvas for high-fidelity PNG rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- qrcode.js for client-side offline QR rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Oswald:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Oswald:wght@400;500;700&display=swap');
         
         :root {
             --bg-page: #f3f4f6;
-            --bg-card: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.75);
             --bg-input: #f9fafb;
             --bg-result: #f9fafb;
             --bg-toggle: #f3f4f6;
             --bg-btn-primary: #000000;
             --bg-btn-unit: #ffffff;
-            --border-color: #e5e7eb;
+            --border-color: rgba(229, 231, 235, 0.6);
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
             --btn-text-primary: #ffffff;
             --btn-text-unit: #000000;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
             --toggle-pill-bg: #e5e7eb;
             --modal-overlay: rgba(0, 0, 0, 0.4);
             
@@ -46,13 +48,13 @@
 
         [data-theme="dark"] {
             --bg-page: #0a0a0a;
-            --bg-card: #121212;
+            --bg-card: rgba(18, 18, 18, 0.75);
             --bg-input: #1a1a1a;
             --bg-result: #1a1a1a;
             --bg-toggle: #1a1a1a;
             --bg-btn-primary: #ffffff;
             --bg-btn-unit: #ffffff;
-            --border-color: #262626;
+            --border-color: rgba(38, 38, 38, 0.6);
             --text-main: #ffffff;
             --text-heading: #ffffff;
             --text-muted: #525252;
@@ -81,12 +83,16 @@
             background-color: var(--bg-page);
             color: var(--text-main);
             transition: background-color 0.3s ease, color 0.3s ease;
+            background-image: radial-gradient(circle at 50% 0%, var(--border-color) 0%, transparent 70%);
+            background-attachment: fixed;
         }
 
         .font-brand { font-family: 'Oswald', sans-serif; }
 
         .app-card {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
@@ -194,9 +200,16 @@
         
         .modal-content {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 100%;
+            max-width: 24rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            position: relative;
         }
         
         .modal-overlay.active .modal-content { transform: scale(1); }
@@ -229,7 +242,6 @@
             transform: scale(1.1) rotate(5deg);
         }
 
-        /* Loading Animation Styles */
         .progress-bar-inner {
             width: 0%;
             transition: width 3s linear;
@@ -261,41 +273,83 @@
             margin-top: 2rem;
             border: 1px dashed var(--border-color);
         }
+
+        .goal-tab {
+            transition: all 0.2s ease;
+        }
+        .goal-tab.active {
+            background-color: var(--bg-btn-primary);
+            color: var(--btn-text-primary);
+        }
+        @media print {
+            .no-print { display: none !important; }
+        }
+
+        /* Standard CSS container for rendering high-res PNG cleanly */
+        #png-render-wrapper {
+            display: none;
+            width: 760px;
+            background: #ffffff;
+            color: #000000;
+            padding: 30px;
+            box-sizing: border-box;
+            border: 1px solid #e5e7eb;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 py-12" data-theme="light">
+<body class="min-h-screen flex flex-col items-center justify-center p-0 sm:p-0" data-theme="light">
 
-    <!-- Activity Level Info Modal -->
-    <div id="activity-modal" class="modal-overlay">
-        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
-            <button onclick="closeModal('activity-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+    <!-- Gender Bio Info Modal -->
+    <div id="gender-modal" class="modal-overlay">
+        <div class="modal-content shadow-2xl">
+            <button onclick="closeModal('gender-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
-                    <i data-lucide="info" class="w-8 h-8"></i>
+                    <i data-lucide="info" class="w-8 h-8" style="color: var(--text-heading)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3 text-center" style="color: var(--text-heading)">Activity Levels</h3>
-                <div class="w-full space-y-4 max-h-[40vh] overflow-y-auto pr-2 text-left">
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Biological Sex</h3>
+                <div class="w-full text-left space-y-3 text-xs leading-relaxed" style="color: var(--text-accent)">
+                    <p>The Mifflin-St Jeor equation requires your biological sex (assigned at birth) to determine baseline caloric needs accurately.</p>
+                    <p>Men typically have a higher percentage of lean body mass, while women naturally carry a higher level of essential fat tissue to support endocrine and reproductive health. Biological differences modify the base BMR formula coefficients significantly.</p>
+                </div>
+                <button onclick="closeModal('gender-modal')" class="w-full mt-6 py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Got it</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Activity Levels Modal -->
+    <div id="activity-modal" class="modal-overlay">
+        <div class="modal-content shadow-2xl">
+            <button onclick="closeModal('activity-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex flex-col items-center text-center">
+                <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
+                    <i data-lucide="info" class="w-8 h-8" style="color: var(--text-heading)"></i>
+                </div>
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Activity Levels</h3>
+                <div class="w-full space-y-4 max-h-[50vh] overflow-y-auto pr-2 text-left" style="color: var(--text-accent)">
                     <div class="space-y-1">
-                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Sedentary</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Office job, little to no intentional exercise.</p>
+                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Sedentary: 🛋️🪑</p>
+                        <p class="text-[11px]">Mostly seated work. Little to no planned movement outside of daily life.</p>
                     </div>
                     <div class="space-y-1">
-                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Lightly Active</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Light exercise or sports 1–3 days per week.</p>
+                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Lightly Active: 🚶‍♀️🧘</p>
+                        <p class="text-[11px]">You stay on your feet or get in 1–3 light movement sessions (walking, yoga, light chores) per week.</p>
                     </div>
                     <div class="space-y-1">
-                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Moderately Active</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Moderate exercise or sports 3–5 days per week.</p>
+                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Moderately Active: 🏃‍♀️💪</p>
+                        <p class="text-[11px]">Consistent training 3–5 times per week. You break a sweat and prioritize structured sessions.</p>
                     </div>
                     <div class="space-y-1">
-                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Highly Active</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Hard exercise or sports 6–7 days per week.</p>
+                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Highly Active: 🏋️‍♀️🤸‍♀️</p>
+                        <p class="text-[11px]">Training is a habit. You’re moving or in the gym 6–7 days a week with a mix of strength and conditioning.</p>
                     </div>
                     <div class="space-y-1">
-                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Extremely Active</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Professional athlete or physical job & training twice daily.</p>
+                        <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Extremely Active: 🥇🚀</p>
+                        <p class="text-[11px]">Performance is your craft. Daily physical labor or high-volume, multi-session training is your norm.</p>
                     </div>
                 </div>
                 <button onclick="closeModal('activity-modal')" class="w-full mt-8 py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Got it</button>
@@ -303,37 +357,37 @@
         </div>
     </div>
 
-    <!-- How To Use Modal -->
+    <!-- Usage Modal -->
     <div id="usage-modal" class="modal-overlay">
-        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
-            <button onclick="closeModal('usage-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+        <div class="modal-content shadow-2xl">
+            <button onclick="closeModal('usage-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
-                    <i data-lucide="help-circle" class="w-8 h-8"></i>
+                    <i data-lucide="help-circle" class="w-8 h-8" style="color: var(--text-heading)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3 text-center" style="color: var(--text-heading)">How To Use</h3>
-                <div class="w-full space-y-5 text-left">
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">How To Use</h3>
+                <div class="w-full space-y-5 text-left" style="color: var(--text-accent)">
                     <div class="flex gap-4">
                         <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-black text-[10px]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">1</div>
                         <div>
                             <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Enter Details</p>
-                            <p class="text-[11px]" style="color: var(--text-accent)">Input your biological factors and your current activity level.</p>
+                            <p class="text-[11px]">Input your age, gender, height, current weight, and activity level.</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-black text-[10px]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">2</div>
                         <div>
                             <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Calculate TDEE</p>
-                            <p class="text-[11px]" style="color: var(--text-accent)">Your TDEE is the amount of calories you burn daily. This is your "Maintenance" number.</p>
+                            <p class="text-[11px]">Discover your Total Daily Energy Expenditure. This is your maintenance intake.</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-black text-[10px]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">3</div>
                         <div>
-                            <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Apply Targets</p>
-                            <p class="text-[11px]" style="color: var(--text-accent)">To lose fat, aim for the "Fat Loss" target. To gain muscle, aim for "Muscle Gain". Use the macro splits to stay on track.</p>
+                            <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Explore Target Tabs</p>
+                            <p class="text-[11px]">Toggle between Maintenance, Fat Loss, and Muscle Gain to instantly calculate your suggested macro targets; rounded to the nearest 5g!</p>
                         </div>
                     </div>
                 </div>
@@ -342,16 +396,17 @@
         </div>
     </div>
 
-    <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
+    <!-- Main Calculator App Card spanning full screen without extra margins on desktop -->
+    <div class="app-card w-full min-h-screen sm:rounded-none overflow-hidden flex flex-col items-center justify-between" id="calculator-card">
         
-        <header class="w-full px-8 pt-10 pb-6 flex justify-between items-start">
+        <header class="w-full px-6 sm:px-12 py-8 sm:py-10 flex justify-between items-start">
             <div class="flex flex-col select-none text-left">
-                <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
-                <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
+                <h1 class="font-brand font-bold text-3xl sm:text-4xl md:text-5xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                <h2 class="font-brand font-bold text-base sm:text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                <h3 class="font-brand font-bold text-base sm:text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <div class="flex flex-col items-center gap-4">
+            <div class="flex flex-col items-center gap-3 no-print">
                 <div class="flex flex-col items-center gap-1.5">
                     <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
                     <div id="theme-toggle" class="theme-switch-container" aria-label="Toggle Theme">
@@ -361,30 +416,25 @@
                             <i data-lucide="moon" class="icon-moon"></i>
                         </div>
                     </div>
-                    <span id="theme-status" class="text-[8px] font-bold uppercase tracking-wider opacity-60" style="color: var(--text-accent)">Light Mode</span>
                 </div>
 
-                <div class="flex flex-col items-center gap-1.5">
-                    <button onclick="openModal('usage-modal')" class="p-2.5 rounded-xl flex items-center justify-center transition-colors duration-300" style="color: var(--text-heading); background-color: var(--bg-toggle)" title="How to use">
-                        <i data-lucide="help-circle" class="w-5 h-5"></i>
-                    </button>
-                    <span class="text-[8px] font-bold uppercase tracking-wider opacity-60" style="color: var(--text-accent)">How to use</span>
-                </div>
+                <button onclick="openModal('usage-modal')" class="p-2.5 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </button>
             </div>
         </header>
 
-        <main class="w-full px-8 flex-grow pb-12 relative">
+        <main class="w-full px-6 sm:px-12 flex-grow pb-12 sm:max-w-xl mx-auto flex flex-col justify-center">
             
-            <!-- Input Form Section -->
             <div id="input-section">
-                <div class="text-center mb-8">
+                <div class="text-center mb-8 sm:mb-10 mt-2">
                     <div class="flex items-center justify-center gap-3 mb-2">
-                        <i data-lucide="utensils" class="title-icon w-10 h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
+                        <i data-lucide="utensils" class="title-icon w-8 h-8 sm:w-10 sm:h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
                         <h2 class="text-2xl font-black uppercase tracking-tight leading-tight" style="color: var(--text-heading)">Free Calorie<br>Calculator</h2>
-                        <i data-lucide="utensils" class="title-icon w-10 h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
+                        <i data-lucide="utensils" class="title-icon w-8 h-8 sm:w-10 sm:h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
                     </div>
                     <p class="text-xs mt-2 leading-relaxed" style="color: var(--text-accent)">
-                        Calculate Maintenance Calories (TDEE) and receive a suggested macro split.
+                        Calculate Maintenance Calories (TDEE) and receive a suggested coach-built split.
                     </p>
                 </div>
 
@@ -398,7 +448,17 @@
 
                 <div id="macro-input-form" class="space-y-4">
                     <label class="block">
-                        <span class="text-xs font-black uppercase tracking-wider block mb-1.5 ml-1" style="color: var(--text-muted)">Gender</span>
+                        <span class="text-xs font-black uppercase tracking-wider block mb-1.5 ml-1" style="color: var(--text-muted)">Your Name</span>
+                        <input id="macro-name" type="text" placeholder="e.g. John Doe" class="w-full text-sm font-medium">
+                    </label>
+
+                    <label class="block">
+                        <div class="flex items-center justify-between mb-1.5 ml-1">
+                            <span class="text-xs font-black uppercase tracking-wider" style="color: var(--text-muted)">Gender</span>
+                            <button onclick="openModal('gender-modal')" class="hover:opacity-80 transition-colors">
+                                <i data-lucide="info" class="w-4 h-4" style="color: var(--text-muted)"></i>
+                            </button>
+                        </div>
                         <select id="macro-gender" class="w-full text-sm font-medium">
                             <option value="male">Male</option>
                             <option value="female">Female</option>
@@ -448,13 +508,18 @@
                         </select>
                     </label>
                     
-                    <button onclick="calculateMacros()" class="w-full mt-6 py-4 text-base font-black uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-[0.98]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">
-                        Calculate
-                    </button>
+                    <div class="pt-2 space-y-3">
+                        <button onclick="calculateMacros()" class="w-full py-4 text-base font-black uppercase tracking-widest rounded-xl transition-all shadow-lg active:scale-[0.98]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">
+                            Calculate
+                        </button>
+
+                        <button onclick="clearAllData()" class="w-full py-3 text-xs font-black uppercase tracking-widest border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors" style="color: var(--text-muted); border-color: var(--border-color)">
+                            Clear Inputs / Reset
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <!-- Loading Section -->
             <div id="loading-section" class="hidden flex flex-col items-center justify-center py-20 fade-in">
                 <div class="mb-8 loading-pulse">
                     <i data-lucide="flame" class="w-16 h-16" style="color: var(--text-heading)"></i>
@@ -467,124 +532,424 @@
                 </div>
             </div>
 
-            <!-- Result Display Section -->
-            <div id="macro-result" class="hidden space-y-8 fade-in">
-                <div class="p-8 rounded-3xl result-box text-center shadow-inner">
+            <!-- Results Output Area -->
+            <div id="macro-result" class="hidden space-y-6 fade-in">
+                
+                <!-- Client Profile Summary Display -->
+                <div class="p-5 rounded-2xl result-box border text-left space-y-3" style="border-color: var(--border-color)">
+                    <div class="flex items-center gap-2 pb-2 border-b" style="border-color: var(--border-color)">
+                        <i data-lucide="user" class="w-4 h-4" style="color: var(--text-muted)"></i>
+                        <p class="text-[10px] font-black uppercase tracking-widest" style="color: var(--text-muted)">Client Profile</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-y-2 gap-x-4 text-xs">
+                        <div><span style="color: var(--text-accent)">Client Name:</span> <strong id="res-profile-name" class="font-bold block text-sm" style="color: var(--text-heading)">-</strong></div>
+                        <div><span style="color: var(--text-accent)">Gender:</span> <strong id="res-profile-gender" class="font-bold block text-sm text-capitalize" style="color: var(--text-heading)">-</strong></div>
+                        <div><span style="color: var(--text-accent)">Age:</span> <strong id="res-profile-age" class="font-bold block text-sm" style="color: var(--text-heading)">-</strong></div>
+                        <div><span style="color: var(--text-accent)">Height:</span> <strong id="res-profile-height" class="font-bold block text-sm" style="color: var(--text-heading)">-</strong></div>
+                        <div><span style="color: var(--text-accent)">Weight:</span> <strong id="res-profile-weight" class="font-bold block text-sm" style="color: var(--text-heading)">-</strong></div>
+                        <div><span style="color: var(--text-accent)">Activity Level:</span> <strong id="res-profile-activity" class="font-bold block text-[10px] uppercase leading-tight" style="color: var(--text-heading)">-</strong></div>
+                    </div>
+                </div>
+
+                <div class="p-8 rounded-3xl result-box text-center shadow-inner relative">
                     <p class="text-[10px] font-black uppercase tracking-widest mb-1" style="color: var(--text-muted)">Daily Maintenance (TDEE)</p>
                     <p class="text-7xl font-brand font-bold" style="color: var(--text-heading)" id="tdee-display">2500</p>
                     <p class="text-[10px] font-black uppercase tracking-widest mt-2" style="color: var(--text-accent)">Calories per day</p>
                     
                     <div class="grid grid-cols-2 gap-4 mt-8 pt-6 border-t" style="border-color: var(--border-color)">
-                        <div class="text-left p-4 rounded-2xl cut-box">
-                            <p class="text-[9px] font-black uppercase tracking-widest opacity-80 mb-1">Fat Loss Goal</p>
-                            <p class="text-xl font-bold font-brand" id="cutting-cal">2200 kcal</p>
+                        <div class="text-center p-4 rounded-2xl cut-box">
+                            <p class="text-[9px] font-black uppercase tracking-widest opacity-80 mb-1">Fat Loss Target</p>
+                            <p class="text-xl font-bold font-brand" id="cutting-cal">1,938 kcal</p>
                         </div>
-                        <div class="text-right p-4 rounded-2xl bulk-box">
-                            <p class="text-[9px] font-black uppercase tracking-widest opacity-80 mb-1">Muscle Gain Goal</p>
-                            <p class="text-xl font-bold font-brand" id="bulking-cal">2800 kcal</p>
+                        <div class="text-center p-4 rounded-2xl bulk-box">
+                            <p class="text-[9px] font-black uppercase tracking-widest opacity-80 mb-1">Muscle Gain Target</p>
+                            <p class="text-xl font-bold font-brand" id="bulking-cal">2,750 kcal</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="space-y-4">
-                    <h4 class="text-xs font-black uppercase tracking-widest text-center" style="color: var(--text-muted)">
-                        Suggested Split
-                    </h4>
-                    <div class="grid grid-cols-3 gap-3">
-                        <div class="p-4 rounded-2xl text-center macro-box-carb">
-                            <p class="text-[9px] font-black uppercase opacity-80">Carbs</p>
-                            <p class="text-xl font-brand font-bold mt-1" id="macro-carbs">250g</p>
-                            <p class="text-[9px] font-black uppercase opacity-60 mt-1">40%</p>
+                    <div class="flex flex-col items-center">
+                        <h4 class="text-xs font-black uppercase tracking-widest text-center mb-3" style="color: var(--text-muted)">
+                            Select Goal for Suggested Splits
+                        </h4>
+                        <div class="grid grid-cols-3 gap-1 p-1 w-full max-w-sm unit-toggle-bg rounded-2xl">
+                            <button id="tab-maintenance" onclick="switchGoalTab('maintenance')" class="goal-tab px-2 py-2.5 text-[10px] font-black uppercase rounded-xl transition-all active:scale-95 active">Maintenance</button>
+                            <button id="tab-fatloss" onclick="switchGoalTab('fatloss')" class="goal-tab px-2 py-2.5 text-[10px] font-black uppercase rounded-xl transition-all active:scale-95">Fat Loss</button>
+                            <button id="tab-muscle" onclick="switchGoalTab('muscle')" class="goal-tab px-2 py-2.5 text-[10px] font-black uppercase rounded-xl transition-all active:scale-95">Muscle Gain</button>
                         </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-3">
                         <div class="p-4 rounded-2xl text-center macro-box-prot">
                             <p class="text-[9px] font-black uppercase opacity-80">Protein</p>
-                            <p class="text-xl font-brand font-bold mt-1" id="macro-protein">187g</p>
-                            <p class="text-[9px] font-black uppercase opacity-60 mt-1">30%</p>
+                            <p class="text-xl font-brand font-bold mt-1" id="macro-protein">180g</p>
+                            <p class="text-[9px] font-black uppercase opacity-60 mt-1" id="macro-protein-pct">30%</p>
                         </div>
                         <div class="p-4 rounded-2xl text-center macro-box-fat">
                             <p class="text-[9px] font-black uppercase opacity-80">Fat</p>
-                            <p class="text-xl font-brand font-bold mt-1" id="macro-fat">83g</p>
-                            <p class="text-[9px] font-black uppercase opacity-60 mt-1">30%</p>
+                            <p class="text-xl font-brand font-bold mt-1" id="macro-fat">65g</p>
+                            <p class="text-[9px] font-black uppercase opacity-60 mt-1" id="macro-fat-pct">25%</p>
+                        </div>
+                        <div class="p-4 rounded-2xl text-center macro-box-carb">
+                            <p class="text-[9px] font-black uppercase opacity-80">Carbs</p>
+                            <p class="text-xl font-brand font-bold mt-1" id="macro-carbs">265g</p>
+                            <p class="text-[9px] font-black uppercase opacity-60 mt-1" id="macro-carbs-pct">45%</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- About This Result Section -->
                 <div class="about-section text-left space-y-4">
                     <h5 class="text-xs font-black uppercase tracking-widest flex items-center gap-2" style="color: var(--text-heading)">
-                        <i data-lucide="book-open" class="w-4 h-4"></i>
-                        About Your Results
+                        <i data-lucide="award" class="w-4 h-4"></i>
+                        Circular Roots Nutrition Protocol
                     </h5>
                     
                     <div class="space-y-3">
                         <div class="space-y-1">
-                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Maintenance (TDEE)</p>
+                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Protein Strategy (1g per lb)</p>
                             <p class="text-[10px] leading-relaxed" style="color: var(--text-accent)">
-                                This is your Total Daily Energy Expenditure. Eating this amount keeps your weight stable. Use this as your baseline.
+                                Consuming 1g of protein per pound of bodyweight preserves muscle tissue while in a deficit and fuels lean mass development during a surplus. This is a foundational, non-negotiable target. (Macro values are rounded to the nearest 5g).
                             </p>
                         </div>
                         <div class="space-y-1">
-                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Goals & Targets</p>
+                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Fat Strategy (25% Target)</p>
                             <p class="text-[10px] leading-relaxed" style="color: var(--text-accent)">
-                                <strong>Fat Loss:</strong> A ~15% deficit designed to burn fat while preserving muscle. <br>
-                                <strong>Muscle Gain:</strong> A ~10% surplus to provide the energy needed for muscle synthesis.
+                                Fixed at 25% of total target calories to protect optimal hormone health, joint function, and cognitive performance.
                             </p>
                         </div>
                         <div class="space-y-1">
-                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Top Tip from Coach Chris</p>
+                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Carbohydrate Strategy (Remainder)</p>
+                            <p class="text-[10px] leading-relaxed" style="color: var(--text-accent)">
+                                Carbs occupy the remainder of your calories to maximize athletic fuel. Carbs are essential for powering explosive barbell work, kettlebell complexes, and high-intensity movement sessions.
+                            </p>
+                        </div>
+                        <div class="space-y-1.5 pt-2 border-t" style="border-color: var(--border-color)">
+                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Top Coach Tip</p>
                             <p class="text-[10px] leading-relaxed italic" style="color: var(--text-accent)">
-                                "Calculators are starting points, not laws. Track your weight for 2-4 weeks. If it doesn't move in the direction you want, adjust your calories by 100-200 and re-evaluate. Consistency beats perfection."
+                                "Calculators are starting points, not laws. Track your body weight for 2 to 4 weeks alongside your training. Adjust calories up or down by 100-200 if you notice stalled progression or energy depletion. Consistency is the true accelerator."
                             </p>
+                        </div>
+
+                        <!-- On-Screen Realistic Expectations Module -->
+                        <div id="expectations-section" class="space-y-2 pt-3 border-t hidden" style="border-color: var(--border-color)">
+                            <p class="text-[10px] font-black uppercase" style="color: var(--text-heading)">Realistic Expectations</p>
+                            <div id="expectations-content" class="text-[10.5px] leading-relaxed space-y-2" style="color: var(--text-accent)">
+                                <!-- Appended Dynamically -->
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <button onclick="resetMacro()" class="w-full py-4 text-[10px] font-black uppercase tracking-widest border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors" style="color: var(--text-muted); border-color: var(--border-color)">
-                    ← START OVER
-                </button>
+                <div class="pt-2">
+                    <a href="https://coachchriscrc.carrd.co/#services" target="_blank" class="w-full py-4 px-6 text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 border-2 border-dashed" style="border-color: var(--text-heading); color: var(--text-heading)">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                        View Programs & Coaching Services
+                    </a>
+                </div>
+
+                <div class="flex flex-col gap-3 no-print">
+                    <button id="copy-results-btn" onclick="copyResultsToClipboard()" class="w-full py-4 text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 border border-black bg-transparent" style="color: var(--text-heading); border-color: var(--text-heading)">
+                        <i data-lucide="copy" class="w-4 h-4"></i>
+                        <span>Copy Results Text</span>
+                    </button>
+
+                    <button onclick="savePNGBlueprint()" class="w-full py-4 text-xs font-black uppercase tracking-widest rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        Download Blueprint PNG
+                    </button>
+
+                    <button onclick="resetMacro()" class="w-full py-4 text-[10px] font-black uppercase tracking-widest border rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-900 transition-colors" style="color: var(--text-muted); border-color: var(--border-color)">
+                        ← START OVER
+                    </button>
+                    
+                    <button onclick="clearAllData()" class="w-full py-2 text-[8px] font-black uppercase tracking-widest text-red-500 hover:text-red-700 transition-colors underline opacity-70">
+                        Clear All Data
+                    </button>
+                </div>
             </div>
             
             <p id="macro-error" class="text-red-500 text-[10px] uppercase font-bold mt-4 hidden text-center tracking-widest">
                 Please ensure all fields are correct.
             </p>
         </main>
+        
+        <footer class="w-full text-center py-6 px-6 border-t" style="border-color: var(--border-color); color: var(--text-muted)">
+            <div class="mb-4 space-y-1 text-center max-w-xl mx-auto">
+                <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
+                <p class="text-[8px] leading-normal normal-case opacity-70 italic">
+                    This calculator provides an estimation of your Basal Metabolic Rate (BMR) through the use of the clinically validated Mifflin-St Jeor Equation. Your Total Daily Energy Expenditure (TDEE) is then determined by adjusting your BMR according to your selected physical activity level. Informational purposes only. Consult with a professional healthcare provider prior to commencing any physical fitness/diet protocol.
+                </p>
+            </div>
+            <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
+                <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
+                <p>TRAIN UNCNVNTNL</p>
+                <p>All Rights Reserved.</p>
+                <p>Fitter | Stronger | Better</p>
+            </div>
+        </footer>
     </div>
 
-    <footer class="w-full max-w-2xl mx-auto text-center py-8 px-6 text-gray-400">
-        <div class="text-[9px] leading-relaxed max-w-md mx-auto italic border-b border-gray-200 dark:border-zinc-800 pb-4 mb-4">
-            <p><strong>Disclaimer:</strong> This calculator provides estimates for informational purposes only. Results are not medical advice. Always consult with a qualified healthcare professional before beginning any new diet or exercise program.</p>
+    <!-- Printable Standard Blueprint Rendering Node (Exported as PNG) -->
+    <div id="png-render-wrapper">
+        <div style="border: 2px solid #000000; padding: 25px; border-radius: 20px; background-color: #ffffff; min-height: 980px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box;">
+            <div>
+                <!-- Header -->
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #e5e7eb; padding-bottom: 12px; margin-bottom: 15px;">
+                    <div>
+                        <h1 style="font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; margin: 0; line-height: 1; color: #000000;">COACH CHRIS</h1>
+                        <h2 style="font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 700; color: #4b5563; margin: 2px 0 0 0; letter-spacing: 0.05em;">CIRCULAR ROOTS COACHING</h2>
+                        <h3 style="font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 700; color: #9ca3af; margin: 2px 0 0 0; text-transform: uppercase;">Train Uncnvntnl</h3>
+                    </div>
+                    <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                        <span style="font-size: 10px; font-weight: 800; background: #000000; color: #ffffff; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.1em; font-family: 'Inter', sans-serif;">Macro Blueprint</span>
+                    </div>
+                </div>
+
+                <!-- Main Layout Grid -->
+                <div style="display: grid; grid-template-columns: 1.1fr 1.1fr; gap: 20px; margin-bottom: 15px;">
+                    
+                    <!-- Left Column: Biometrics & Strategy -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div>
+                            <h3 style="font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #111827; margin: 0 0 8px 0; border-left: 3px solid #000000; padding-left: 8px; font-family: 'Inter', sans-serif;">Client Profile</h3>
+                            <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px;">
+                                <table style="width: 100%; font-size: 10.5px; border-collapse: collapse; color: #000000; font-family: 'Inter', sans-serif;">
+                                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                                        <td style="padding: 4px 0; color: #6b7280; font-weight: 500;">Client Name:</td>
+                                        <td id="pdf-profile-name" style="padding: 4px 0; text-align: right; font-weight: 700;">-</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                                        <td style="padding: 4px 0; color: #6b7280; font-weight: 500;">Gender:</td>
+                                        <td id="pdf-profile-gender" style="padding: 4px 0; text-align: right; font-weight: 700; text-transform: capitalize;">-</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                                        <td style="padding: 4px 0; color: #6b7280; font-weight: 500;">Age:</td>
+                                        <td id="pdf-profile-age" style="padding: 4px 0; text-align: right; font-weight: 700;">-</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                                        <td style="padding: 4px 0; color: #6b7280; font-weight: 500;">Height:</td>
+                                        <td id="pdf-profile-height" style="padding: 4px 0; text-align: right; font-weight: 700;">-</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #f3f4f6;">
+                                        <td style="padding: 4px 0; color: #6b7280; font-weight: 500;">Weight:</td>
+                                        <td id="pdf-profile-weight" style="padding: 4px 0; text-align: right; font-weight: 700;">-</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 4px 0; color: #6b7280; font-weight: 500;">Activity Level:</td>
+                                        <td id="pdf-profile-activity" style="padding: 4px 0; text-align: right; font-weight: 700; font-size: 8.5px; text-transform: uppercase;">-</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 style="font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #111827; margin: 0 0 8px 0; border-left: 3px solid #000000; padding-left: 8px; font-family: 'Inter', sans-serif;">Circular Roots Nutrition Protocol</h3>
+                            <div style="font-size: 9.5px; line-height: 1.45; color: #4b5563; font-family: 'Inter', sans-serif;">
+                                <p style="margin: 0 0 6px 0;"><strong style="color: #111827;">Protein Strategy (1g per lb):</strong> Consuming 1g of protein per pound of bodyweight preserves muscle tissue while in a deficit and fuels lean mass development during a surplus.</p>
+                                <p style="margin: 0 0 6px 0;"><strong style="color: #111827;">Fat Strategy (25% Target):</strong> Fixed at 25% of total target calories to protect optimal hormone health, joint function, and cognitive performance.</p>
+                                <p style="margin: 0;"><strong style="color: #111827;">Carbohydrate Strategy (Remainder):</strong> Carbs occupy the remainder of your calories to maximize athletic fuel. Carbs power explosive barbell work and kettlebell complexes.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Target Metrics & Dynamic Splits -->
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div>
+                            <h3 style="font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #111827; margin: 0 0 8px 0; border-left: 3px solid #000000; padding-left: 8px; font-family: 'Inter', sans-serif;">Target Metrics</h3>
+                            
+                            <div style="background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 12px; padding: 18px 10px; text-align: center; margin-bottom: 8px; font-family: 'Inter', sans-serif;">
+                                <span style="font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; display: block; margin-bottom: 4px;">Daily Maintenance (TDEE)</span>
+                                <div id="pdf-tdee-val" style="font-family: 'Oswald', sans-serif; font-size: 36px; font-weight: 700; line-height: 1; margin: 0; color: #000000;">-</div>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; font-family: 'Inter', sans-serif;">
+                                <div style="background-color: #ecfdf5; border: 1px solid #10b981; border-radius: 10px; padding: 6px; text-align: center;">
+                                    <span style="font-size: 7.5px; font-weight: 900; text-transform: uppercase; color: #059669; display: block;">Fat Loss Target</span>
+                                    <span id="pdf-cut-val" style="font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 700; color: #065f46;">- kcal</span>
+                                </div>
+                                <div style="background-color: #f0fdf4; border: 1px solid #22c55e; border-radius: 10px; padding: 6px; text-align: center;">
+                                    <span style="font-size: 7.5px; font-weight: 900; text-transform: uppercase; color: #166534; display: block;">Muscle Gain Target</span>
+                                    <span id="pdf-bulk-val" style="font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 700; color: #14532d;">- kcal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3 id="pdf-split-goal-header" style="font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; color: #111827; margin: 0 0 8px 0; border-left: 3px solid #000000; padding-left: 8px; font-family: 'Inter', sans-serif;">Suggested Macro Splits</h3>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 8px; font-family: 'Inter', sans-serif;">
+                                <div style="background-color: #f5f3ff; border: 1px solid #7c3aed; border-radius: 10px; padding: 8px; text-align: center;">
+                                    <span style="font-size: 8px; font-weight: 900; text-transform: uppercase; color: #7c3aed; display: block;">Protein</span>
+                                    <span id="pdf-macro-prot" style="font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; color: #5b21b6; display: block; margin-top: 1px;">-</span>
+                                    <span id="pdf-macro-prot-pct" style="font-size: 8.5px; font-weight: 700; color: #6d28d9; opacity: 0.8; display: block; margin-top: 1px;">-</span>
+                                </div>
+                                <div style="background-color: #fffbeb; border: 1px solid #d97706; border-radius: 10px; padding: 8px; text-align: center;">
+                                    <span style="font-size: 8px; font-weight: 900; text-transform: uppercase; color: #d97706; display: block;">Fat</span>
+                                    <span id="pdf-macro-fat" style="font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; color: #92400e; display: block; margin-top: 1px;">-</span>
+                                    <span id="pdf-macro-fat-pct" style="font-size: 8.5px; font-weight: 700; color: #b45309; opacity: 0.8; display: block; margin-top: 1px;">-</span>
+                                </div>
+                                <div style="background-color: #eff6ff; border: 1px solid #2563eb; border-radius: 10px; padding: 8px; text-align: center;">
+                                    <span style="font-size: 8px; font-weight: 900; text-transform: uppercase; color: #2563eb; display: block;">Carbs</span>
+                                    <span id="pdf-macro-carbs" style="font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 700; color: #1e40af; display: block; margin-top: 1px;">-</span>
+                                    <span id="pdf-macro-carbs-pct" style="font-size: 8.5px; font-weight: 700; color: #1d4ed8; opacity: 0.8; display: block; margin-top: 1px;">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Realistic Expectations Container (Rendered conditionally on PNG too) -->
+                <div id="pdf-expectations-container" style="background-color: #f9fafb; border: 1px dashed #e5e7eb; border-radius: 12px; padding: 12px; margin-bottom: 15px; font-family: 'Inter', sans-serif; display: none;">
+                    <h4 style="font-size: 9.5px; font-weight: 900; text-transform: uppercase; color: #111827; margin: 0 0 5px 0; letter-spacing: 0.05em;">⏳ Realistic Expectations</h4>
+                    <div id="pdf-expectations-body" style="font-size: 9px; line-height: 1.4; color: #4b5563;">
+                        <!-- Updated Dynamically via script -->
+                    </div>
+                </div>
+
+                <!-- Footer Strategies & Scanning Block -->
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; align-items: center; margin-bottom: 15px;">
+                    <!-- Coach Tip Card -->
+                    <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; font-family: 'Inter', sans-serif;">
+                        <h4 style="font-size: 9.5px; font-weight: 900; text-transform: uppercase; color: #111827; margin: 0 0 3px 0; letter-spacing: 0.05em;">⭐ Top Coach Tip</h4>
+                        <p style="font-size: 9.5px; line-height: 1.45; color: #4b5563; font-style: italic; margin: 0;">
+                            "Calculators are starting points, not laws. Track your body weight for 2 to 4 weeks alongside your training. Adjust calories up or down by 100-200 if you notice stalled progression or energy depletion. Consistency is the true accelerator."
+                        </p>
+                    </div>
+
+                    <!-- Dynamic QR Code Node -->
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 8px; font-family: 'Inter', sans-serif;">
+                        <div id="pdf-qrcode" style="margin-bottom: 4px; padding: 4px; background: #ffffff;"></div>
+                        <span style="font-size: 7.5px; font-weight: 900; text-transform: uppercase; color: #111827; letter-spacing: 0.05em; text-align: center; line-height: 1.1;">Scan for Coaching & Programs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer & Disclaimer -->
+            <div style="border-top: 1px solid #e5e7eb; padding-top: 10px; display: flex; justify-content: space-between; align-items: flex-end; font-family: 'Inter', sans-serif;">
+                <div style="font-size: 7px; color: #9ca3af; max-width: 65%; line-height: 1.3;">
+                    <strong>Disclaimer:</strong> This blueprint provides BMR estimations via the Mifflin-St Jeor Equation adjusted for activity multiplier TDEE values. Informational purposes only. Consult with a professional healthcare provider prior to commencing any physical fitness/diet protocol.
+                </div>
+                <div style="text-align: right; font-size: 7px; color: #9ca3af; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">
+                    &copy; <span id="pdf-footer-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING
+                </div>
+            </div>
         </div>
-        
-        <div class="text-[10px] uppercase tracking-widest space-y-1">
-            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL.</p>
-            <p>All Rights Reserved.</p>
-            <p class="font-bold mt-2" style="color: var(--text-heading)">Fitter. Stronger. Better.</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
         lucide.createIcons();
         
         const LB_TO_KG = 0.453592;
+        const KG_TO_LB = 2.20462;
         const IN_TO_CM = 2.54;
         const PROTEIN_CAL_PER_G = 4;
         const CARB_CAL_PER_G = 4;
         const FAT_CAL_PER_G = 9;
-        const MACRO_SPLIT = { carbs: 0.40, protein: 0.30, fat: 0.30 }; 
+
+        let globalWeightLb = 0;
+        let globalMaintenanceCal = 0;
+        let globalCuttingCal = 0;
+        let globalBulkingCal = 0;
+        let currentActiveTab = 'maintenance';
+        let qrCodeInstance = null;
 
         const body = document.body;
         const themeToggle = document.getElementById('theme-toggle');
-        const themeStatus = document.getElementById('theme-status');
+        const yearSpan = document.getElementById('current-year');
+        const pdfFooterYear = document.getElementById('pdf-footer-year');
+        
+        if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+        if (pdfFooterYear) pdfFooterYear.textContent = new Date().getFullYear();
         
         themeToggle.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
             const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
             body.setAttribute('data-theme', nextTheme);
-            themeStatus.textContent = nextTheme === 'light' ? 'Light Mode' : 'Dark Mode';
+            localStorage.setItem('theme', nextTheme);
         });
+
+        const inputsToWatch = [
+            'macro-name', 'macro-gender', 'macro-age', 'macro-weight', 'macro-height-cm', 
+            'macro-height-ft', 'macro-height-in', 'macro-activity', 'macro-unit-system'
+        ];
+
+        function registerChangeListeners() {
+            inputsToWatch.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('change', () => saveState(false));
+                    el.addEventListener('input', () => saveState(false));
+                }
+            });
+        }
+
+        function saveState(hasResults) {
+            const data = {
+                inputs: {
+                    name: document.getElementById('macro-name').value,
+                    gender: document.getElementById('macro-gender').value,
+                    age: document.getElementById('macro-age').value,
+                    weight: document.getElementById('macro-weight').value,
+                    heightCm: document.getElementById('macro-height-cm').value,
+                    heightFt: document.getElementById('macro-height-ft').value,
+                    heightIn: document.getElementById('macro-height-in').value,
+                    activity: document.getElementById('macro-activity').value,
+                    unitSystem: document.getElementById('macro-unit-system').value
+                },
+                hasResults: hasResults,
+                results: hasResults ? {
+                    globalWeightLb: globalWeightLb,
+                    globalMaintenanceCal: globalMaintenanceCal,
+                    globalCuttingCal: globalCuttingCal,
+                    globalBulkingCal: globalBulkingCal,
+                    currentActiveTab: currentActiveTab
+                } : null
+            };
+            localStorage.setItem('userMacroData', JSON.stringify(data));
+        }
+
+        function loadSettings() {
+            const savedData = JSON.parse(localStorage.getItem('userMacroData'));
+            if (savedData) {
+                const inputs = savedData.inputs || savedData;
+                
+                document.getElementById('macro-name').value = inputs.name || '';
+                document.getElementById('macro-gender').value = inputs.gender || 'male';
+                document.getElementById('macro-age').value = inputs.age || '';
+                document.getElementById('macro-weight').value = inputs.weight || '';
+                document.getElementById('macro-height-cm').value = inputs.heightCm || '';
+                document.getElementById('macro-height-ft').value = inputs.heightFt || '';
+                document.getElementById('macro-height-in').value = inputs.heightIn || '';
+                document.getElementById('macro-activity').value = inputs.activity || '1.2';
+                setUnitSystem(inputs.unitSystem || 'metric');
+
+                if (savedData.hasResults && savedData.results) {
+                    globalWeightLb = savedData.results.globalWeightLb;
+                    globalMaintenanceCal = savedData.results.globalMaintenanceCal;
+                    globalCuttingCal = savedData.results.globalCuttingCal;
+                    globalBulkingCal = savedData.results.globalBulkingCal;
+                    currentActiveTab = savedData.results.currentActiveTab || 'maintenance';
+
+                    document.getElementById('tdee-display').textContent = globalMaintenanceCal.toLocaleString();
+                    document.getElementById('cutting-cal').textContent = `${globalCuttingCal.toLocaleString()} kcal`;
+                    document.getElementById('bulking-cal').textContent = `${globalBulkingCal.toLocaleString()} kcal`;
+
+                    updateProfileSummary();
+
+                    document.getElementById('input-section').classList.add('hidden');
+                    document.getElementById('macro-result').classList.remove('hidden');
+
+                    switchGoalTab(currentActiveTab);
+                }
+            }
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', savedTheme);
+        }
 
         function openModal(id) {
             document.getElementById(id).classList.add('active');
+            lucide.createIcons();
         }
 
         function closeModal(id) {
@@ -631,21 +996,56 @@
             }
         }
 
+        function updateProfileSummary() {
+            const name = document.getElementById('macro-name').value.trim() || 'Valued Client';
+            const gender = document.getElementById('macro-gender').value;
+            const age = document.getElementById('macro-age').value || '-';
+            const weight = document.getElementById('macro-weight').value || '-';
+            const unitSystem = document.getElementById('macro-unit-system').value;
+            const weightUnit = unitSystem === 'imperial' ? 'lb' : 'kg';
+            
+            let heightStr = '-';
+            if (unitSystem === 'imperial') {
+                const ft = document.getElementById('macro-height-ft').value || '';
+                const inch = document.getElementById('macro-height-in').value || '';
+                if(ft !== '' || inch !== '') {
+                    heightStr = `${ft || '0'}' ${inch || '0'}"`;
+                }
+            } else {
+                const cm = document.getElementById('macro-height-cm').value;
+                if(cm) {
+                    heightStr = `${cm} cm`;
+                }
+            }
+
+            const activitySelect = document.getElementById('macro-activity');
+            const activityText = activitySelect.options[activitySelect.selectedIndex].text;
+
+            document.getElementById('res-profile-name').textContent = name;
+            document.getElementById('res-profile-gender').textContent = gender;
+            document.getElementById('res-profile-age').textContent = `${age} yrs`;
+            document.getElementById('res-profile-height').textContent = heightStr;
+            document.getElementById('res-profile-weight').textContent = `${weight} ${weightUnit}`;
+            document.getElementById('res-profile-activity').textContent = activityText;
+        }
+
         function calculateMacros() {
             const unitSystem = document.getElementById('macro-unit-system').value;
             const isImperial = unitSystem === 'imperial';
-            const gender = document.getElementById('macro-gender').value;
             const age = parseInt(document.getElementById('macro-age').value, 10);
             const weightInput = parseFloat(document.getElementById('macro-weight').value);
             const activityMultiplier = parseFloat(document.getElementById('macro-activity').value);
+            const gender = document.getElementById('macro-gender').value;
             let heightCm;
             
             if (isImperial) {
                 const ft = parseFloat(document.getElementById('macro-height-ft').value) || 0;
                 const inches = parseFloat(document.getElementById('macro-height-in').value) || 0;
                 heightCm = ((ft * 12) + inches) * IN_TO_CM;
+                globalWeightLb = weightInput;
             } else {
                 heightCm = parseFloat(document.getElementById('macro-height-cm').value);
+                globalWeightLb = weightInput * KG_TO_LB;
             }
             
             const inputSection = document.getElementById('input-section');
@@ -663,41 +1063,33 @@
                 return;
             }
 
-            // Calculation Logic (Mifflin-St Jeor Equation)
             let bmr = (gender === 'male') ? 
                 (10 * weightKg) + (6.25 * heightCm) - (5 * age) + 5 : 
                 (10 * weightKg) + (6.25 * heightCm) - (5 * age) - 161;
             
-            const maintenance = Math.round(bmr * activityMultiplier);
-            const cutting = Math.round(maintenance * 0.85); 
-            const bulking = Math.round(maintenance * 1.10); 
-            
-            const carbsGrams = Math.round((maintenance * MACRO_SPLIT.carbs) / CARB_CAL_PER_G);
-            const proteinGrams = Math.round((maintenance * MACRO_SPLIT.protein) / PROTEIN_CAL_PER_G);
-            const fatGrams = Math.round((maintenance * MACRO_SPLIT.fat) / FAT_CAL_PER_G);
+            globalMaintenanceCal = Math.round(bmr * activityMultiplier);
+            globalCuttingCal = Math.round(globalMaintenanceCal * (1 - 0.225)); 
+            globalBulkingCal = Math.round(globalMaintenanceCal * 1.10); 
 
-            // Populate Result
-            document.getElementById('tdee-display').textContent = maintenance.toLocaleString();
-            document.getElementById('cutting-cal').textContent = `${cutting.toLocaleString()} kcal`;
-            document.getElementById('bulking-cal').textContent = `${bulking.toLocaleString()} kcal`;
-            document.getElementById('macro-carbs').textContent = `${carbsGrams}g`;
-            document.getElementById('macro-protein').textContent = `${proteinGrams}g`;
-            document.getElementById('macro-fat').textContent = `${fatGrams}g`;
+            document.getElementById('tdee-display').textContent = globalMaintenanceCal.toLocaleString();
+            document.getElementById('cutting-cal').textContent = `${globalCuttingCal.toLocaleString()} kcal`;
+            document.getElementById('bulking-cal').textContent = `${globalBulkingCal.toLocaleString()} kcal`;
 
-            // Loading Animation Sequence
+            updateProfileSummary();
+            updateGoalSplitDisplay('maintenance');
+
             inputSection.classList.add('hidden');
             loadingSection.classList.remove('hidden');
             
-            // Force reflow and start progress bar
             void progressBar.offsetWidth;
             progressBar.style.width = '100%';
 
-            // Rotate loading messages
             const messages = [
-                "Analyzing activity levels...",
-                "Optimizing macro split...",
-                "Building your blueprint...",
-                "Finalizing results..."
+                "Analyzing metabolic baselines...",
+                "Integrating Coach Chris formula...",
+                "Applying 1g per lb protein split...",
+                "Balancing remainder carbs...",
+                "Finalizing Blueprint..."
             ];
             
             let msgIndex = 0;
@@ -706,37 +1098,337 @@
                 if (msgIndex < messages.length) {
                     loadingText.textContent = messages[msgIndex];
                 }
-            }, 750);
+            }, 600);
 
-            // Finish after 3 seconds
             setTimeout(() => {
                 clearInterval(msgInterval);
                 loadingSection.classList.add('hidden');
                 resultDiv.classList.remove('hidden');
-                // Reset progress bar for next time
                 progressBar.style.width = '0%';
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-                lucide.createIcons(); // Re-init icons for result section
+                
+                saveState(true);
+                lucide.createIcons();
             }, 3000);
         }
-        
+
+        function switchGoalTab(goal) {
+            currentActiveTab = goal;
+            
+            document.querySelectorAll('.goal-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.backgroundColor = 'transparent';
+                tab.style.color = 'var(--text-main)';
+            });
+
+            const activeTabButton = document.getElementById(`tab-${goal}`);
+            activeTabButton.classList.add('active');
+            activeTabButton.style.backgroundColor = 'var(--bg-btn-primary)';
+            activeTabButton.style.color = 'var(--btn-text-primary)';
+
+            updateGoalSplitDisplay(goal);
+            updateExpectationsSection(goal);
+            saveState(true);
+        }
+
+        function updateExpectationsSection(goal) {
+            const section = document.getElementById('expectations-section');
+            const content = document.getElementById('expectations-content');
+            
+            if (goal === 'maintenance') {
+                section.classList.add('hidden');
+                content.innerHTML = '';
+                return;
+            }
+
+            section.classList.remove('hidden');
+            if (goal === 'fatloss') {
+                content.innerHTML = `
+                    <p class="font-bold">A realistic and sustainable rate of fat loss is 0.5% to 1% of your total body weight per week.</p>
+                    <div class="mt-2 space-y-1 pl-1">
+                        <p>• <strong>Weekly Target:</strong> 0.25 to 1 kg (0.5 to 2 lbs) per week</p>
+                        <p>• <strong>Monthly Target:</strong> 1 to 4 kg (2 to 8 lbs) per month.</p>
+                    </div>
+                `;
+            } else if (goal === 'muscle') {
+                content.innerHTML = `
+                    <p class="font-bold">A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.</p>
+                    <p class="italic text-[10px] mt-1 text-red-500 dark:text-red-400">Muscle tissue builds significantly slower than fat burns. If the scale rises faster than this, the extra weight is more likely stored body fat, not muscle.</p>
+                    <p class="font-semibold mt-2">Your lifting experience dictates how fast you can grow. The more experienced you are, the slower progress becomes:</p>
+                    <div class="mt-1 space-y-1.5 pl-1 text-[10px]">
+                        <p>• <strong>Beginner (0-1 years lifting):</strong> 1% to 1.5% of body weight per month (approx. 0.7 to 1.5 kg / 1.5 to 3 lbs). Your body responds rapidly to the new training stimulus ("newbie gains").</p>
+                        <p>• <strong>Intermediate (1-3 years lifting):</strong> 0.5% to 1% of body weight per month (approx. 0.4 to 0.7 kg / 0.8 to 1.5 lbs).</p>
+                        <p>• <strong>Advanced (3+ years lifting):</strong> 0.25% to 0.5% of body weight per month (approx. 0.1 to 0.3 kg / 0.25 to 0.5 lbs). Growth slows down as your body adapts.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function roundToNearest5(value) {
+            return Math.round(value / 5) * 5;
+        }
+
+        function updateGoalSplitDisplay(goal) {
+            let activeCalorieTarget = globalMaintenanceCal;
+            if (goal === 'fatloss') {
+                activeCalorieTarget = globalCuttingCal;
+            } else if (goal === 'muscle') {
+                activeCalorieTarget = globalBulkingCal;
+            }
+
+            const proteinGramsRaw = globalWeightLb;
+            const proteinGrams = roundToNearest5(proteinGramsRaw);
+            const proteinCalories = proteinGrams * PROTEIN_CAL_PER_G;
+
+            const fatCaloriesRaw = activeCalorieTarget * 0.25;
+            const fatGramsRaw = fatCaloriesRaw / FAT_CAL_PER_G;
+            const fatGrams = roundToNearest5(fatGramsRaw);
+            const fatCalories = fatGrams * FAT_CAL_PER_G;
+
+            const remainderCalories = activeCalorieTarget - (proteinCalories + fatCalories);
+            const carbsGramsRaw = remainderCalories / CARB_CAL_PER_G;
+            let carbsGrams = roundToNearest5(carbsGramsRaw);
+            
+            if (carbsGrams < 0) carbsGrams = 0;
+
+            const actualProteinCaloriesUsed = proteinGrams * PROTEIN_CAL_PER_G;
+            const actualFatCaloriesUsed = fatGrams * FAT_CAL_PER_G;
+            const actualCarbCaloriesUsed = carbsGrams * CARB_CAL_PER_G;
+            const totalCalsAccountedFor = actualProteinCaloriesUsed + actualFatCaloriesUsed + actualCarbCaloriesUsed;
+
+            const proteinPct = Math.round((actualProteinCaloriesUsed / totalCalsAccountedFor) * 100);
+            const fatPct = Math.round((actualFatCaloriesUsed / totalCalsAccountedFor) * 100);
+            const carbPct = 100 - (proteinPct + fatPct);
+
+            document.getElementById('macro-protein').textContent = `${proteinGrams}g`;
+            document.getElementById('macro-protein-pct').textContent = `${proteinPct}%`;
+            document.getElementById('macro-fat').textContent = `${fatGrams}g`;
+            document.getElementById('macro-fat-pct').textContent = `${fatPct}%`;
+            document.getElementById('macro-carbs').textContent = `${carbsGrams}g`;
+            document.getElementById('macro-carbs-pct').textContent = `${carbPct}%`;
+        }
+
+        function getGoalFriendlyName(goal) {
+            if (goal === 'fatloss') return 'Fat Loss';
+            if (goal === 'muscle') return 'Muscle Gain';
+            return 'Maintenance';
+        }
+
+        function getSelectedGoalCalories() {
+            if (currentActiveTab === 'fatloss') return globalCuttingCal;
+            if (currentActiveTab === 'muscle') return globalBulkingCal;
+            return globalMaintenanceCal;
+        }
+
+        function copyResultsToClipboard() {
+            const name = document.getElementById('macro-name').value.trim() || 'Athlete';
+            const genderRaw = document.getElementById('macro-gender').value;
+            const gender = genderRaw.charAt(0).toUpperCase() + genderRaw.slice(1);
+            const age = document.getElementById('macro-age').value || '-';
+            const unitSystem = document.getElementById('macro-unit-system').value;
+            const weight = document.getElementById('macro-weight').value || '-';
+            const weightUnit = unitSystem === 'imperial' ? 'lb' : 'kg';
+            
+            let heightStr = '-';
+            if (unitSystem === 'imperial') {
+                const ft = document.getElementById('macro-height-ft').value || '0';
+                const inch = document.getElementById('macro-height-in').value || '0';
+                heightStr = `${ft}' ${inch}"`;
+            } else {
+                heightStr = `${document.getElementById('macro-height-cm').value || '0'} cm`;
+            }
+
+            const activitySelect = document.getElementById('macro-activity');
+            const activityText = activitySelect.options[activitySelect.selectedIndex].text;
+
+            const activeGoalTitle = getGoalFriendlyName(currentActiveTab);
+            const activeCalories = getSelectedGoalCalories();
+
+            const protein = document.getElementById('macro-protein').textContent;
+            const proteinPct = document.getElementById('macro-protein-pct').textContent;
+            const fat = document.getElementById('macro-fat').textContent;
+            const fatPct = document.getElementById('macro-fat-pct').textContent;
+            const carbs = document.getElementById('macro-carbs').textContent;
+            const carbsPct = document.getElementById('macro-carbs-pct').textContent;
+
+            let expectationsText = '';
+            if (currentActiveTab === 'fatloss') {
+                expectationsText = `A realistic and sustainable rate of fat loss is 0.5% to 1% of your total body weight per week.\n\n• Weekly Target: 0.25 to 1 kg (0.5 to 2 lbs) per week\n• Monthly Target: 1 to 4 kg (2 to 8 lbs) per month.`;
+            } else if (currentActiveTab === 'muscle') {
+                expectationsText = `A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.\n\nMuscle tissue builds significantly slower than fat burns. If the scale rises faster than this, the extra weight is more likely stored body fat, not muscle.\n\nYour lifting experience dictates how fast you can grow. The more experienced you are, the slower progress becomes:\n\n• Beginner (0-1 years lifting): 1% to 1.5% of body weight per month (approx. 0.7 to 1.5 kg / 1.5 to 3 lbs). Your body responds rapidly to the new training stimulus ("newbie gains").\n\n• Intermediate (1-3 years lifting): 0.5% to 1% of body weight per month (approx. 0.4 to 0.7 kg / 0.8 to 1.5 lbs).\n\n• Advanced (3+ years lifting): 0.25% to 0.5% of body weight per month (approx. 0.1 to 0.3 kg / 0.25 to 0.5 lbs). Growth slows down as your body adapts.`;
+            }
+
+            let textToCopy = `COACH CHRIS | MACRO BLUEPRINT
+----------------------------------------
+CLIENT PROFILE:
+• Name: ${name}
+• Gender: ${gender}
+• Age: ${age} yrs
+• Height: ${heightStr}
+• Weight: ${weight} ${weightUnit}
+• Activity Level: ${activityText}
+
+DAILY ENERGY TARGETS:
+• Maintenance (TDEE): ${globalMaintenanceCal.toLocaleString()} kcal
+• Fat Loss Target: ${globalCuttingCal.toLocaleString()} kcal
+• Muscle Gain Target: ${globalBulkingCal.toLocaleString()} kcal
+
+SELECTED SPLIT (${activeGoalTitle.toUpperCase()} - ${activeCalories.toLocaleString()} KCAL):
+• Protein: ${protein} (${proteinPct})
+• Fat: ${fat} (${fatPct})
+• Carbs: ${carbs} (${carbPct})
+`;
+
+            if (expectationsText) {
+                textToCopy += `\nREALISTIC EXPECTATIONS:\n${expectationsText}\n`;
+            }
+
+            textToCopy += `\n----------------------------------------
+CIRCULAR ROOTS NUTRITION PROTOCOL
+• Protein Strategy (1g/lb): Preserves muscle in deficits / fuels growth in surpluses.
+• Fat Strategy (25%): Protects hormone and cognitive function.
+• Carbs: Remainder of calories for peak training performance.
+
+Top Coach Tip: "Calculators are starting points, not laws. Track your body weight for 2-4 weeks and adjust calories by 100-200 if needed. Consistency is the true accelerator."
+`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = document.getElementById('copy-results-btn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i><span>Copied Successfully!</span>`;
+                lucide.createIcons();
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    lucide.createIcons();
+                }, 2500);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
+
+        function savePNGBlueprint() {
+            document.getElementById('pdf-profile-name').textContent = document.getElementById('macro-name').value.trim() || 'Valued Client';
+            document.getElementById('pdf-profile-gender').textContent = document.getElementById('macro-gender').value;
+            document.getElementById('pdf-profile-age').textContent = `${document.getElementById('macro-age').value || '-'} yrs`;
+            
+            const unitSystem = document.getElementById('macro-unit-system').value;
+            const weightUnit = unitSystem === 'imperial' ? 'lb' : 'kg';
+            document.getElementById('pdf-profile-weight').textContent = `${document.getElementById('macro-weight').value || '-'} ${weightUnit}`;
+            
+            let heightStr = '-';
+            if (unitSystem === 'imperial') {
+                const ft = document.getElementById('macro-height-ft').value || '0';
+                const inch = document.getElementById('macro-height-in').value || '0';
+                heightStr = `${ft}' ${inch}"`;
+            } else {
+                heightStr = `${document.getElementById('macro-height-cm').value || '0'} cm`;
+            }
+            document.getElementById('pdf-profile-height').textContent = heightStr;
+
+            const activitySelect = document.getElementById('macro-activity');
+            document.getElementById('pdf-profile-activity').textContent = activitySelect.options[activitySelect.selectedIndex].text;
+
+            document.getElementById('pdf-tdee-val').textContent = globalMaintenanceCal.toLocaleString();
+            document.getElementById('pdf-cut-val').textContent = `${globalCuttingCal.toLocaleString()} kcal`;
+            document.getElementById('pdf-bulk-val').textContent = `${globalBulkingCal.toLocaleString()} kcal`;
+
+            const goalTitle = getGoalFriendlyName(currentActiveTab);
+            const goalCals = getSelectedGoalCalories();
+            document.getElementById('pdf-split-goal-header').textContent = `Suggested Macro Splits (${goalTitle} - ${goalCals.toLocaleString()} kcal)`;
+
+            document.getElementById('pdf-macro-prot').textContent = document.getElementById('macro-protein').textContent;
+            document.getElementById('pdf-macro-prot-pct').textContent = document.getElementById('macro-protein-pct').textContent;
+            document.getElementById('pdf-macro-fat').textContent = document.getElementById('macro-fat').textContent;
+            document.getElementById('pdf-macro-fat-pct').textContent = document.getElementById('macro-fat-pct').textContent;
+            document.getElementById('pdf-macro-carbs').textContent = document.getElementById('macro-carbs').textContent;
+            document.getElementById('pdf-macro-carbs-pct').textContent = document.getElementById('macro-carbs-pct').textContent;
+
+            const pdfExpContainer = document.getElementById('pdf-expectations-container');
+            const pdfExpBody = document.getElementById('pdf-expectations-body');
+            
+            if (currentActiveTab === 'maintenance') {
+                pdfExpContainer.style.display = 'none';
+                pdfExpBody.innerHTML = '';
+            } else {
+                pdfExpContainer.style.display = 'block';
+                if (currentActiveTab === 'fatloss') {
+                    pdfExpBody.innerHTML = `
+                        <p style="margin: 0 0 4px 0; font-weight: bold;">A realistic and sustainable rate of fat loss is 0.5% to 1% of your total body weight per week.</p>
+                        <p style="margin: 0 0 2px 0;">• <strong>Weekly Target:</strong> 0.25 to 1 kg (0.5 to 2 lbs) per week</p>
+                        <p style="margin: 0;">• <strong>Monthly Target:</strong> 1 to 4 kg (2 to 8 lbs) per month.</p>
+                    `;
+                } else if (currentActiveTab === 'muscle') {
+                    pdfExpBody.innerHTML = `
+                        <p style="margin: 0 0 4px 0; font-weight: bold;">A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.</p>
+                        <p style="margin: 0 0 4px 0; font-style: italic; color: #dc2626;">Muscle tissue builds significantly slower than fat burns. If scale weight rises faster, it is likely stored body fat.</p>
+                        <p style="margin: 0;"><strong>Beginner:</strong> 1-1.5%/mo | <strong>Intermediate:</strong> 0.5-1%/mo | <strong>Advanced:</strong> 0.25-0.5%/mo</p>
+                    `;
+                }
+            }
+
+            const qrContainer = document.getElementById('pdf-qrcode');
+            qrContainer.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrContainer, {
+                    text: "https://coachchriscrc.carrd.co/#services",
+                    width: 75,
+                    height: 75,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+
+            const renderWrapper = document.getElementById('png-render-wrapper');
+            renderWrapper.style.display = 'block';
+
+            html2canvas(renderWrapper, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                renderWrapper.style.display = 'none';
+                const imageURL = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imageURL;
+                const clientNameClean = (document.getElementById('macro-name').value.trim() || 'Client').replace(/[^a-z0-9]/gi, '_');
+                downloadLink.download = `CoachChris_Macro_Blueprint_${clientNameClean}.png`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }).catch(err => {
+                renderWrapper.style.display = 'none';
+                console.error('PNG generation error:', err);
+                alert('Could not generate PNG automatically. Please try again.');
+            });
+        }
+
         function resetMacro() {
+            document.getElementById('macro-result').classList.add('hidden');
+            document.getElementById('loading-section').classList.add('hidden');
+            document.getElementById('input-section').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            localStorage.removeItem('userMacroData');
+        }
+
+        function clearAllData() {
+            document.getElementById('macro-name').value = '';
+            document.getElementById('macro-gender').value = 'male';
             document.getElementById('macro-age').value = '';
+            document.getElementById('macro-weight').value = '';
             document.getElementById('macro-height-cm').value = '';
             document.getElementById('macro-height-ft').value = '';
             document.getElementById('macro-height-in').value = '';
-            document.getElementById('macro-weight').value = '';
-            document.getElementById('macro-result').classList.add('hidden');
-            document.getElementById('input-section').classList.remove('hidden');
-            document.getElementById('macro-error').classList.add('hidden');
-            document.getElementById('loading-text').textContent = "Crunching the numbers...";
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('macro-activity').value = '1.2';
+            setUnitSystem('metric');
+            resetMacro();
         }
 
-        window.onload = () => { 
-            document.getElementById('current-year').textContent = new Date().getFullYear();
-            toggleMacroUnits(); 
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            registerChangeListeners();
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
