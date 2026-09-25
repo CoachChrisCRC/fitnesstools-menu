@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,19 +14,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Import custom fonts */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Oswald:wght@400;500;700&display=swap');
         
         :root {
             --bg-page: #f3f4f6;
-            --bg-card: #ffffff;
-            --border-color: #e5e7eb;
+            --bg-card: rgba(255, 255, 255, 0.75);
+            --border-color: rgba(229, 231, 235, 0.6);
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            --bg-toggle: #f3f4f6;
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+            --bg-toggle: rgba(243, 244, 246, 0.8);
             --toggle-pill-bg: #e5e7eb;
             --bg-btn-primary: #000000;
             --btn-text-primary: #ffffff;
@@ -37,14 +37,14 @@
 
         [data-theme="dark"] {
             --bg-page: #0a0a0a;
-            --bg-card: #121212;
-            --border-color: #262626;
+            --bg-card: rgba(18, 18, 18, 0.75);
+            --border-color: rgba(38, 38, 38, 0.6);
             --text-main: #ffffff;
             --text-heading: #ffffff;
             --text-muted: #525252;
             --text-accent: #a3a3a3;
             --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            --bg-toggle: #1a1a1a;
+            --bg-toggle: rgba(26, 26, 26, 0.8);
             --toggle-pill-bg: #1a1a1a;
             --bg-btn-primary: #ffffff;
             --btn-text-primary: #000000;
@@ -59,12 +59,16 @@
             background-color: var(--bg-page);
             color: var(--text-main);
             transition: background-color 0.3s ease, color 0.3s ease;
+            background-image: radial-gradient(circle at 50% 0%, var(--border-color) 0%, transparent 70%);
+            background-attachment: fixed;
         }
 
         .font-brand { font-family: 'Oswald', sans-serif; }
 
         .app-card {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
@@ -74,6 +78,8 @@
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-decoration: none;
             background-color: var(--bg-card);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid var(--border-color);
             color: var(--text-main);
             cursor: pointer;
@@ -197,6 +203,8 @@
         
         .modal-content {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -210,9 +218,8 @@
         .modal-overlay.active .modal-content { transform: scale(1); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
+<body class="min-h-screen flex flex-col items-center justify-center p-0 sm:p-0" data-theme="light">
 
-    <!-- Minimal Loading Overlay -->
     <div id="launch-overlay">
         <div id="launch-icon-container">
             <!-- Icon injected here -->
@@ -273,14 +280,14 @@
         </div>
     </div>
 
-    <!-- Main Card -->
-    <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center">
+    <!-- Main Card spanning full screen without extra margins on desktop -->
+    <div class="app-card w-full min-h-screen sm:rounded-none overflow-hidden flex flex-col items-center justify-between">
         
-        <header class="w-full px-8 py-10 flex justify-between items-start">
+        <header class="w-full px-6 sm:px-12 py-8 sm:py-10 flex justify-between items-start">
             <div class="flex flex-col select-none">
-                <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
-                <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
+                <h1 class="font-brand font-bold text-3xl sm:text-4xl md:text-5xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                <h2 class="font-brand font-bold text-base sm:text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                <h3 class="font-brand font-bold text-base sm:text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
             <div class="flex flex-col items-center gap-3">
@@ -300,20 +307,20 @@
             </div>
         </header>
 
-        <main class="w-full px-8 flex-grow pb-12">
-            <div class="text-center mb-10 mt-2">
+        <main class="w-full px-6 sm:px-12 flex-grow pb-12 sm:max-w-none max-w-xl mx-auto flex flex-col justify-center">
+            <div class="text-center mb-8 sm:mb-10 mt-2">
                 <div class="inline-block p-1 rounded-full mb-4 shadow-sm" style="background-color: var(--bg-toggle); border: 1px solid var(--border-color)">
-                    <div class="w-24 h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
-                        <i data-lucide="dumbbell" class="w-10 h-10" style="color: var(--btn-text-primary)"></i>
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full flex items-center justify-center overflow-hidden" style="background-color: var(--bg-btn-primary)">
+                        <i data-lucide="dumbbell" class="w-8 h-8 sm:w-10 sm:h-10" style="color: var(--btn-text-primary)"></i>
                     </div>
                 </div>
                 <h2 class="text-2xl font-black mb-2 uppercase" style="color: var(--text-heading)">Free Fitness Tools</h2>
-                <p class="text-sm max-w-[280px] mx-auto leading-relaxed" style="color: var(--text-accent)">
+                <p class="text-sm max-w-[280px] sm:max-w-none mx-auto leading-relaxed" style="color: var(--text-accent)">
                     No nonsense tools to support & optimise your training journey
                 </p>
             </div>
 
-            <div class="space-y-3 flex flex-col w-full">
+            <div class="space-y-3 flex flex-col w-full sm:max-w-xl sm:mx-auto">
                 <!-- Internal Tools turned External -->
                 <a href="https://coachchriscrc.github.io/wodgenerator" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl">
                     <div class="flex items-center space-x-4">
@@ -376,7 +383,7 @@
             </div>
 
             <!-- Social Media Section -->
-            <div class="flex justify-center space-x-12 mt-12 pb-4">
+            <div class="flex justify-center space-x-12 mt-10 pb-4">
                 <a href="#" class="group flex flex-col items-center gap-2 hover:opacity-100 transition-all opacity-50" style="color: var(--text-main)">
                     <i data-lucide="message-circle" class="w-6 h-6"></i>
                     <span class="text-[9px] font-black uppercase tracking-widest">WhatsApp</span>
@@ -391,23 +398,23 @@
                 </a>
             </div>
         </main>
+        
+        <!-- Footer integrated into bottom of full-screen card -->
+        <footer class="w-full text-center py-6 px-6 border-t" style="border-color: var(--border-color); color: var(--text-muted)">
+            <div class="mb-4 space-y-1 text-center">
+                <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
+                <p class="text-[8px] leading-normal normal-case opacity-70 italic">
+                    The content provided by these tools is for informational purposes only and is not intended as medical advice.
+                </p>
+            </div>
+            <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
+                <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
+                <p>TRAIN UNCNVNTNL</p>
+                <p>All Rights Reserved.</p>
+                <p>Fitter | Stronger | Better</p>
+            </div>
+        </footer>
     </div>
-
-    <!-- Footer -->
-    <footer class="w-full text-center py-8 px-6 max-w-lg" style="color: var(--text-muted)">
-        <div class="mb-6 space-y-2 text-center">
-            <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
-            <p class="text-[8px] leading-normal normal-case opacity-70 italic">
-                The content provided by these tools is for informational purposes only and is not intended as medical advice.
-            </p>
-        </div>
-        <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
-            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
-            <p>TRAIN UNCNVNTNL</p>
-            <p>All Rights Reserved.</p>
-            <p>Fitter | Stronger | Better</p>
-        </div>
-    </footer>
 
     <script>
         lucide.createIcons();
@@ -543,3 +550,4 @@
     </script>
 </body>
 </html>
+```
