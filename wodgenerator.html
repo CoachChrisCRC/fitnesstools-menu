@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,14 +25,14 @@
     <style>
         :root {
             --bg-page: #f3f4f6;
-            --bg-card: #ffffff;
-            --border-color: #e5e7eb;
+            --bg-card: rgba(255, 255, 255, 0.75);
+            --border-color: rgba(229, 231, 235, 0.6);
             --text-main: #1f2927;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            --bg-toggle: #f3f4f6;
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+            --bg-toggle: rgba(243, 244, 246, 0.8);
             --toggle-pill-bg: #e5e7eb;
             --bg-btn-primary: #000000;
             --btn-text-primary: #ffffff;
@@ -42,18 +43,20 @@
             --launch-overlay: rgba(255, 255, 255, 0.9);
             --bg-focus: #000000;
             --text-focus: #ffffff;
+            --link-hover-bg: #000000;
+            --link-hover-text: #ffffff;
         }
 
         [data-theme="dark"] {
             --bg-page: #0a0a0a;
-            --bg-card: #121212;
-            --border-color: #262626;
+            --bg-card: rgba(18, 18, 18, 0.75);
+            --border-color: rgba(38, 38, 38, 0.6);
             --text-main: #ffffff;
             --text-heading: #ffffff;
             --text-muted: #525252;
             --text-accent: #a3a3a3;
             --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-            --bg-toggle: #1a1a1a;
+            --bg-toggle: rgba(26, 26, 26, 0.8);
             --toggle-pill-bg: #1a1a1a;
             --bg-btn-primary: #ffffff;
             --btn-text-primary: #000000;
@@ -64,6 +67,8 @@
             --launch-overlay: rgba(10, 10, 10, 0.95);
             --bg-focus: #ffffff;
             --text-focus: #000000;
+            --link-hover-bg: #ffffff;
+            --link-hover-text: #000000;
         }
 
         body {
@@ -71,6 +76,8 @@
             background-color: var(--bg-page);
             color: var(--text-main);
             transition: background-color 0.3s ease, color 0.3s ease;
+            background-image: radial-gradient(circle at 50% 0%, var(--border-color) 0%, transparent 70%);
+            background-attachment: fixed;
             scroll-behavior: smooth;
         }
 
@@ -78,6 +85,8 @@
 
         .app-card {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
@@ -178,6 +187,8 @@
         
         .modal-content {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -322,7 +333,7 @@
         #render-canvas { display: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4" data-theme="light">
+<body class="min-h-screen flex flex-col items-center justify-between p-0 sm:p-0" data-theme="light">
 
     <!-- CANVAS FOR GENERATING SHAREABLE IMAGE -->
     <canvas id="render-canvas"></canvas>
@@ -414,139 +425,144 @@
         </div>
     </div>
 
-    <div class="app-card w-full max-w-md rounded-[2.5rem] overflow-hidden flex flex-col items-center p-8 space-y-8">
-        <header class="w-full flex justify-between items-start">
-            <div class="flex flex-col select-none text-left">
-                <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
-                <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl.</h3>
-            </div>
-            
-            <div class="flex flex-col items-center gap-3">
-                <div class="flex flex-col items-center gap-1.5">
-                    <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
-                    <div id="theme-toggle" class="theme-switch-container">
-                        <div class="theme-switch-circle"></div>
+    <div class="app-card w-full min-h-screen sm:rounded-none overflow-hidden flex flex-col justify-between p-6 sm:p-12">
+        <div class="w-full max-w-xl mx-auto flex flex-col items-center space-y-8 flex-grow">
+            <header class="w-full flex justify-between items-start">
+                <div class="flex flex-col select-none text-left">
+                    <h1 class="font-brand font-bold text-3xl sm:text-4xl md:text-5xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                    <h2 class="font-brand font-bold text-base sm:text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                    <h3 class="font-brand font-bold text-base sm:text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl.</h3>
+                </div>
+                
+                <div class="flex flex-col items-center gap-3">
+                    <div class="flex flex-col items-center gap-1.5">
+                        <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
+                        <div id="theme-toggle" class="theme-switch-container">
+                            <div class="theme-switch-circle"></div>
+                        </div>
+                    </div>
+                    <button id="open-info" class="p-2.5 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)">
+                        <i data-lucide="help-circle" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div id="home-state" class="w-full text-center space-y-6 py-4">
+                <div class="space-y-1">
+                    <h2 class="font-brand font-bold text-4xl uppercase tracking-tight" style="color: var(--text-heading)">WOD Generator</h2>
+                    <h3 class="font-brand font-bold text-sm uppercase tracking-[0.2em] opacity-80 mb-2" style="color: var(--text-heading)">Workout of the Day</h3>
+                    <p class="text-[10px] font-black uppercase tracking-widest px-4 py-2 flex items-center justify-center gap-2 rounded-full mx-auto w-fit mt-4" style="background-color: var(--bg-toggle); color: var(--text-accent)">
+                        <i data-lucide="clock" class="w-3 h-3"></i> 15 - 30 MIN SESSIONS
+                    </p>
+                </div>
+                
+                <div class="rounded-3xl p-6 border border-dashed space-y-4" style="background-color: var(--bg-toggle); border-color: var(--border-color)">
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-2xl flex items-center justify-between" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">
+                            <div class="flex flex-col items-start text-left">
+                                <span class="text-xs font-bold uppercase tracking-widest">Bodyweight Foundation</span>
+                                <span class="text-[9px] font-black opacity-60 uppercase tracking-tighter">Essential movements included</span>
+                            </div>
+                            <i data-lucide="shield" class="w-5 h-5"></i>
+                        </div>
+
+                        <div class="flex items-center gap-3 py-1">
+                            <div class="h-[1px] flex-1 bg-gray-300 dark:bg-gray-700 opacity-30"></div>
+                            <span class="text-[10px] font-black uppercase tracking-widest opacity-40">Supplemental Kit</span>
+                            <div class="h-[1px] flex-1 bg-gray-300 dark:bg-gray-700 opacity-30"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-2">
+                            <label class="kit-option p-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider">
+                                <input type="checkbox" name="kit-select" value="kettlebell" checked>
+                                Single Kettlebell
+                            </label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <label class="kit-option p-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider">
+                                    <input type="checkbox" name="kit-select" value="run">
+                                    Run Space
+                                </label>
+                                <label class="kit-option p-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider">
+                                    <input type="checkbox" name="kit-select" value="pullup">
+                                    Pull Up Bar
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <button id="open-info" class="p-2 rounded-xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)">
-                    <i data-lucide="help-circle" class="w-5 h-5"></i>
-                </button>
             </div>
-        </header>
 
-        <div id="home-state" class="w-full text-center space-y-6 py-4">
-            <div class="space-y-1">
-                <h2 class="font-brand font-bold text-4xl uppercase tracking-tight" style="color: var(--text-heading)">WOD Generator</h2>
-                <h3 class="font-brand font-bold text-sm uppercase tracking-[0.2em] opacity-80 mb-2" style="color: var(--text-heading)">Workout of the Day</h3>
-                <p class="text-[10px] font-black uppercase tracking-widest px-4 py-2 flex items-center justify-center gap-2 rounded-full mx-auto w-fit mt-4" style="background-color: var(--bg-toggle); color: var(--text-accent)">
-                    <i data-lucide="clock" class="w-3 h-3"></i> 15 - 30 MIN SESSIONS
+            <div id="wod-card" class="w-full space-y-5 hidden-initial opacity-0 transition-opacity duration-500">
+                <div class="flex items-center justify-between">
+                    <div id="kit-section" class="space-y-2">
+                        <span class="text-[10px] font-black uppercase tracking-widest" style="color: var(--text-muted)">Kit Required</span>
+                        <div id="kit-container" class="flex flex-wrap gap-2"></div>
+                    </div>
+                    <button id="reset-button" class="p-2.5 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center border border-dashed" style="background-color: var(--bg-toggle); color: var(--text-accent); border-color: var(--border-color)">
+                        <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="flex flex-col gap-1 text-left">
+                        <div class="flex items-center justify-between">
+                            <span id="wod-format-name" class="text-4xl font-black uppercase tracking-tighter leading-[0.9]" style="color: var(--text-heading)"></span>
+                            <button id="open-type-info" class="p-1.5 rounded-lg opacity-40 hover:opacity-100 transition-opacity" style="color: var(--text-heading)">
+                                <i data-lucide="info" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between mt-1">
+                            <span id="wod-format-desc" class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-accent)"></span>
+                            <span id="intensity-indicator" class="intensity-pill"></span>
+                        </div>
+                    </div>
+
+                    <div id="wod-movements" class="w-full p-5 rounded-3xl text-sm text-left"></div>
+
+                    <div class="flex items-center justify-between">
+                        <div id="wod-time-cap" class="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-2" style="background-color: var(--bg-toggle); color: var(--text-heading)">
+                            <i data-lucide="timer" class="w-3 h-3"></i>
+                            <span id="time-cap-value"></span>
+                        </div>
+                        
+                        <div class="flex items-center gap-4">
+                            <button id="download-graphic-button" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-70" style="color: var(--text-accent)">
+                                <i data-lucide="image" class="w-3 h-3"></i> Graphic
+                            </button>
+                            <button id="copy-button" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-70" style="color: var(--text-accent)">
+                                <i data-lucide="copy" class="w-3 h-3"></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="instructional-section" class="pt-6 border-t space-y-4 text-left" style="border-color: var(--border-color)">
+                    <h3 class="text-xs font-black uppercase tracking-widest" style="color: var(--text-muted)">Execution Strategy</h3>
+                    <div id="instruction-content" class="space-y-2"></div>
+                </div>
+            </div>
+
+            <button id="generate-button" class="btn-generate w-full py-5 font-brand font-bold text-xl uppercase tracking-widest rounded-3xl shadow-lg">
+                Build My Session
+            </button>
+        </div>
+
+        <footer class="w-full text-center py-6 px-6 border-t mt-12" style="border-color: var(--border-color); color: var(--text-muted)">
+            <div class="mb-4 space-y-1 text-center max-w-xl mx-auto">
+                <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
+                <p class="text-[8px] leading-normal normal-case opacity-70 italic">
+                    Attention: High-intensity exercise carries significant risk. You are responsible for ensuring correct technical execution of all movements. If you have pre-existing conditions or experience unusual symptoms, pause training and seek medical advice. By using these protocols, you accept full responsibility for your safety.
                 </p>
             </div>
-            
-            <div class="rounded-3xl p-6 border border-dashed space-y-4" style="background-color: var(--bg-toggle); border-color: var(--border-color)">
-                <div class="space-y-4">
-                    <div class="p-4 rounded-2xl flex items-center justify-between" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">
-                        <div class="flex flex-col items-start text-left">
-                            <span class="text-xs font-bold uppercase tracking-widest">Bodyweight Foundation</span>
-                            <span class="text-[9px] font-black opacity-60 uppercase tracking-tighter">Essential movements included</span>
-                        </div>
-                        <i data-lucide="shield" class="w-5 h-5"></i>
-                    </div>
-
-                    <div class="flex items-center gap-3 py-1">
-                        <div class="h-[1px] flex-1 bg-gray-300 dark:bg-gray-700 opacity-30"></div>
-                        <span class="text-[10px] font-black uppercase tracking-widest opacity-40">Supplemental Kit</span>
-                        <div class="h-[1px] flex-1 bg-gray-300 dark:bg-gray-700 opacity-30"></div>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-2">
-                        <label class="kit-option p-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider">
-                            <input type="checkbox" name="kit-select" value="kettlebell" checked>
-                            Single Kettlebell
-                        </label>
-                        <div class="grid grid-cols-2 gap-2">
-                            <label class="kit-option p-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider">
-                                <input type="checkbox" name="kit-select" value="run">
-                                Run Space
-                            </label>
-                            <label class="kit-option p-4 rounded-2xl text-[11px] font-bold uppercase tracking-wider">
-                                <input type="checkbox" name="kit-select" value="pullup">
-                                Pull Up Bar
-                            </label>
-                        </div>
-                    </div>
-                </div>
+            <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
+                <p>&copy; <span id="year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
+                <p>TRAIN UNCNVNTNL</p>
+                <p>All Rights Reserved.</p>
+                <p>Fitter | Stronger | Better</p>
             </div>
-        </div>
-
-        <div id="wod-card" class="w-full space-y-5 hidden-initial opacity-0 transition-opacity duration-500">
-            <div class="flex items-center justify-between">
-                <div id="kit-section" class="space-y-2">
-                    <span class="text-[10px] font-black uppercase tracking-widest" style="color: var(--text-muted)">Kit Required</span>
-                    <div id="kit-container" class="flex flex-wrap gap-2"></div>
-                </div>
-                <button id="reset-button" class="p-2.5 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center border border-dashed" style="background-color: var(--bg-toggle); color: var(--text-accent); border-color: var(--border-color)">
-                    <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
-                </button>
-            </div>
-
-            <div class="space-y-4">
-                <div class="flex flex-col gap-1 text-left">
-                    <div class="flex items-center justify-between">
-                        <span id="wod-format-name" class="text-4xl font-black uppercase tracking-tighter leading-[0.9]" style="color: var(--text-heading)"></span>
-                        <button id="open-type-info" class="p-1.5 rounded-lg opacity-40 hover:opacity-100 transition-opacity" style="color: var(--text-heading)">
-                            <i data-lucide="info" class="w-5 h-5"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="flex items-center justify-between mt-1">
-                        <span id="wod-format-desc" class="text-[10px] font-bold uppercase tracking-widest" style="color: var(--text-accent)"></span>
-                        <span id="intensity-indicator" class="intensity-pill"></span>
-                    </div>
-                </div>
-
-                <div id="wod-movements" class="w-full p-5 rounded-3xl text-sm text-left"></div>
-
-                <div class="flex items-center justify-between">
-                    <div id="wod-time-cap" class="text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-2" style="background-color: var(--bg-toggle); color: var(--text-heading)">
-                        <i data-lucide="timer" class="w-3 h-3"></i>
-                        <span id="time-cap-value"></span>
-                    </div>
-                    
-                    <div class="flex items-center gap-4">
-                        <button id="download-graphic-button" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-70" style="color: var(--text-accent)">
-                            <i data-lucide="image" class="w-3 h-3"></i> Graphic
-                        </button>
-                        <button id="copy-button" class="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest hover:opacity-70" style="color: var(--text-accent)">
-                            <i data-lucide="copy" class="w-3 h-3"></i> Copy
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="instructional-section" class="pt-6 border-t space-y-4 text-left" style="border-color: var(--border-color)">
-                <h3 class="text-xs font-black uppercase tracking-widest" style="color: var(--text-muted)">Execution Strategy</h3>
-                <div id="instruction-content" class="space-y-2"></div>
-            </div>
-        </div>
-
-        <button id="generate-button" class="btn-generate w-full py-5 font-brand font-bold text-xl uppercase tracking-widest rounded-3xl shadow-lg">
-            Build My Session
-        </button>
+        </footer>
     </div>
-
-    <footer class="app-footer">
-        <p class="disclaimer-text" style="color: var(--text-accent)">
-            Attention: High-intensity exercise carries significant risk. You are responsible for ensuring correct technical execution of all movements. If you have pre-existing conditions or experience unusual symptoms, pause training and seek medical advice. By using these protocols, you accept full responsibility for your safety.
-        </p>
-        <div class="footer-divider"></div>
-        <div class="copyright-container">
-            <span class="copyright-line-1">&copy; <span id="year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING <br> TRAIN UNCNVNTNL.</span>
-            <span class="copyright-line-2">All Rights Reserved.</span>
-            <span class="copyright-line-3">Fitter. Stronger. Better.</span>
-        </div>
-    </footer>
 
     <script type="module">
         // --- SERVICE WORKER REGISTRATION (PWA) ---
