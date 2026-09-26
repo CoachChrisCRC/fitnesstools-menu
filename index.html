@@ -363,13 +363,14 @@
                     <i data-lucide="arrow-right" class="arrow-icon w-5 h-5 transition-transform duration-300"></i>
                 </div>
 
-                <div data-tool="newsletter" class="newsletter-cta tool-btn p-4 rounded-xl mt-6 shadow-md flex items-center justify-between">
+                <!-- Newsletter Link Button with FREE Badge -->
+                <a href="https://circularroots.substack.com" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl mt-6 shadow-md">
                     <div class="flex items-center space-x-4">
                         <i data-lucide="mail" class="w-5 h-5"></i>
                         <span class="font-bold text-base uppercase tracking-wider">Join the Newsletter</span>
                     </div>
                     <span class="text-[10px] font-black bg-white text-black px-2 py-0.5 rounded uppercase">FREE</span>
-                </div>
+                </a>
 
                 <!-- New Get Coaching Button -->
                 <a href="https://circularroots.co.uk/#services" target="_blank" rel="noopener noreferrer" class="link-card external-link p-4 rounded-xl shadow-lg border-2" style="border-color: var(--text-heading)">
@@ -486,8 +487,7 @@
             
             const toolData = {
                 '1rm': { title: "Heavy Loading", text: "Finalizing precision formulas for power and strength lifts. Coming soon.", icon: "dumbbell" },
-                'timer': { title: "Synchronizing", text: "Our performance clock is being calibrated for interval training. Coming soon.", icon: "timer" },
-                'newsletter': { title: "Drafting Intel", text: "Assembling unconventional training wisdom for your inbox. Coming soon.", icon: "mail" }
+                'timer': { title: "Synchronizing", text: "Our performance clock is being calibrated for interval training. Coming soon.", icon: "timer" }
             };
             
             if (yearSpan) yearSpan.textContent = new Date().getFullYear();
