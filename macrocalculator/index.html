@@ -16,20 +16,20 @@
         
         :root {
             --bg-page: #f3f4f6;
-            --bg-card: #ffffff;
+            --bg-card: rgba(255, 255, 255, 0.75);
             --bg-input: #f9fafb;
             --bg-result: #f9fafb;
             --bg-toggle: #f3f4f6;
             --bg-btn-primary: #000000;
             --bg-btn-unit: #ffffff;
-            --border-color: #e5e7eb;
+            --border-color: rgba(229, 231, 235, 0.6);
             --text-main: #1f2937;
             --text-heading: #000000;
             --text-muted: #9ca3af;
             --text-accent: #6b7280;
             --btn-text-primary: #ffffff;
             --btn-text-unit: #000000;
-            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
             --toggle-pill-bg: #e5e7eb;
             --modal-overlay: rgba(0, 0, 0, 0.4);
             
@@ -48,13 +48,13 @@
 
         [data-theme="dark"] {
             --bg-page: #0a0a0a;
-            --bg-card: #121212;
+            --bg-card: rgba(18, 18, 18, 0.75);
             --bg-input: #1a1a1a;
             --bg-result: #1a1a1a;
             --bg-toggle: #1a1a1a;
             --bg-btn-primary: #ffffff;
             --bg-btn-unit: #ffffff;
-            --border-color: #262626;
+            --border-color: rgba(38, 38, 38, 0.6);
             --text-main: #ffffff;
             --text-heading: #ffffff;
             --text-muted: #525252;
@@ -83,12 +83,16 @@
             background-color: var(--bg-page);
             color: var(--text-main);
             transition: background-color 0.3s ease, color 0.3s ease;
+            background-image: radial-gradient(circle at 50% 0%, var(--border-color) 0%, transparent 70%);
+            background-attachment: fixed;
         }
 
         .font-brand { font-family: 'Oswald', sans-serif; }
 
         .app-card {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             box-shadow: var(--shadow);
             border: 1px solid var(--border-color);
             transition: all 0.3s ease;
@@ -196,9 +200,16 @@
         
         .modal-content {
             background-color: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             transform: scale(0.95);
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            width: 100%;
+            max-width: 24rem;
+            border-radius: 1.5rem;
+            padding: 2rem;
+            position: relative;
         }
         
         .modal-overlay.active .modal-content { transform: scale(1); }
@@ -286,19 +297,19 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center p-4 py-12" data-theme="light">
+<body class="min-h-screen flex flex-col items-center justify-center p-0 sm:p-0" data-theme="light">
 
     <!-- Gender Bio Info Modal -->
     <div id="gender-modal" class="modal-overlay">
-        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
-            <button onclick="closeModal('gender-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+        <div class="modal-content shadow-2xl">
+            <button onclick="closeModal('gender-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
-                    <i data-lucide="info" class="w-8 h-8"></i>
+                    <i data-lucide="info" class="w-8 h-8" style="color: var(--text-heading)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3 text-center" style="color: var(--text-heading)">Biological Sex</h3>
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Biological Sex</h3>
                 <div class="w-full text-left space-y-3 text-xs leading-relaxed" style="color: var(--text-accent)">
                     <p>The Mifflin-St Jeor equation requires your biological sex (assigned at birth) to determine baseline caloric needs accurately.</p>
                     <p>Men typically have a higher percentage of lean body mass, while women naturally carry a higher level of essential fat tissue to support endocrine and reproductive health. Biological differences modify the base BMR formula coefficients significantly.</p>
@@ -310,35 +321,35 @@
 
     <!-- Activity Levels Modal -->
     <div id="activity-modal" class="modal-overlay">
-        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
-            <button onclick="closeModal('activity-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+        <div class="modal-content shadow-2xl">
+            <button onclick="closeModal('activity-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
-                    <i data-lucide="info" class="w-8 h-8"></i>
+                    <i data-lucide="info" class="w-8 h-8" style="color: var(--text-heading)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3 text-center" style="color: var(--text-heading)">Activity Levels</h3>
-                <div class="w-full space-y-4 max-h-[50vh] overflow-y-auto pr-2 text-left">
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">Activity Levels</h3>
+                <div class="w-full space-y-4 max-h-[50vh] overflow-y-auto pr-2 text-left" style="color: var(--text-accent)">
                     <div class="space-y-1">
                         <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Sedentary: 🛋️🪑</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Mostly seated work. Little to no planned movement outside of daily life.</p>
+                        <p class="text-[11px]">Mostly seated work. Little to no planned movement outside of daily life.</p>
                     </div>
                     <div class="space-y-1">
                         <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Lightly Active: 🚶‍♀️🧘</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">You stay on your feet or get in 1–3 light movement sessions (walking, yoga, light chores) per week.</p>
+                        <p class="text-[11px]">You stay on your feet or get in 1–3 light movement sessions (walking, yoga, light chores) per week.</p>
                     </div>
                     <div class="space-y-1">
                         <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Moderately Active: 🏃‍♀️💪</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Consistent training 3–5 times per week. You break a sweat and prioritize structured sessions.</p>
+                        <p class="text-[11px]">Consistent training 3–5 times per week. You break a sweat and prioritize structured sessions.</p>
                     </div>
                     <div class="space-y-1">
                         <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Highly Active: 🏋️‍♀️🤸‍♀️</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Training is a habit. You’re moving or in the gym 6–7 days a week with a mix of strength and conditioning.</p>
+                        <p class="text-[11px]">Training is a habit. You’re moving or in the gym 6–7 days a week with a mix of strength and conditioning.</p>
                     </div>
                     <div class="space-y-1">
                         <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Extremely Active: 🥇🚀</p>
-                        <p class="text-[11px]" style="color: var(--text-accent)">Performance is your craft. Daily physical labor or high-volume, multi-session training is your norm.</p>
+                        <p class="text-[11px]">Performance is your craft. Daily physical labor or high-volume, multi-session training is your norm.</p>
                     </div>
                 </div>
                 <button onclick="closeModal('activity-modal')" class="w-full mt-8 py-3 font-black uppercase tracking-widest rounded-xl text-xs" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">Got it</button>
@@ -348,35 +359,35 @@
 
     <!-- Usage Modal -->
     <div id="usage-modal" class="modal-overlay">
-        <div class="modal-content w-full max-w-sm rounded-3xl p-8 shadow-2xl relative">
-            <button onclick="closeModal('usage-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+        <div class="modal-content shadow-2xl">
+            <button onclick="closeModal('usage-modal')" class="absolute top-4 right-4 p-2 rounded-full hover:opacity-70 transition-opacity" style="color: var(--text-muted)">
                 <i data-lucide="x" class="w-5 h-5"></i>
             </button>
-            <div class="flex flex-col items-center">
+            <div class="flex flex-col items-center text-center">
                 <div class="p-4 rounded-2xl mb-4" style="background-color: var(--bg-toggle)">
-                    <i data-lucide="help-circle" class="w-8 h-8"></i>
+                    <i data-lucide="help-circle" class="w-8 h-8" style="color: var(--text-heading)"></i>
                 </div>
-                <h3 class="font-brand font-bold text-2xl uppercase mb-3 text-center" style="color: var(--text-heading)">How To Use</h3>
-                <div class="w-full space-y-5 text-left">
+                <h3 class="font-brand font-bold text-2xl uppercase mb-3" style="color: var(--text-heading)">How To Use</h3>
+                <div class="w-full space-y-5 text-left" style="color: var(--text-accent)">
                     <div class="flex gap-4">
                         <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-black text-[10px]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">1</div>
                         <div>
                             <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Enter Details</p>
-                            <p class="text-[11px]" style="color: var(--text-accent)">Input your age, gender, height, current weight, and activity level.</p>
+                            <p class="text-[11px]">Input your age, gender, height, current weight, and activity level.</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-black text-[10px]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">2</div>
                         <div>
                             <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Calculate TDEE</p>
-                            <p class="text-[11px]" style="color: var(--text-accent)">Discover your Total Daily Energy Expenditure. This is your maintenance intake.</p>
+                            <p class="text-[11px]">Discover your Total Daily Energy Expenditure. This is your maintenance intake.</p>
                         </div>
                     </div>
                     <div class="flex gap-4">
                         <div class="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center font-black text-[10px]" style="background-color: var(--bg-btn-primary); color: var(--btn-text-primary)">3</div>
                         <div>
                             <p class="font-bold text-xs uppercase" style="color: var(--text-heading)">Explore Target Tabs</p>
-                            <p class="text-[11px]" style="color: var(--text-accent)">Toggle between Maintenance, Fat Loss, and Muscle Gain to instantly calculate your suggested macro targets; rounded to the nearest 5g!</p>
+                            <p class="text-[11px]">Toggle between Maintenance, Fat Loss, and Muscle Gain to instantly calculate your suggested macro targets; rounded to the nearest 5g!</p>
                         </div>
                     </div>
                 </div>
@@ -385,17 +396,17 @@
         </div>
     </div>
 
-    <!-- Main Calculator App Card -->
-    <div class="app-card w-full max-w-md rounded-3xl overflow-hidden flex flex-col items-center" id="calculator-card">
+    <!-- Main Calculator App Card spanning full screen without extra margins on desktop -->
+    <div class="app-card w-full min-h-screen sm:rounded-none overflow-hidden flex flex-col items-center justify-between" id="calculator-card">
         
-        <header class="w-full px-8 pt-10 pb-6 flex justify-between items-start">
+        <header class="w-full px-6 sm:px-12 py-8 sm:py-10 flex justify-between items-start">
             <div class="flex flex-col select-none text-left">
-                <h1 class="font-brand font-bold text-4xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
-                <h2 class="font-brand font-bold text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
-                <h3 class="font-brand font-bold text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
+                <h1 class="font-brand font-bold text-3xl sm:text-4xl md:text-5xl leading-none tracking-wide mb-1" style="color: var(--text-heading)">COACH CHRIS</h1>
+                <h2 class="font-brand font-bold text-base sm:text-lg leading-none mb-[2px]" style="color: var(--text-accent)">CIRCULAR ROOTS COACHING</h2>
+                <h3 class="font-brand font-bold text-base sm:text-lg leading-none uppercase" style="color: var(--text-muted)">Train Uncnvntnl</h3>
             </div>
             
-            <div class="flex flex-col items-center gap-4 no-print">
+            <div class="flex flex-col items-center gap-3 no-print">
                 <div class="flex flex-col items-center gap-1.5">
                     <span class="text-[9px] font-black uppercase tracking-widest opacity-60" style="color: var(--text-muted)">Theme</span>
                     <div id="theme-toggle" class="theme-switch-container" aria-label="Toggle Theme">
@@ -405,26 +416,22 @@
                             <i data-lucide="moon" class="icon-moon"></i>
                         </div>
                     </div>
-                    <span id="theme-status" class="text-[8px] font-bold uppercase tracking-wider opacity-60" style="color: var(--text-accent)">Light Mode</span>
                 </div>
 
-                <div class="flex flex-col items-center gap-1.5">
-                    <button onclick="openModal('usage-modal')" class="p-2.5 rounded-xl flex items-center justify-center transition-colors duration-300" style="color: var(--text-heading); background-color: var(--bg-toggle)" title="How to use">
-                        <i data-lucide="help-circle" class="w-5 h-5"></i>
-                    </button>
-                    <span class="text-[8px] font-bold uppercase tracking-wider opacity-60" style="color: var(--text-accent)">How to use</span>
-                </div>
+                <button onclick="openModal('usage-modal')" class="p-2.5 rounded-xl transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center" style="background-color: var(--bg-toggle); color: var(--text-heading)" title="How to use">
+                    <i data-lucide="help-circle" class="w-5 h-5"></i>
+                </button>
             </div>
         </header>
 
-        <main class="w-full px-8 flex-grow pb-12 relative">
+        <main class="w-full px-6 sm:px-12 flex-grow pb-12 sm:max-w-xl mx-auto flex flex-col justify-center">
             
             <div id="input-section">
-                <div class="text-center mb-8">
+                <div class="text-center mb-8 sm:mb-10 mt-2">
                     <div class="flex items-center justify-center gap-3 mb-2">
-                        <i data-lucide="utensils" class="title-icon w-10 h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
+                        <i data-lucide="utensils" class="title-icon w-8 h-8 sm:w-10 sm:h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
                         <h2 class="text-2xl font-black uppercase tracking-tight leading-tight" style="color: var(--text-heading)">Free Calorie<br>Calculator</h2>
-                        <i data-lucide="utensils" class="title-icon w-10 h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
+                        <i data-lucide="utensils" class="title-icon w-8 h-8 sm:w-10 sm:h-10 opacity-70 flex-shrink-0" style="color: var(--text-heading)"></i>
                     </div>
                     <p class="text-xs mt-2 leading-relaxed" style="color: var(--text-accent)">
                         Calculate Maintenance Calories (TDEE) and receive a suggested coach-built split.
@@ -666,6 +673,21 @@
                 Please ensure all fields are correct.
             </p>
         </main>
+        
+        <footer class="w-full text-center py-6 px-6 border-t" style="border-color: var(--border-color); color: var(--text-muted)">
+            <div class="mb-4 space-y-1 text-center max-w-xl mx-auto">
+                <h4 class="text-[9px] font-black uppercase tracking-[0.2em]">Disclaimer</h4>
+                <p class="text-[8px] leading-normal normal-case opacity-70 italic">
+                    This calculator provides an estimation of your Basal Metabolic Rate (BMR) through the use of the clinically validated Mifflin-St Jeor Equation. Your Total Daily Energy Expenditure (TDEE) is then determined by adjusting your BMR according to your selected physical activity level. Informational purposes only. Consult with a professional healthcare provider prior to commencing any physical fitness/diet protocol.
+                </p>
+            </div>
+            <div class="text-[8px] sm:text-[9px] uppercase tracking-[0.1em] sm:tracking-[0.15em] font-bold leading-relaxed space-y-1 text-center">
+                <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING</p>
+                <p>TRAIN UNCNVNTNL</p>
+                <p>All Rights Reserved.</p>
+                <p>Fitter | Stronger | Better</p>
+            </div>
+        </footer>
     </div>
 
     <!-- Printable Standard Blueprint Rendering Node (Exported as PNG) -->
@@ -815,19 +837,6 @@
         </div>
     </div>
 
-    <!-- APP FOOTER -->
-    <footer class="w-full max-w-2xl mx-auto text-center py-8 px-6 text-gray-400">
-        <div class="text-[9px] leading-relaxed max-w-md mx-auto italic border-b border-gray-200 dark:border-zinc-800 pb-4 mb-4 text-justify">
-            <p><strong>Disclaimer:</strong> This calculator provides an estimation of your Basal Metabolic Rate (BMR) through the use of the clinically validated Mifflin-St Jeor Equation. Your Total Daily Energy Expenditure (TDEE) is then determined by adjusting your BMR according to your selected physical activity level, utilizing standard activity multipliers. Please note that these results are intended for informational purposes only and do not constitute medical advice. It is always recommended to consult with a qualified healthcare professional before commencing any new diet or exercise regimen.</p>
-        </div>
-        
-        <div class="text-[10px] uppercase tracking-widest space-y-1">
-            <p>&copy; <span id="current-year"></span> COACH CHRIS | CIRCULAR ROOTS COACHING | TRAIN UNCNVNTNL.</p>
-            <p>All Rights Reserved. <br>Delivered via <a href="https://coachchriscrc.mvt.so" target="_blank" class="underline hover:opacity-80 font-semibold">Circular Roots Coaching</a> app.</p>
-            <p class="font-bold mt-2" style="color: var(--text-heading)">Fitter. Stronger. Better.</p>
-        </div>
-    </footer>
-
     <script>
         lucide.createIcons();
         
@@ -847,13 +856,16 @@
 
         const body = document.body;
         const themeToggle = document.getElementById('theme-toggle');
-        const themeStatus = document.getElementById('theme-status');
+        const yearSpan = document.getElementById('current-year');
+        const pdfFooterYear = document.getElementById('pdf-footer-year');
+        
+        if (yearSpan) yearSpan.textContent = new Date().getFullYear();
+        if (pdfFooterYear) pdfFooterYear.textContent = new Date().getFullYear();
         
         themeToggle.addEventListener('click', () => {
             const currentTheme = body.getAttribute('data-theme');
             const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
             body.setAttribute('data-theme', nextTheme);
-            themeStatus.textContent = nextTheme === 'light' ? 'Light Mode' : 'Dark Mode';
             localStorage.setItem('theme', nextTheme);
         });
 
@@ -933,12 +945,11 @@
             }
             const savedTheme = localStorage.getItem('theme') || 'light';
             body.setAttribute('data-theme', savedTheme);
-            themeStatus.textContent = savedTheme === 'light' ? 'Light Mode' : 'Dark Mode';
         }
 
         function openModal(id) {
             document.getElementById(id).classList.add('active');
-            lucide.createIcons(); // Force refresh Icons inside opened modals
+            lucide.createIcons();
         }
 
         function closeModal(id) {
@@ -1240,89 +1251,69 @@
             const carbs = document.getElementById('macro-carbs').textContent;
             const carbsPct = document.getElementById('macro-carbs-pct').textContent;
 
-            // Generate expectations string dynamically based on target goals
             let expectationsText = '';
             if (currentActiveTab === 'fatloss') {
                 expectationsText = `A realistic and sustainable rate of fat loss is 0.5% to 1% of your total body weight per week.\n\n• Weekly Target: 0.25 to 1 kg (0.5 to 2 lbs) per week\n• Monthly Target: 1 to 4 kg (2 to 8 lbs) per month.`;
             } else if (currentActiveTab === 'muscle') {
-                // Exact requested format for Muscle Gain Expectations with custom spacing and line breaks
-                expectationsText = `A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.\n\nMuscle tissue builds significantly slower than fat burns. If the scale rises faster than this, the extra weight is most likely stored body fat, not muscle.\n\nYour lifting experience dictates how fast you can grow. The more experienced you are, the slower progress becomes:\n\n• Beginner (0-1 years lifting): \n1% to 1.5% of body weight per month (approx. 0.7 to 1.5 kg / 1.5 to 3 lbs). \nYour body responds rapidly to the new training stimulus ("newbie gains").\n\n• Intermediate (1-3 years lifting): 0.5% to 1% of body weight per month (approx. 0.4 to 0.7 kg / 0.8 to 1.5 lbs).\n\n• Advanced (3+ years lifting): 0.25% to 0.5% of body weight per month (approx. 0.1 to 0.3 kg / 0.25 to 0.5 lbs). Growth slows down as your body adapts.`;
-            } else {
-                expectationsText = `Staying at maintenance calories allows seasoned lifters and beginners alike to achieve recomposition—dropping fat while gaining strength.\n\nIdeal for peak joint profiles, optimal hormone health, and daily hybrid performance recovery.`;
+                expectationsText = `A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.\n\nMuscle tissue builds significantly slower than fat burns. If the scale rises faster than this, the extra weight is more likely stored body fat, not muscle.\n\nYour lifting experience dictates how fast you can grow. The more experienced you are, the slower progress becomes:\n\n• Beginner (0-1 years lifting): 1% to 1.5% of body weight per month (approx. 0.7 to 1.5 kg / 1.5 to 3 lbs). Your body responds rapidly to the new training stimulus ("newbie gains").\n\n• Intermediate (1-3 years lifting): 0.5% to 1% of body weight per month (approx. 0.4 to 0.7 kg / 0.8 to 1.5 lbs).\n\n• Advanced (3+ years lifting): 0.25% to 0.5% of body weight per month (approx. 0.1 to 0.3 kg / 0.25 to 0.5 lbs). Growth slows down as your body adapts.`;
             }
 
-            // Build output exactly matching the user's requested template format
-            let textToCopy = `Your Personalized Macro Blueprint\n\n`;
-            textToCopy += `– CLIENT PROFILE \n`;
-            textToCopy += `Name: ${name}\n`;
-            textToCopy += `Gender: ${gender}   Age: ${age}\n`;
-            textToCopy += `Height: ${heightStr}    Weight: ${weight} ${weightUnit}\n`;
-            textToCopy += `Activity Level: ${activityText}\n\n`;
-            
-            textToCopy += `– BASE ENERGY TARGETS \n`;
-            textToCopy += `Daily Maintenance (TDEE): ${globalMaintenanceCal.toLocaleString()} kcal\n`;
-            textToCopy += `Fat Loss Target: ${globalCuttingCal.toLocaleString()} kcal\n`;
-            textToCopy += `Muscle Gain Target: ${globalBulkingCal.toLocaleString()} kcal\n\n`;
-            
-            textToCopy += `– SELECTED GOAL: ${activeGoalTitle.toUpperCase()}\n`;
-            textToCopy += `Target Intake: \n${activeCalories.toLocaleString()} kcal / day\n`;
-            textToCopy += `Protein: ${protein} (${proteinPct})\n`;
-            textToCopy += `Fat: ${fat} (${fatPct})\n`;
-            textToCopy += `Carbs: ${carbs} (${carbsPct})\n\n`;
+            let textToCopy = `COACH CHRIS | MACRO BLUEPRINT
+----------------------------------------
+CLIENT PROFILE:
+• Name: ${name}
+• Gender: ${gender}
+• Age: ${age} yrs
+• Height: ${heightStr}
+• Weight: ${weight} ${weightUnit}
+• Activity Level: ${activityText}
 
-            textToCopy += `– REALISTIC EXPECTATIONS\n`;
-            textToCopy += `${expectationsText}\n\n\n`;
-            textToCopy += `View programs & Coaching Services at: https://coachchriscrc.carrd.co/#services \n\n`;
-            textToCopy += `For Support/Questions, contact Coach Chris.\n`;
-            textToCopy += `📧 circularrootscoaching@gmail.com \n`;
-            textToCopy += `🔗 https://wa.me/+447925116794`;
+DAILY ENERGY TARGETS:
+• Maintenance (TDEE): ${globalMaintenanceCal.toLocaleString()} kcal
+• Fat Loss Target: ${globalCuttingCal.toLocaleString()} kcal
+• Muscle Gain Target: ${globalBulkingCal.toLocaleString()} kcal
 
-            // iFrame safe copying approach
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            textArea.style.position = "fixed"; 
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            
-            let success = false;
-            try {
-                success = document.execCommand('copy');
-            } catch (err) {
-                console.error('Fallback copy operation failed', err);
-            }
-            
-            document.body.removeChild(textArea);
-            
-            if (!success && navigator.clipboard) {
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    success = true;
-                    showFeedback();
-                });
-            } else if (success) {
-                showFeedback();
+SELECTED SPLIT (${activeGoalTitle.toUpperCase()} - ${activeCalories.toLocaleString()} KCAL):
+• Protein: ${protein} (${proteinPct})
+• Fat: ${fat} (${fatPct})
+• Carbs: ${carbs} (${carbPct})
+`;
+
+            if (expectationsText) {
+                textToCopy += `\nREALISTIC EXPECTATIONS:\n${expectationsText}\n`;
             }
 
-            function showFeedback() {
+            textToCopy += `\n----------------------------------------
+CIRCULAR ROOTS NUTRITION PROTOCOL
+• Protein Strategy (1g/lb): Preserves muscle in deficits / fuels growth in surpluses.
+• Fat Strategy (25%): Protects hormone and cognitive function.
+• Carbs: Remainder of calories for peak training performance.
+
+Top Coach Tip: "Calculators are starting points, not laws. Track your body weight for 2-4 weeks and adjust calories by 100-200 if needed. Consistency is the true accelerator."
+`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
                 const btn = document.getElementById('copy-results-btn');
-                const origHtml = btn.innerHTML;
-                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-green-500"></i> <span class="text-green-500">Copied to Clipboard!</span>`;
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4 text-emerald-500"></i><span>Copied Successfully!</span>`;
                 lucide.createIcons();
                 setTimeout(() => {
-                    btn.innerHTML = origHtml;
+                    btn.innerHTML = originalHTML;
                     lucide.createIcons();
-                }, 2000);
-            }
+                }, 2500);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
         }
 
-        // Generates high-res image download
         function savePNGBlueprint() {
-            const name = document.getElementById('macro-name').value.trim() || 'Valued Client';
-            const gender = document.getElementById('macro-gender').value;
-            const age = document.getElementById('macro-age').value || '-';
+            document.getElementById('pdf-profile-name').textContent = document.getElementById('macro-name').value.trim() || 'Valued Client';
+            document.getElementById('pdf-profile-gender').textContent = document.getElementById('macro-gender').value;
+            document.getElementById('pdf-profile-age').textContent = `${document.getElementById('macro-age').value || '-'} yrs`;
+            
             const unitSystem = document.getElementById('macro-unit-system').value;
-            const weight = document.getElementById('macro-weight').value || '-';
             const weightUnit = unitSystem === 'imperial' ? 'lb' : 'kg';
+            document.getElementById('pdf-profile-weight').textContent = `${document.getElementById('macro-weight').value || '-'} ${weightUnit}`;
             
             let heightStr = '-';
             if (unitSystem === 'imperial') {
@@ -1332,115 +1323,95 @@
             } else {
                 heightStr = `${document.getElementById('macro-height-cm').value || '0'} cm`;
             }
+            document.getElementById('pdf-profile-height').textContent = heightStr;
 
             const activitySelect = document.getElementById('macro-activity');
-            const activityText = activitySelect.options[activitySelect.selectedIndex].text;
+            document.getElementById('pdf-profile-activity').textContent = activitySelect.options[activitySelect.selectedIndex].text;
 
-            const activeGoalTitle = getGoalFriendlyName(currentActiveTab);
-            const activeCalories = getSelectedGoalCalories();
-
-            const protein = document.getElementById('macro-protein').textContent;
-            const proteinPct = document.getElementById('macro-protein-pct').textContent;
-            const fat = document.getElementById('macro-fat').textContent;
-            const fatPct = document.getElementById('macro-fat-pct').textContent;
-            const carbs = document.getElementById('macro-carbs').textContent;
-            const carbsPct = document.getElementById('macro-carbs-pct').textContent;
-
-            // Mapping gathered values directly into the target blueprint rendering node
-            document.getElementById('pdf-profile-name').textContent = name;
-            document.getElementById('pdf-profile-gender').textContent = gender;
-            document.getElementById('pdf-profile-age').textContent = `${age} yrs`;
-            document.getElementById('pdf-profile-height').textContent = heightStr;
-            document.getElementById('pdf-profile-weight').textContent = `${weight} ${weightUnit}`;
-            document.getElementById('pdf-profile-activity').textContent = activityText;
-
-            // Updated TDEE metric with "kcal" instead of "calories per day" subtitle
-            document.getElementById('pdf-tdee-val').textContent = `${globalMaintenanceCal.toLocaleString()} kcal`;
+            document.getElementById('pdf-tdee-val').textContent = globalMaintenanceCal.toLocaleString();
             document.getElementById('pdf-cut-val').textContent = `${globalCuttingCal.toLocaleString()} kcal`;
             document.getElementById('pdf-bulk-val').textContent = `${globalBulkingCal.toLocaleString()} kcal`;
 
-            document.getElementById('pdf-split-goal-header').textContent = `Suggested Splits (${activeGoalTitle})`;
-            document.getElementById('pdf-macro-prot').textContent = protein;
-            document.getElementById('pdf-macro-prot-pct').textContent = proteinPct;
-            document.getElementById('pdf-macro-fat').textContent = fat;
-            document.getElementById('pdf-macro-fat-pct').textContent = fatPct;
-            document.getElementById('pdf-macro-carbs').textContent = carbs;
-            document.getElementById('pdf-macro-carbs-pct').textContent = carbsPct;
+            const goalTitle = getGoalFriendlyName(currentActiveTab);
+            const goalCals = getSelectedGoalCalories();
+            document.getElementById('pdf-split-goal-header').textContent = `Suggested Macro Splits (${goalTitle} - ${goalCals.toLocaleString()} kcal)`;
 
-            document.getElementById('pdf-footer-year').textContent = new Date().getFullYear();
+            document.getElementById('pdf-macro-prot').textContent = document.getElementById('macro-protein').textContent;
+            document.getElementById('pdf-macro-prot-pct').textContent = document.getElementById('macro-protein-pct').textContent;
+            document.getElementById('pdf-macro-fat').textContent = document.getElementById('macro-fat').textContent;
+            document.getElementById('pdf-macro-fat-pct').textContent = document.getElementById('macro-fat-pct').textContent;
+            document.getElementById('pdf-macro-carbs').textContent = document.getElementById('macro-carbs').textContent;
+            document.getElementById('pdf-macro-carbs-pct').textContent = document.getElementById('macro-carbs-pct').textContent;
 
-            // Handling the dynamic "Realistic Expectations" inside the offline blueprint rendering container
-            const pdfExpectationsContainer = document.getElementById('pdf-expectations-container');
-            const pdfExpectationsBody = document.getElementById('pdf-expectations-body');
+            const pdfExpContainer = document.getElementById('pdf-expectations-container');
+            const pdfExpBody = document.getElementById('pdf-expectations-body');
             
             if (currentActiveTab === 'maintenance') {
-                pdfExpectationsContainer.style.display = 'none';
+                pdfExpContainer.style.display = 'none';
+                pdfExpBody.innerHTML = '';
             } else {
-                pdfExpectationsContainer.style.display = 'block';
+                pdfExpContainer.style.display = 'block';
                 if (currentActiveTab === 'fatloss') {
-                    pdfExpectationsBody.innerHTML = `
-                        <p style="margin: 0 0 5px 0; font-weight: 700;">A realistic and sustainable rate of fat loss is 0.5% to 1% of your total body weight per week.</p>
-                        <p style="margin: 2px 0 0 0;">• <strong>Weekly Target:</strong> 0.25 to 1 kg (0.5 to 2 lbs) per week</p>
-                        <p style="margin: 2px 0 0 0;">• <strong>Monthly Target:</strong> 1 to 4 kg (2 to 8 lbs) per month.</p>
+                    pdfExpBody.innerHTML = `
+                        <p style="margin: 0 0 4px 0; font-weight: bold;">A realistic and sustainable rate of fat loss is 0.5% to 1% of your total body weight per week.</p>
+                        <p style="margin: 0 0 2px 0;">• <strong>Weekly Target:</strong> 0.25 to 1 kg (0.5 to 2 lbs) per week</p>
+                        <p style="margin: 0;">• <strong>Monthly Target:</strong> 1 to 4 kg (2 to 8 lbs) per month.</p>
                     `;
                 } else if (currentActiveTab === 'muscle') {
-                    pdfExpectationsBody.innerHTML = `
-                        <p style="margin: 0 0 5px 0; font-weight: 700;">A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.</p>
-                        <p style="margin: 0 0 5px 0; font-style: italic;">Muscle tissue builds significantly slower than fat burns. If the scale rises faster than this, the extra weight is more likely stored body fat, not muscle.</p>
-                        <p style="margin: 5px 0 3px 0; font-weight: 700;">Lifting experience dictates rate of muscle gain progress:</p>
-                        <p style="margin: 1px 0 0 0;">• <strong>Beginner (0-1 yrs):</strong> 1% to 1.5% of body weight / month (approx. 0.7-1.5 kg / 1.5-3 lbs). Rapid response to stimulus ("newbie gains").</p>
-                        <p style="margin: 1px 0 0 0;">• <strong>Intermediate (1-3 yrs):</strong> 0.5% to 1% of body weight / month (approx. 0.4-0.7 kg / 0.8-1.5 lbs).</p>
-                        <p style="margin: 1px 0 0 0;">• <strong>Advanced (3+ yrs):</strong> 0.25% to 0.5% of body weight / month (approx. 0.1-0.3 kg / 0.25-0.5 lbs). Growth slows as body adapts.</p>
+                    pdfExpBody.innerHTML = `
+                        <p style="margin: 0 0 4px 0; font-weight: bold;">A realistic rate of muscle gain is 0.25% to 1.5% of your total body weight per month.</p>
+                        <p style="margin: 0 0 4px 0; font-style: italic; color: #dc2626;">Muscle tissue builds significantly slower than fat burns. If scale weight rises faster, it is likely stored body fat.</p>
+                        <p style="margin: 0;"><strong>Beginner:</strong> 1-1.5%/mo | <strong>Intermediate:</strong> 0.5-1%/mo | <strong>Advanced:</strong> 0.25-0.5%/mo</p>
                     `;
                 }
             }
 
-            // Create or refresh modern QR code referencing services page
-            const qrContainer = document.getElementById("pdf-qrcode");
-            qrContainer.innerHTML = "";
-            qrCodeInstance = new QRCode(qrContainer, {
-                text: "https://coachchriscrc.carrd.co/#services",
-                width: 75,
-                height: 75,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            const qrContainer = document.getElementById('pdf-qrcode');
+            qrContainer.innerHTML = '';
+            if (typeof QRCode !== 'undefined') {
+                new QRCode(qrContainer, {
+                    text: "https://coachchriscrc.carrd.co/#services",
+                    width: 75,
+                    height: 75,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
 
-            // Temporarily present blueprint wrapper into standard flow to allow graphics pipeline painting
             const renderWrapper = document.getElementById('png-render-wrapper');
             renderWrapper.style.display = 'block';
 
-            // Brief timeout ensures render pipeline completes layout before capture
-            setTimeout(() => {
-                html2canvas(renderWrapper, {
-                    scale: 2.5, // 2.5x supersampled resolution for extreme clarity on output
-                    useCORS: true,
-                    backgroundColor: '#ffffff',
-                    logging: false
-                }).then(canvas => {
-                    const imgUrl = canvas.toDataURL('image/png');
-                    const link = document.createElement('a');
-                    link.download = `Coach_Chris_Macro_Blueprint_${name.replace(/\s+/g, '_')}.png`;
-                    link.href = imgUrl;
-                    link.click();
-
-                    // Hide container again to clean layout viewport
-                    renderWrapper.style.display = 'none';
-                });
-            }, 300);
+            html2canvas(renderWrapper, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            }).then(canvas => {
+                renderWrapper.style.display = 'none';
+                const imageURL = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = imageURL;
+                const clientNameClean = (document.getElementById('macro-name').value.trim() || 'Client').replace(/[^a-z0-9]/gi, '_');
+                downloadLink.download = `CoachChris_Macro_Blueprint_${clientNameClean}.png`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+            }).catch(err => {
+                renderWrapper.style.display = 'none';
+                console.error('PNG generation error:', err);
+                alert('Could not generate PNG automatically. Please try again.');
+            });
         }
-        
+
         function resetMacro() {
-            saveState(false);
             document.getElementById('macro-result').classList.add('hidden');
+            document.getElementById('loading-section').classList.add('hidden');
             document.getElementById('input-section').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            localStorage.removeItem('userMacroData');
         }
 
         function clearAllData() {
-            localStorage.removeItem('userMacroData');
-            
             document.getElementById('macro-name').value = '';
             document.getElementById('macro-gender').value = 'male';
             document.getElementById('macro-age').value = '';
@@ -1449,20 +1420,15 @@
             document.getElementById('macro-height-ft').value = '';
             document.getElementById('macro-height-in').value = '';
             document.getElementById('macro-activity').value = '1.2';
-            
             setUnitSystem('metric');
-
-            document.getElementById('macro-result').classList.add('hidden');
-            document.getElementById('input-section').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            resetMacro();
         }
 
-        window.onload = () => { 
-            document.getElementById('current-year').textContent = new Date().getFullYear();
+        document.addEventListener('DOMContentLoaded', () => {
             loadSettings();
-            toggleMacroUnits();
             registerChangeListeners();
-        }
+            lucide.createIcons();
+        });
     </script>
 </body>
 </html>
